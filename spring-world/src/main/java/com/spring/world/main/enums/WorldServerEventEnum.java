@@ -1,0 +1,10 @@
+package com.spring.world.main.enums;
+
+public enum WorldServerEventEnum {
+
+	WORLD_STATE_EVENT_LOGIN,
+	WORLD_STATE_EVENT_LOGINOUT,
+	WORLD_STATE_EVENT_CHOOSE_ROLE,
+	WORLD_STATE_EVENT_DELETE_ROLE,
+	WORLD_STATE_EVENT_TIMER;
+}

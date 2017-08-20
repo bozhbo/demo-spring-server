@@ -9,13 +9,17 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class SceneServerMain {
 	
 	public static ConfigurableApplicationContext context = null;
-
-	public static void main(String[] args) {
+	
+	public static void start(String[] args) {
 		SpringApplication springApplication = new SpringApplication(SceneServerMain.class);
 
 		springApplication.setBannerMode(Mode.LOG);
 		springApplication.setLogStartupInfo(true);
 
 		context = springApplication.run(args);
+	}
+
+	public static void main(String[] args) {
+		start(args);
 	}
 }

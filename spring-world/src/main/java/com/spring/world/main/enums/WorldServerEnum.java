@@ -1,0 +1,11 @@
+package com.spring.world.main.enums;
+
+public enum WorldServerEnum {
+
+	WORLD_STATE_UNKNOW, 
+	WORLD_STATE_LOAD_DATA,
+	WORLD_STATE_LOAD_SCENE,
+	WORLD_STATE_OPNEED,
+	WORLD_STATE_CLOSEING,
+	WORLD_STATE_CLOSED;
+}

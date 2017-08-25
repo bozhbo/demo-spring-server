@@ -1,0 +1,46 @@
+service mysqld start|stop|restart
+
+/usr/bin/mysqladmin shutdown
+/usr/bin/mysqld_safe --user mysql &
+
+innodb_use_sys_malloc=0
+
+innodb_file_per_table=1
+binlog_cache_size
+table_open_cache
+
+etc/sysctl.conf上添加vm.swappiness=0（永久）
+
+http://blog.chinaunix.net/uid-26610882-id-3486655.html
+
+LOAD DATA INFILE 'e:\equip.sql' INTO TABLE gyc0625.GAME_EQUIP_INFO FIELDS TERMINATED BY ',' ENCLOSED BY '\''  LINES TERMINATED BY '\r\n';
+LOAD DATA INFILE 'd:\data.txt' INTO TABLE tt_nx_base_test.nx_roles FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' STARTING BY '';
+
+清除binlog:PURGE BINARY LOGS TO 'mysql-bin.000086';
+select * from information_schema.processlist;
+show engine innodb status;
+
+mysqldump -uuser -p'password' -h 远程地址 --default-character-set=utf8 --single-transaction db_name table_name | mysql -uroot -p'password' -D db_name
+--single-transaction  镜像当前位置
+--master-data=2 
+--parallel-schemas
+alter table table_name discard tablespace;
+table_name ibd文件 复制对应的目标库下面。chown -R mysql.mysql table_name
+alter table  table_name import tablespace;
+
+xtrabackup  备份工具
+
+线程数量show global status like 'Thread%'
+性能监控SHOW STATUS LIKE '%Com_commit%'
+
+MySQL Fabric
+MyCat
+Vitess
+ScaleBase
+
+percona版本
+install:mysqld.exe --console --initialize
+start:mysqld.exe --console --datadir=F:\MySql5.7\mysql\data\dbfile\roledb
+--skip-grant-tables 跳过密码检查
+
+mysql -h10.206.2.2 -utest -p123456 --execute="show engine innodb status \G" > c:/mysql.log

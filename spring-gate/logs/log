@@ -1,0 +1,3 @@
+2017-08-22 18:58:21 [logs]-[INFO] GateServer listener start success(IP:172.17.14.45,Port:8088)!
+2017-08-22 18:58:22 [logs]-[ERROR] Connect GameServer failure!IP:172.19.40.41,Port:7001
+2017-08-22 18:58:24 [logs]-[ERROR] Connect GameServer failure!IP:172.19.40.41,Port:7001

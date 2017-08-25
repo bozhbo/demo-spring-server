@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<webgame>
+	<server-name>GateServer</server-name>
+	<monitor-id>Nx_Gate_1_0</monitor-id>
+	<monitor-ip>172.19.60.104</monitor-ip>
+	<monitor-port>5001</monitor-port>
+	<monitor-log>DEBUG</monitor-log>
+	<monitor-flag>1</monitor-flag><!--monitor开关 0-关闭 1-打开 -->
+
+	<license-path>/config/Gate.license</license-path>
+	<log4j-path>/config/log4j.properties</log4j-path>
+	<game-server-id>40</game-server-id>
+	<encrypt-type>99</encrypt-type><!-- type 1:DES 2:BlowFish(暂不支持) 3:DESede 
+		4:AES 99:随机加密 -->
+	<defense-flag>0</defense-flag><!--0-不启动防御 1-启动防御 -->
+	<reconnect-flag>90</reconnect-flag><!--0-不启动断线重连 大于0的值-最大断线重连有效时间秒（必须大于30秒） -->
+	<disconnect-notify>40</disconnect-notify><!--0-不通知 断开指定秒数后通知 -->
+	<black-list-time>3600</black-list-time><!-- 黑名单存亡时间（秒） -->
+	<local-server>
+		<gate-server-id>1</gate-server-id><!-- 连接服务器ID -->
+		<local-ip>172.17.14.45</local-ip><!-- 本地监听IP -->
+		<local-port>8088</local-port><!-- 本地监听端口 -->
+		<remote-ip>172.17.14.45</remote-ip><!-- 外网监听IP -->
+		<remote-port>80</remote-port><!-- 外网监听端口 -->
+	</local-server>
+
+	<conncet-server>
+		<server>
+			<name>GameServer</name>
+			<ip>172.19.40.41</ip>
+			<port>7001</port>
+		</server>
+	</conncet-server>
+
+	<!-- flash用的策略文件 -->
+	<flash-domain>
+		<domain>*</domain>
+		<port>*</port>
+	</flash-domain>
+
+	<!-- 通讯服务器监听 socket配置 -->
+	<socket-option>
+		<SocketReceiveBuffer>204800</SocketReceiveBuffer>
+		<SocketSendBuffer>204800</SocketSendBuffer>
+		<KeepAlive>true</KeepAlive>
+		<TcpNoDelay>false</TcpNoDelay>
+		<IdleTime><!-- session超时 -->
+			<state>3</state><!--0（不超时） 1(READER_IDLE),2(WRITER_IDLE),3(BOTH_IDLE) -->
+			<Timeout>3000</Timeout><!--(秒) -->
+		</IdleTime>
+	</socket-option>
+
+</webgame>

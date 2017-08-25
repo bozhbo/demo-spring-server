@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<webgame>
+	<!-- 对于游戏客户端发送的不同消息转发向不同服务器 -->
+	<message-transmit>
+		<message>
+			<serverName>SceneServer</serverName>
+		</message>
+
+		<message>
+			<serverName>GameServer</serverName>
+			<msgType>0xA001</msgType>
+			<msgType>0xA002</msgType>
+			<msgType>0xA003</msgType>
+			<msgType>0xA004</msgType>
+			<msgType>0xA005</msgType>
+			<msgType>0xA006</msgType>
+			<msgType>0xA007</msgType>
+			<msgType>0xA008</msgType>
+			<msgType>0xA009</msgType>
+			<msgType>0xA010</msgType>
+			<msgType>0xA011</msgType>
+			<msgType>0xA012</msgType>
+		</message>
+
+		<message>
+			<serverName>RoomServer</serverName>
+			<msgType>0xD006</msgType>
+			<msgType>0xD008</msgType>
+			<msgType>0xD010</msgType>
+			<msgType>0xD012</msgType>
+			<msgType>0xD014</msgType>
+		</message>
+
+	</message-transmit>
+</webgame>

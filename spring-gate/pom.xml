@@ -15,9 +15,35 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.spring.mina</groupId>
-			<artifactId>spring-mina</artifactId>
+			<groupId>com.snail.webgame.engine</groupId>
+			<artifactId>Engine-Commons</artifactId>
 			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.mina</groupId>
+			<artifactId>mina-core</artifactId>
+			<version>1.1.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.mina</groupId>
+			<artifactId>mina-core</artifactId>
+			<version>1.1.7</version>
+			<classifier>sources</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.4.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j.impl</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.4.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.11</version>
 		</dependency>
 	</dependencies>
 

@@ -9,38 +9,159 @@ innodb_file_per_table=1
 binlog_cache_size
 table_open_cache
 
-etc/sysctl.conf������vm.swappiness=0�����ã�
+etc/sysctl.conf上添加vm.swappiness=0（永久）
 
 http://blog.chinaunix.net/uid-26610882-id-3486655.html
 
 LOAD DATA INFILE 'e:\equip.sql' INTO TABLE gyc0625.GAME_EQUIP_INFO FIELDS TERMINATED BY ',' ENCLOSED BY '\''  LINES TERMINATED BY '\r\n';
 LOAD DATA INFILE 'd:\data.txt' INTO TABLE tt_nx_base_test.nx_roles FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' STARTING BY '';
 
-���binlog:PURGE BINARY LOGS TO 'mysql-bin.000086';
+清除binlog:PURGE BINARY LOGS TO 'mysql-bin.000086';
 select * from information_schema.processlist;
 show engine innodb status;
 
-mysqldump -uuser -p'password' -h Զ�̵�ַ --default-character-set=utf8 --single-transaction db_name table_name | mysql -uroot -p'password' -D db_name
---single-transaction  ����ǰλ��
+mysqldump -uuser -p'password' -h 远程地址 --default-character-set=utf8 --single-transaction db_name table_name | mysql -uroot -p'password' -D db_name
+--single-transaction  镜像当前位置
 --master-data=2 
 --parallel-schemas
 alter table table_name discard tablespace;
-table_name ibd�ļ� ���ƶ�Ӧ��Ŀ������档chown -R mysql.mysql table_name
+table_name ibd文件 复制对应的目标库下面。chown -R mysql.mysql table_name
 alter table  table_name import tablespace;
 
-xtrabackup  ���ݹ���
+xtrabackup  备份工具
 
-�߳�����show global status like 'Thread%'
-���ܼ��SHOW STATUS LIKE '%Com_commit%'
+线程数量show global status like 'Thread%'
+性能监控SHOW STATUS LIKE '%Com_commit%'
 
 MySQL Fabric
 MyCat
 Vitess
 ScaleBase
 
-percona�汾
+percona版本
 install:mysqld.exe --console --initialize
 start:mysqld.exe --console --datadir=F:\MySql5.7\mysql\data\dbfile\roledb
---skip-grant-tables ����������
+--skip-grant-tables 跳过密码检查
 
 mysql -h10.206.2.2 -utest -p123456 --execute="show engine innodb status \G" > c:/mysql.log
+
+====================================================================
+对于innodb有个blob类型的，能不写redo日志日志吗？ 
+陆崇霖:  你的意思是，这个表或者字段不记录日志？提高IO 是吧？
+有个一个办法就是 表引擎换成Myisam
+
+陆崇霖:  或者其它引擎周波:  Myisam 如果更新一行是不是锁全表的？陆崇霖:  是的周波:  还有个问题，我们现在的主从同步最大延迟有多大啊？陆崇霖:  这个不好说周波:  有没有经验啊，最大会达到多大
+周波:  就我们外网游戏的数据库陆崇霖:  看主库的binlog 存放多久，和从库相差数量啊。
+陆崇霖:  不过这个不允许的。陆崇霖:  太长的会影响线上业务的
+周波:  会不会出现几分钟都没同步打陆崇霖:  延迟，基本上是ddl 大表变更字段属性，或者增加字段 造成的。
+陆崇霖:  线上业务批量dml, 一起commit 的状况少啊。陆崇霖:  所以延迟很少的。周波:  好的，还有个问题，如果我想把一个数据库的一张表快速复制到另外一个数据库有一般怎么做陆崇霖:  跨实例吗？周波:  恩
+陆崇霖:  mysqldump -uuser -p'password' -h 远程地址 --default-character-set=utf8 --single-transaction db_name table_name | mysql -uroot -p'password' -D db_name 
+陆崇霖:  table_name 针对这个表的。周波:  那不跨实例就简单吗？陆崇霖:  不跨实例。insert into table_name select * from db_name.table_name;
+陆崇霖:  如果是myisam 引擎的  ，直接拷贝文件 就好了周波:  我想是不是可以直接复制ibd文件到目标服务器？陆崇霖:  如果是innodb ,  需要加载的。周波:  加载有命令吗
+陆崇霖:  mysqldump -uuser -p'password' -h 远程地址 --default-character-set=utf8 --single-transaction db_name table_name | mysql -uroot -p'password' -D db_name  
+这个最安全周波:  mysqldump 的原理是什么啊？ 周波:  这个命令是不是会导致内存中的脏页被刷新的磁盘啊陆崇霖:  --single-transaction  镜像当前位置陆崇霖:  --master-data=2 
+陆崇霖:  加上这个，只是记录当前镜像啊周波:  我的意思是运行mysqldump的时候对当前实例的其他DML操作会有多大影响?陆崇霖:  alter table table_name discard tablespace;
+ table_name ibd文件 复制对应的目标库下面。chown -R mysql.mysql table_name
+alter table  table_name import tablespace;陆崇霖:  影响不大，主要看你的硬盘是不是分开的。还有库是不是很大，如果是大库，几百G 的话，不建议用这个了陆崇霖:  可以用xtrabackup 
+陆崇霖:  几个G ，几十G 的话，MySQLdump 完全可以胜任啊周波:  好的，那我试试周波:  几个G 执行MySQLdump大概多久？陆崇霖:  --parallel-schemas  加上并行 更快一点
+陆崇霖:  几个G  看硬盘速度了。如果SSD 很快的，1-2分钟吧陆崇霖:  普通盘，2分钟也差不多周波:  这样会不会过多的占用带宽，影响其他操作周波:  可以做限制吗？ 让MySQLdump执行的慢点
+陆崇霖:  本地备份。和IO有关系，和带宽没啥关系。你要慢一点啊？周波:  只是备份在本地，由我拷贝过去是吧？陆崇霖:  可以远程备份，也可以从从库备份。
+陆崇霖:  看你怎么设置了周波:  好的，我知道了周波:  非常感谢，如果有其他问题我再咨询你周波:  我们希望能把存储层整合你一下，不搞一个服一个库，你觉得这个方案可行吗
+陆崇霖:  看怎么设计了？陆崇霖:  要分布式呢、还是集中式？周波:  分布式的，就是当增加节点的时候需要拷贝数据陆崇霖:  分布式有可以这么说，也可以将数据sharding 周波:  就是分片到不同的数据库里面
+陆崇霖:  是的周波:  还有我想问下，对于日志记录，如果我们引入一些开源的NOSQL有没有问题周波:  因为现在mysql对于日志表的支持不是很好，量太大了
+陆崇霖:  还有一种就是有数据都是在会话中交互，实在要存储数据，再刷到数据库中去。这样数据很快。不是特别需要的数据都在会话相互处理。
+陆崇霖:  可以的。周波:  那好，下次有问题在找你周波:  谢谢陆崇霖:  不客气。陆崇霖:  如果你们要引入NOSQL ,麻烦提前说一下啊
+陆崇霖:  建议可以测试一下mysql 5.7陆崇霖:  多源复制陆崇霖:  可能对你们游戏有些好处周波:  多源复制 是什么意思陆崇霖:  多个实例，多个主库的数据，可以复制一个从库实例下
+陆崇霖:  因为MySQL 5.7 slave 线程可以增加了。所以复制的速度也上来了。周波:  哦，好的陆崇霖:  MySQL 5.7  group commit  功能
+陆崇霖:  问一下，你们准备加入nosql ，如果要加入，麻烦提前说明一下，用那个产品啊。我们也好提前熟悉一下啊周波:  知道，我们现在还是设计阶段周波:  HI，Fabric  这个工具你使用过吗？
+陆崇霖:  你说的是　mysql Fabric 插件陆崇霖:  是不是这个？周波:  恩陆崇霖:  作为 dblink 使用的陆崇霖:  类似oracle 的 物化视图陆崇霖:  怎么了？
+陆崇霖:  为啥用这个？周波:  这个是不是可以自动数据分片功能？陆崇霖:  这个不行啊周波:  MySQL Utilities 1.5 Manual  /  MySQL Fabric  /  Introduction to Fabric周波:  这是个util的工具啊
+陆崇霖:  这个是dblink 功能啊周波:  什么是dblink陆崇霖:  知道了陆崇霖:  看错了周波:  这个能做完一个分布式mysql的管理器吗？
+陆崇霖:  可以的。周波:  就是我不关心数据在哪里，能自动扩容周波:  那我先研究研究，到时有问题找你问一下陆崇霖:  数据是分开的。
+陆崇霖:  这个我也看看啊陆崇霖:  陆崇霖:  跨库查询 可能会有的问题陆崇霖:  建议研究这个分布式数据库TIDB
+陆崇霖:  这个分布式数据库相对完善。TiDB 支持包括传统 RDBMS 和 NoSQL 的特性。陆崇霖:  TiDB：支持 MySQL 协议的分布式数据库解决方案
+陆崇霖:  TiDB Beta 版功能：
+
+支持 SQL 
+支持 SQL-92 标准，实现常用的 SQL 语句，包括基本的 CURD、Join、子查询、聚合函数以及 Prepare 语句等
+支持 MySQL 协议
+高度兼容 MySQL 的协议与语法，兼容常用的 MySQL 客户端和 MySQL 管理工具。大多数业务可无缝从 MySQL 切换到 TiDB
+支持分布式事务
+       实现完整的 ACID 事务，提供强一致性
+在线 Schema 变更
+       在不停服务的情况下，进行 Schema 变更，并在此过程中保证数据的一致性
+可插拔存储引擎
+支持多种存储引擎，针对不同的业务场景选择不同的存储引擎。推荐使用 TiKV 存储引擎，组成真正的分布式数据库。开发者亦可遵循规范，将自己的 KV 引擎接入 TiDB。
+与 TiKV 引擎配合使用
+高可用    
+通过 Raft 协议复制多副本，可实现异地多活和多数据中心容灾
+水平扩展
+通过增加机器，可以轻松实现水平扩展，存储海量数据
+支持 MPP
+快速处理海量数据陆崇霖:  陆崇霖:  作为 dblink 使用的
+陆崇霖:  类似oracle 的 物化视图
+记错了。没有这功能陆崇霖:  不好意思陆崇霖:  记成federated周波:  Hi，对应Mysql的Fabric 我看了一下好像是适合的，你能不能再帮忙研究一下，从你们DBA的角度看看这个可不可行
+陆崇霖:  可以的。陆崇霖:  主要是会不会有跨库查询陆崇霖:  如果有的话，可能有点麻烦陆崇霖:  我这边开始研究一下啊周波:  恩，我们只是初步研究，还要就和实际应用的
+陆崇霖:  弱弱的问一下，这个作为什么上面用的、周波:  游戏啊周波:  就是把现在的单服单库合并成集群陆崇霖:  好的。知道了周波:  这样可以节省服务器，也不用再合服了
+陆崇霖:  恩，是的。陆崇霖:  类似 ARK 那种结构方式周波:  HI,有个SQL语句的疑问， 例如一个update语句更新了10000行，在mysql里面是不是会把这10000行所涉及到的页都load到内存里面？
+陆崇霖:  是的。周波:  是为了写undo log吗？周波:  还有多版本控制陆崇霖:  是为多版本控制啊。主要还是innodb 原理周波:  如果内存装不下10000行怎么处理的？
+周波:  每次要进行多版本控制都是重新再去读取数据吗陆崇霖:   InnoDB存储引擎把事务写入日志缓冲(log buffer)--redo 和 undo,日志缓冲把事务刷新到事务日志.
+ InnoDB存储引擎把事务写入缓冲池(Buffer pool).陆崇霖:   InnoDB存储引擎把事务写入缓冲池(Buffer pool)  其实就是数据缓存区
+周波:  多版本控制老数据是从undo里面读取，还是要去真正的数据页读取的？陆崇霖:  每次要进行多版本控制都是重新再去读取数据吗
+
+多版本是针对 UPDAET DELETE INSERT
+读取数据是数据量了，数据量少的话，会读BUFFER POOL，有的也会读磁盘数据陆崇霖:  真正的数据页读取的陆崇霖:  多版本控制老数据是从undo里面读取陆崇霖:  不是真正的数据页，因为需要rollback
+周波:  那就是update后即使真正的数据页不在BUFFER POOL也不会再去读取磁盘的真正数据了，都是去undo里面读取？陆崇霖:  是的周波:  undo占用的内存可控吗？是不是一个涉及很多页的数据修改，会导致undo非常大
+陆崇霖:  除非提交了陆崇霖:  undo  表空间看版本了陆崇霖:  错了陆崇霖:  undo 表空间是可以指定磁盘位置的陆崇霖:  是不是一个涉及很多页的数据修改，会导致undo非常大
+
+会的。会让表空间增大的周波:  在内存里面的undo占用也会很大吗陆崇霖:  事务多的话，会让表空间越来越大陆崇霖:  那相应的。
+陆崇霖:  所以有的平台 数据库内存很大，上百G 的内存有的周波:  哦，好的，update成功返回是不是要等所有的数据都写完undo和redo以后才返回？
+陆崇霖:  是的周波:  好的，现在我们的备库是异步更新吧？ 就是马上查询可能不存在？陆崇霖:  如果是大表更新。备库会有延迟的周波:  好的，知道了。 非常感谢
+陆崇霖:  不客气啊。上次你说的 mysql fabric 这个， 你们有在测试吗？周波:  我们可能倾向自己开发，这个有点不满足邀请陆崇霖:  呵呵。周波:  你有什么建议吗？
+陆崇霖:  mysql fabric  这个部分问了一部分人用的比较少啊。中间件 这个选型，还真的不是很好说。周波:  是的，外面的使用不多，有些公司都是自己开发的周波:  还有对于数据的迁移，如果在线做是不是风险太大了》
+陆崇霖:  如果了解业务的话，也没事的。陆崇霖:  不了解业务在线迁移数据肯定不行的周波:  就是现在的游戏业务，混服后想把一个实例中大概1/5的数据迁移到另外一个实例陆崇霖:  一个实例中大概1/5的数据  可以拆分吗？
+陆崇霖:  如果可以拆分的话，也没事的。周波:  拆分是什么意思周波:  比如就是迁移一张表里面id字段%10=0的行迁移过去陆崇霖:  是的周波:  mysqldump应该只能dump所有行，然后业务自己做拆分吧
+陆崇霖:  恩，还有一种就是可以通过中间件比如mycat 先做拆分，表范围划分。 用sql 语句来拆分逻辑数据。周波:  mycat 可靠吗？陆崇霖:  要看具体的使用了。只能说适不适合？
+陆崇霖:  其实原理和mysql fabric 一样的周波:  恩，我看mysql fabric迁移好像只支持静态的，不然就会阻止写操作陆崇霖:  现在公司里面  mycat  有在用了，不知道用的怎么样了？
+周波:  谁在使用啊 ，IT中心那边吗陆崇霖:  支广生 他们有在用陆崇霖:  你认识不？周波:  认识的，我到时去问问周波:  不过他们那个不是关键业务陆崇霖:  当时测试的时候，我看了一下。
+陆崇霖:  是的陆崇霖:  后来没在参与。陆崇霖:  你可以问问啊。具体的使用啊周波:  好的周波:  能不能给一个外网的my.cnf配置，我内网可以模拟一下陆崇霖:  只有5.5 版本的
+周波:  你建议使用哪个版本比较好陆崇霖:  5.6 版本没有对外陆崇霖:  我建议你用5.6 版本的周波:  好的，配置文件应该差不多吧陆崇霖:  恩周波:  那你给我一个吧陆崇霖:  邮件你了
+陆崇霖:  5.6的周波:  好的陆崇霖:  软件要吗？周波:  还有我执行load data infile 发现表的操作阻塞验证周波:  严重周波:  是不是把内存都吃掉了的原因陆崇霖:  恩
+周波:  那就是如果在线laod data会影响在线业务啊周波:  软件怎么发我呢陆崇霖:  静静试试啊陆崇霖:  接收一下周波:  怎么才63M陆崇霖:  恩陆崇霖:  自己重新打包了一下
+周波:  这个有安装手册吗周波:  我记得mysql安装比较麻烦陆崇霖:  这个直接rpm陆崇霖:  然后你看着修改Mysql.cnf陆崇霖:  从新打包后，安装快一些
+陆崇霖:  这个undo 表空间没有分开陆崇霖:  还是和共享表空间在一起陆崇霖:  你注意下啊周波:  好的，你们在线的一般分开吗陆崇霖:  5.5 的都是混在一起的。5.6 才有的功能
+周波:  现在一台机器已经有一个Mysql实例了，我能再安装一个5.6吗，会不会覆盖原来的？陆崇霖:  如果路径一样的话，会的陆崇霖:  这个默认路径是/mysql
+周波:  你给我的包是不是会安装到/mysql下面？陆崇霖:  是的周波:  /var/lib/mysql/               #数据库目录
+/usr/share/mysql              #配置文件目录
+/usr/bin                     #相关命令目录
+/etc/init.d/mysql              #启动脚本周波:  这些目录会覆盖吗
+周波:  现在有些目录下是有mysql的陆崇霖:  应该不会周波:  好的陆崇霖:  这个软件，整个是/mysql  目录下面，只有/etc/my.cnf周波:  好的
+周波:  我执行了load data infile 但是中途取消了是不是这个事务还要回滚啊？ 现在重启了数据库还是很慢
+周波:  1CFB566	ROLLING BACK	2017-06-14 14:08:28			647825	0			0	0	0	376	0	647825	0	REPEATABLE READ	1	1		0	10000
+周波:  INNODB_TRX里面有这条语句周波:  104	root	localhost:1338	tt_nx_base_test	Query	748	Sending data	SELECT count(*) FROM nx_roles周波:  这个是processorlist的，一个count*都很慢
+陆崇霖:  总共多少条？
+周波:  我想导入300w的，到了很久都没成功，就取消了周波:  是不是现在在回滚？陆崇霖:  是的陆崇霖:  load data infile 如果这个表没在用的话，建议索引先拿掉周波:  那我只能等了啊
+陆崇霖:  load data infile 表的主键拿掉陆崇霖:  恩陆崇霖:  是的陆崇霖:  不然会报错周波:  好吧陆崇霖:  load data infile 表的主键拿掉啊。陆崇霖:  好了后，再加上主键啊
+周波:  什么意思？就是把所有的索引和主键去除，等数据加载完了再加上是吧？陆崇霖:  索引留着陆崇霖:  主键拿掉陆崇霖:  是的周波:  哦陆崇霖:  Innodb 有个insert buffer。针对没有主键的表，但是这个表有索引
+陆崇霖:  这样会比较快一点周波:  hi,问一个问题，mysql的TPS你是通过什么方式获取的？陆崇霖:  show status周波:  SHOW STATUS LIKE '%Com_commit%' ？这个吗？陆崇霖:  恩周波:  这个查出来是一个库的还是所有库的
+陆崇霖:  所有库周波:  这个值一般是多少表示压力比较大了？周波:  我们游戏库一般每秒能到1000吗陆崇霖:  到不了陆崇霖:  一开始上线的时候，有的周波:  我的意思是每秒到多少算压力大了？
+陆崇霖:  压力大，一开始会做系统压测陆崇霖:  最大压测硬盘周波:  我们外网是不是DB都使用SSD了？陆崇霖:  是的周波:  好的，那内网测试就按照SSD的测试了陆崇霖:  先压测，压测最大瓶颈，并发，随机读写。
+周波:  HI。问一下你上次给我的mysqlRPM包，安装成功后的账号密码是什么啊，陆崇霖:  snail陆崇霖:  或者123456陆崇霖:  试试周波:  OK，是snail陆崇霖:  1周波:  问一下，这个RPM是你们自己定制生成的吗？
+陆崇霖:  恩。是的陆崇霖:  也没有修改什么 只是percona  打包一下周波:  percona 是Percona Server吗？陆崇霖:  是的周波:  这个是mysql的一个分支吗？陆崇霖:  是的陆崇霖:  线上都用percona 版本
+周波:  我一直以为我们使用mysql的社区版陆崇霖:  不是周波:  好的，明白了，谢谢陆崇霖:  不客气陆崇霖:  不过线上都是5.5.21 版本周波:  好的周波:  问一下 SHOW STATUS LIKE '%Com_commit%' 这个怎么一直是 0
+周波:  存储过程或者select包含吗陆崇霖:  第一个是当前值，不是累计值。陆崇霖:  select 不包含。陆崇霖:  commit 只有提交吧周波:  现在就是一个存储过程在跑Insert，这样请求量怎么看陆崇霖:  一般会用平均值来算
+周波:  现在是取不到值，一直是0陆崇霖:  周波:  SHOW STATUS LIKE '%Com_select%'; 这个可以查到值，但是我使用存储过程调用Insert没有取到值陆崇霖:  SHOW STATUS LIKE 'Com_commit';  试试看周波:  这个取出来是0
+周波:  是不是我存储过程里面没有调用commit啊陆崇霖:  SHOW STATUS LIKE 'Questions';陆崇霖:  试试这个呢陆崇霖:  这个是事务量周波:  这个是有的陆崇霖:  这个是QPS周波:  这是总值吧陆崇霖:  是的
+陆崇霖:  一段时间的平均值来处理周波:  你平时一般使用什么看啊陆崇霖:  给你个工具啊周波:  最好是命令，我们需要实时获取进行负载均衡周波:  没有命令就先给工具吧陆崇霖:  是命令的周波:  那你发我一个
+周波:  使用大文件传输周波:  这个下载太慢了陆崇霖:  好的周波:  看里面的工具说明就可以了吧陆崇霖:  恩。是的。运行一下。就可以看了了周波:  好的，非常感谢陆崇霖:  1s 自动跑
+周波:  我发现mysql的Com_commit只在autocommit=false的时候才起作用周波:  这个变量是不是依赖客户端的commit的操作，然后才自增的陆崇霖:  有个参数影响的，mysql有个自动提交功能
+陆崇霖:  就是这个原因陆崇霖:  这个功能影响mysql 并发的陆崇霖:  一般都是程序来控制提交的。周波:  我内网测试遇到mysql慢，能不能帮我看看问题在哪里，我发一个配置和show innodb status给你
+陆崇霖:  恩周波:  现在执行都是 insert，但是里面有大字段blob大概100k的陆崇霖:  等一下啊周波:  没事的，你先做事好了，我不是很急陆崇霖:  1陆崇霖:  问你个问题。这台机器的内存多大？这个实例同时有多少个会话？
+周波:  内存32G，我配置的10G 同时100个会话陆崇霖:  binlog_cache_size=100m  这个设置小点啊陆崇霖:  这个参数是会话级别的周波:  好，那我调大一点，还有哪些参数可以调整的吗陆崇霖:  这个要调小点啊
+陆崇霖:  不能调大了周波:  哦，好的陆崇霖:  innodb_max_dirty_pages_pct=30  这个也调整小点
+调整到15陆崇霖:  你在试试周波:  好陆崇霖:  忘记一个参数需要调整了。innodb_buffer_pool_instances 这个默认是8个 改少点啊。改成2个就好了。周波:  好陆崇霖:  这样buffer不会分的那么散了。
+周波:  show processlist ，我已经把我的客户端关闭了，怎么processlist里面还显示啊
+周波:  10.206.0.46 test/123456 这个库你能连吗，现在这个库卡死了，我客户端都关闭了陆崇霖:  线程死连接周波:  好像磁盘满了，我知道了陆崇霖:  
+周波:  问一下，主从模式，如果从服务器掉了很久再连上来数据是怎么同步的？还是通过binlog慢慢恢复吗？陆崇霖:  是的周波:  那这个在线上服务器不是永远都同步不完
+周波:  这个有其他方式处理吗，让他们尽快同步陆崇霖:  同步很快的。或者用pt-tools 工具pt-archiver 处理陆崇霖:  还有一种就是重新搭建主从陆崇霖:  mysql 5.7 可以增加 slave 线程啊
+陆崇霖:  目前线上是5.5 只有一个slave 线程 会慢一点的。

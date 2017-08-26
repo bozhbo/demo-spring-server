@@ -108,44 +108,6 @@ public class RoomServer {
 		}
 	}
 	
-	public synchronized void start(String serverIp, int serverPort, int socketThreads, IoHandler ioHandler, Executor handlerExecutor, boolean useMonitor, List<RoomFilterInfo> ioFilterList) {
-		try {
-			startTime = 0;
-			
-			if (acceptor == null) {
-				acceptor = new SocketAcceptor(socketThreads, Executors.newCachedThreadPool());
-			}
-			
-			SocketAcceptorConfig acceptorConfig = acceptor.getDefaultConfig();
-			acceptorConfig.setThreadModel(ThreadModel.MANUAL);
-			acceptorConfig.getSessionConfig().setReuseAddress(true);
-			acceptorConfig.getSessionConfig().setTcpNoDelay(true);
-
-			DefaultIoFilterChainBuilder chainBuilder = acceptorConfig.getFilterChain();
-			
-			for (RoomFilterInfo roomFilterInfo : ioFilterList) {
-				if (roomFilterInfo.getName() != null && roomFilterInfo.getIoFilter() != null) {
-					chainBuilder.addLast(roomFilterInfo.getName(), roomFilterInfo.getIoFilter());
-				}
-			}
-			
-			acceptor.bind(new InetSocketAddress(serverIp, serverPort), ioHandler);
-		
-			if (useMonitor) {
-				RoomValue.USE_SERVER_STATE_MONITOR = useMonitor;
-				ServerStateThread sst = new ServerStateThread();
-				sst.start();
-			}
-			
-			logger.info("Server started ," + "HOST : " + serverIp + " PORT : " + serverPort);
-		
-			startTime = System.currentTimeMillis();
-		} catch (Exception e) {
-			logger.error("start server error", e);
-			System.exit(0);
-		}
-	}
-	
 	public synchronized void start(String serverIp, int serverPort, int socketThreads, IoHandler ioHandler, boolean useMonitor, List<RoomFilterInfo> ioFilterList) {
 		try {
 			startTime = 0;

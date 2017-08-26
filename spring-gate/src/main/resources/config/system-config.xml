@@ -24,11 +24,11 @@
 	</local-server>
 
 	<conncet-server>
-		<!-- <server>
+		<server>
 			<name>GameServer</name>
-			<ip>172.19.40.41</ip>
+			<ip>192.168.1.105</ip>
 			<port>7001</port> 
-		</server>-->
+		</server>
 	</conncet-server>
 
 	<!-- flash用的策略文件 -->

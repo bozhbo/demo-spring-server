@@ -1,7 +1,9 @@
-package com.spring.world.main.enums;
+package com.spring.world.state.enums;
 
 public enum WorldServerEventEnum {
 
+	WORLD_STATE_EVENT_LOAD_DATA,
+	
 	WORLD_STATE_EVENT_LOGIN,
 	WORLD_STATE_EVENT_LOGINOUT,
 	WORLD_STATE_EVENT_CHOOSE_ROLE,

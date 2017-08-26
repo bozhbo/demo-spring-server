@@ -1,4 +1,4 @@
-package com.spring.world.main.enums;
+package com.spring.world.state.enums;
 
 public enum WorldServerEnum {
 

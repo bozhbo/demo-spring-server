@@ -7,7 +7,6 @@ import org.apache.mina.common.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.snail.webgame.engine.common.ServerName;
 import com.snail.webgame.engine.gate.cache.SequenceMap;
 import com.snail.webgame.engine.gate.cache.ServerMap;
 import com.snail.webgame.engine.gate.common.ConnectConfig;
@@ -16,6 +15,7 @@ import com.snail.webgame.engine.gate.config.Command;
 import com.snail.webgame.engine.gate.config.WebGameConfig;
 import com.snail.webgame.engine.gate.util.IdentityMap;
 import com.snail.webgame.engine.gate.util.MessageServiceManage;
+import com.spring.common.ServerName;
 
 public class ShutDownThread extends Thread {
 	private MessageServiceManage msgmgt = new MessageServiceManage();

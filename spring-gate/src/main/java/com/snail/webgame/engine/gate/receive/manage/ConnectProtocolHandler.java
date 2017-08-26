@@ -12,9 +12,6 @@ import org.apache.mina.transport.socket.nio.SocketSessionConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.snail.webgame.engine.common.ErrorCode;
-import com.snail.webgame.engine.common.ServerName;
-import com.snail.webgame.engine.common.util.FixedDes;
 import com.snail.webgame.engine.gate.cache.BlacklistMap;
 import com.snail.webgame.engine.gate.cache.DisconnectSessionMap;
 import com.snail.webgame.engine.gate.cache.SequenceMap;
@@ -26,10 +23,11 @@ import com.snail.webgame.engine.gate.common.SocketConfig;
 import com.snail.webgame.engine.gate.config.Command;
 import com.snail.webgame.engine.gate.config.TempTestConfig;
 import com.snail.webgame.engine.gate.config.WebGameConfig;
-import com.snail.webgame.engine.gate.util.IdentityMap;
 import com.snail.webgame.engine.gate.util.MessageServiceManage;
 import com.snail.webgame.engine.gate.util.SequenceId;
 import com.snail.webgame.engine.gate.util.Util;
+import com.spring.common.ErrorCode;
+import com.spring.common.ServerName;
 
 public class ConnectProtocolHandler extends IoHandlerAdapter {
 
@@ -95,74 +93,74 @@ public class ConnectProtocolHandler extends IoHandlerAdapter {
 						}
 					}
 
-					// 合法账号
-					IoSession oldSession = SequenceMap.getSession(sequenceId);
-					String acc = (String) oldSession.getAttribute("Account");
-					// 获取重连消息中的校验串
-					String acccode = msgmgt.getAcccode((byte[]) message);
-					if (acc == null || acccode == null || acc.length() == 0 || acccode.length() == 0) {
-						if (log.isWarnEnabled()) {
-							InetSocketAddress address1 = (InetSocketAddress) session.getRemoteAddress();
-							String ip = address1.getAddress().getHostAddress();
-							log.warn("user reconnect failure, IP=" + ip + " acc=" + acc + " acccode=" + acccode);
-						}
-						msgmgt.sendDisconnectMsg(session, "", 0, Command.USER_DISCONNECT_REQ, ErrorCode.ERROR_REQUEST,
-								DisconnectPhase.DISCONNECT, false);
-						return;
-					}
-
-					if (acc.equalsIgnoreCase(FixedDes.decrypt(acccode)))// 合法
-					{
-						session.setAttribute("Account", acc);
-						session.setAttribute("SequenceId", sequenceId);
-						session.setAttribute("lastReqTime", oldSession.getAttribute("lastReqTime"));
-						session.setAttribute("freqNum", oldSession.getAttribute("freqNum"));
-						// 设置验证信息
-						Object identity = oldSession.getAttribute("identity");
-						if (identity != null) {
-							session.setAttribute("identity", identity);
-							IdentityMap.addSession((Integer) identity, session);
-						}
-
-						SequenceMap.addSession(sequenceId, session);
-
-						if (oldSession != null && oldSession.isConnected()) {
-							log.info("ConnectProtocolHandler : close old session");
-							oldSession.close();
-						}
-
-						oldSession.setAttribute("identity", null);
-						oldSession.setAttribute("SequenceId", null);
-
-						// 重连成功该消息原样返回
-						session.write(message);
-						synchronized (ContentValue.lock) {
-							DisconnectSessionMap.removeDisconnectInfo(sequenceId);
-						}
-						// 通知其它服务器玩家重连成功
-						if (identity != null) {
-							List<String> serverList = new ArrayList<String>();
-							serverList.add(ServerName.GAME_SERVER_NAME);
-							serverList.add(ServerName.MAIL_SERVER_NAME);
-							msgmgt.reportUserDisconnect(serverList, "", (Integer) identity,
-									DisconnectPhase.DISCONNECT_RECONNECT_OK);
-						}
-						if (log.isWarnEnabled()) {
-							InetSocketAddress address = (InetSocketAddress) session.getRemoteAddress();
-							String ip = address.getAddress().getHostAddress();
-							log.warn("user reconnect success, IP=" + ip + " old session identity=" + identity + " acc="
-									+ acc);
-						}
-						return;
-					} else {
-						if (log.isWarnEnabled()) {
-							InetSocketAddress address1 = (InetSocketAddress) session.getRemoteAddress();
-							String ip = address1.getAddress().getHostAddress();
-							log.warn("user reconnect failure, IP=" + ip + " acc=" + acc + " acccode=" + acccode);
-						}
-						msgmgt.sendDisconnectMsg(session, "", 0, Command.USER_DISCONNECT_REQ, ErrorCode.ERROR_REQUEST,
-								DisconnectPhase.DISCONNECT, false);
-					}
+//					// 合法账号
+//					IoSession oldSession = SequenceMap.getSession(sequenceId);
+//					String acc = (String) oldSession.getAttribute("Account");
+//					// 获取重连消息中的校验串
+//					String acccode = msgmgt.getAcccode((byte[]) message);
+//					if (acc == null || acccode == null || acc.length() == 0 || acccode.length() == 0) {
+//						if (log.isWarnEnabled()) {
+//							InetSocketAddress address1 = (InetSocketAddress) session.getRemoteAddress();
+//							String ip = address1.getAddress().getHostAddress();
+//							log.warn("user reconnect failure, IP=" + ip + " acc=" + acc + " acccode=" + acccode);
+//						}
+//						msgmgt.sendDisconnectMsg(session, "", 0, Command.USER_DISCONNECT_REQ, ErrorCode.ERROR_REQUEST,
+//								DisconnectPhase.DISCONNECT, false);
+//						return;
+//					}
+//
+//					if (acc.equalsIgnoreCase(FixedDes.decrypt(acccode)))// 合法
+//					{
+//						session.setAttribute("Account", acc);
+//						session.setAttribute("SequenceId", sequenceId);
+//						session.setAttribute("lastReqTime", oldSession.getAttribute("lastReqTime"));
+//						session.setAttribute("freqNum", oldSession.getAttribute("freqNum"));
+//						// 设置验证信息
+//						Object identity = oldSession.getAttribute("identity");
+//						if (identity != null) {
+//							session.setAttribute("identity", identity);
+//							IdentityMap.addSession((Integer) identity, session);
+//						}
+//
+//						SequenceMap.addSession(sequenceId, session);
+//
+//						if (oldSession != null && oldSession.isConnected()) {
+//							log.info("ConnectProtocolHandler : close old session");
+//							oldSession.close();
+//						}
+//
+//						oldSession.setAttribute("identity", null);
+//						oldSession.setAttribute("SequenceId", null);
+//
+//						// 重连成功该消息原样返回
+//						session.write(message);
+//						synchronized (ContentValue.lock) {
+//							DisconnectSessionMap.removeDisconnectInfo(sequenceId);
+//						}
+//						// 通知其它服务器玩家重连成功
+//						if (identity != null) {
+//							List<String> serverList = new ArrayList<String>();
+//							serverList.add(ServerName.GAME_SERVER_NAME);
+//							serverList.add(ServerName.MAIL_SERVER_NAME);
+//							msgmgt.reportUserDisconnect(serverList, "", (Integer) identity,
+//									DisconnectPhase.DISCONNECT_RECONNECT_OK);
+//						}
+//						if (log.isWarnEnabled()) {
+//							InetSocketAddress address = (InetSocketAddress) session.getRemoteAddress();
+//							String ip = address.getAddress().getHostAddress();
+//							log.warn("user reconnect success, IP=" + ip + " old session identity=" + identity + " acc="
+//									+ acc);
+//						}
+//						return;
+//					} else {
+//						if (log.isWarnEnabled()) {
+//							InetSocketAddress address1 = (InetSocketAddress) session.getRemoteAddress();
+//							String ip = address1.getAddress().getHostAddress();
+//							log.warn("user reconnect failure, IP=" + ip + " acc=" + acc + " acccode=" + acccode);
+//						}
+//						msgmgt.sendDisconnectMsg(session, "", 0, Command.USER_DISCONNECT_REQ, ErrorCode.ERROR_REQUEST,
+//								DisconnectPhase.DISCONNECT, false);
+//					}
 
 				} else {
 					if (log.isWarnEnabled()) {
@@ -371,6 +369,8 @@ public class ConnectProtocolHandler extends IoHandlerAdapter {
 				}
 			}
 		}
+		
+		log.info("remote client is open " + session.getRemoteAddress().toString());
 	}
 
 }

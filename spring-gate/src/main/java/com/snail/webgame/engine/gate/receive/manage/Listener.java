@@ -35,7 +35,7 @@ public class Listener {
 		ByteBuffer.setAllocator(new SimpleByteBufferAllocator());
 
 		chain.addLast("codec", new ProtocolCodecFilter(new ReceiveCodeFactory()));
-		chain.addLast("crypto", new CryptoIoFilter(WebGameConfig.getInstance().getEncryptType()));// 加密
+		//chain.addLast("crypto", new CryptoIoFilter(WebGameConfig.getInstance().getEncryptType()));// 加密
 		chain.addLast("defence", new DefenceIoFilter(WebGameConfig.getInstance().getDefenseFlag()));// 消息防御
 
 		String localIP = WebGameConfig.getInstance().getLocalConfig().getLocalIP();

@@ -10,26 +10,25 @@
 	<license-path>/config/Gate.license</license-path>
 	<log4j-path>/config/log4j.properties</log4j-path>
 	<game-server-id>40</game-server-id>
-	<encrypt-type>99</encrypt-type><!-- type 1:DES 2:BlowFish(暂不支持) 3:DESede 
-		4:AES 99:随机加密 -->
+	<encrypt-type>1</encrypt-type><!-- type 1:DES 2:BlowFish(暂不支持) 3:DESede 4:AES 99:随机加密 -->
 	<defense-flag>0</defense-flag><!--0-不启动防御 1-启动防御 -->
 	<reconnect-flag>90</reconnect-flag><!--0-不启动断线重连 大于0的值-最大断线重连有效时间秒（必须大于30秒） -->
 	<disconnect-notify>40</disconnect-notify><!--0-不通知 断开指定秒数后通知 -->
 	<black-list-time>3600</black-list-time><!-- 黑名单存亡时间（秒） -->
 	<local-server>
 		<gate-server-id>1</gate-server-id><!-- 连接服务器ID -->
-		<local-ip>172.17.14.45</local-ip><!-- 本地监听IP -->
+		<local-ip>192.168.1.105</local-ip><!-- 本地监听IP -->
 		<local-port>8088</local-port><!-- 本地监听端口 -->
-		<remote-ip>172.17.14.45</remote-ip><!-- 外网监听IP -->
+		<remote-ip>192.168.1.105</remote-ip><!-- 外网监听IP -->
 		<remote-port>80</remote-port><!-- 外网监听端口 -->
 	</local-server>
 
 	<conncet-server>
-		<server>
+		<!-- <server>
 			<name>GameServer</name>
 			<ip>172.19.40.41</ip>
-			<port>7001</port>
-		</server>
+			<port>7001</port> 
+		</server>-->
 	</conncet-server>
 
 	<!-- flash用的策略文件 -->

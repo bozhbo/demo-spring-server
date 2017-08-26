@@ -8,7 +8,7 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.snail.webgame.engine.common.util.CodeUtil;
+import com.spring.common.util.CodeUtil;
 
 public class CertConfig {
 

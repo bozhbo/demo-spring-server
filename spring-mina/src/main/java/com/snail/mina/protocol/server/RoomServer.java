@@ -70,7 +70,7 @@ public class RoomServer {
 			startTime = 0;
 			
 			if (acceptor == null) {
-				acceptor = new SocketAcceptor(socketThreads, Executors.newCachedThreadPool());
+				acceptor = new SocketAcceptor(socketThreads, Executors.newCachedThreadPool((r) -> {return new Thread(r, "SocketAcceptor-Pool");}));
 			}
 			
 			SocketAcceptorConfig acceptorConfig = acceptor.getDefaultConfig();

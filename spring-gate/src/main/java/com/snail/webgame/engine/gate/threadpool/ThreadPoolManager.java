@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 import org.dom4j.Document;
 import org.dom4j.Element;
 
-import com.snail.webgame.engine.common.util.XMLUtil4DOM;
+import com.spring.common.util.XMLUtil4DOM;
 
 public class ThreadPoolManager {
     private static ThreadPoolManager thisInstance;

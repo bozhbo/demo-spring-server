@@ -15,13 +15,13 @@ import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.snail.webgame.engine.common.util.XMLUtil4DOM;
 import com.snail.webgame.engine.gate.common.ConnectConfig;
 import com.snail.webgame.engine.gate.common.FlashConfig;
 import com.snail.webgame.engine.gate.common.LocalConfig;
 import com.snail.webgame.engine.gate.common.SocketConfig;
 import com.snail.webgame.engine.gate.filter.crypto.Arithmetic;
 import com.snail.webgame.engine.gate.util.Util;
+import com.spring.common.util.XMLUtil4DOM;
 
 public class WebGameConfig {
 

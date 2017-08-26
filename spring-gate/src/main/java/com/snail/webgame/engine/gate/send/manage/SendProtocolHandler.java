@@ -10,12 +10,12 @@ import org.apache.mina.transport.socket.nio.SocketSessionConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.snail.webgame.engine.common.ServerName;
 import com.snail.webgame.engine.gate.cache.ServerMap;
 import com.snail.webgame.engine.gate.common.SocketConfig;
 import com.snail.webgame.engine.gate.config.GlobalServer;
 import com.snail.webgame.engine.gate.config.WebGameConfig;
 import com.snail.webgame.engine.gate.util.MessageServiceManage;
+import com.spring.common.ServerName;
 
 public class SendProtocolHandler extends IoHandlerAdapter {
 	

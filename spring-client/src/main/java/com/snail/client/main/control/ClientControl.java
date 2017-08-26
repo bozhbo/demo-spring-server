@@ -1,22 +1,17 @@
 package com.snail.client.main.control;
 
-import javax.servlet.http.HttpServletRequest;
+import com.snail.client.main.net.service.NetService;
+import com.snail.client.main.net.service.RoleService;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-
-@Controller
 public class ClientControl {
 
-	@GetMapping("/templates")
-    public String login(HttpServletRequest request){
-		request.setAttribute("key", "hello world");
-        return "login";
-    }
+	public static NetService netService;
+	public static RoleService roleService;
 	
-	@GetMapping("/templates/login")
-	public String commit(HttpServletRequest request){
-		request.setAttribute("key", "hello world1");
-        return "control";
-    }
+	public static void init() {
+		netService = new NetService();
+		roleService = new RoleService();
+		
+		netService.init();
+	}
 }

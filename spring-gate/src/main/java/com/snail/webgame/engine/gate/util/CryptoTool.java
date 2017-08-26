@@ -1,6 +1,6 @@
 package com.snail.webgame.engine.gate.util;
 
-import com.snail.webgame.engine.common.util.CodeUtil;
+import com.spring.common.util.CodeUtil;
 
 public class CryptoTool {
 

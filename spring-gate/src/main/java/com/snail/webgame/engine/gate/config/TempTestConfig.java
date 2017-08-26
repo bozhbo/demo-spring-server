@@ -9,7 +9,7 @@ import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.snail.webgame.engine.common.util.XMLUtil4DOM;
+import com.spring.common.util.XMLUtil4DOM;
 
 public class TempTestConfig {
 	private static final Logger log = LoggerFactory.getLogger("logs");

@@ -8,13 +8,13 @@ import org.apache.mina.common.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.snail.webgame.engine.common.ServerName;
 import com.snail.webgame.engine.gate.cache.ServerMap;
 import com.snail.webgame.engine.gate.common.ConnectConfig;
 import com.snail.webgame.engine.gate.config.GlobalServer;
 import com.snail.webgame.engine.gate.config.WebGameConfig;
 import com.snail.webgame.engine.gate.send.connect.Connect;
 import com.snail.webgame.engine.gate.util.MessageServiceManage;
+import com.spring.common.ServerName;
 
 /**
  * 维护连接 如果连接中断重新连接

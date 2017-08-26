@@ -6,7 +6,7 @@ public class RoomValue {
 	/**
 	 * 心跳接口
 	 */
-	public static final int MESSAGE_TYPE_HEARTBEAT_FF01 = Integer.parseInt("FF01", 16);
+	public static final int MESSAGE_TYPE_HEARTBEAT_FF01 = Integer.parseInt("ffff", 16);
 	
 	/**
 	 * 错误码

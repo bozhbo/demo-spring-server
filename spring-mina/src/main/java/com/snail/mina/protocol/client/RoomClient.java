@@ -207,4 +207,8 @@ public class RoomClient {
 		
 		return -1;
 	}
+	
+	public static boolean isConnected(String serverName) {
+		return clientMap.containsKey(serverName);
+	}
 }

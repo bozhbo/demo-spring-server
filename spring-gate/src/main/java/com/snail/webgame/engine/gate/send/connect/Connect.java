@@ -46,7 +46,7 @@ public class Connect {
 		ByteBuffer.setUseDirectBuffers(false);
 		ByteBuffer.setAllocator(new SimpleByteBufferAllocator());
 
-		chain.addLast("threadPool", new ExecutorFilter(Executors.newCachedThreadPool()));
+		//chain.addLast("threadPool", new ExecutorFilter(Executors.newCachedThreadPool()));
 		chain.addLast("codec", new ProtocolCodecFilter(new SendCodeFactory()));
 
 		try {

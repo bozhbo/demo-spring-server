@@ -22,7 +22,7 @@ public class GameServerSessionHandler implements SessionStateHandler {
 	@Override
 	public boolean checkRoleMessage(IoSession session, IRoomHead roomHead) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override

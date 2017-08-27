@@ -18,6 +18,8 @@ import com.snail.mina.protocol.filter.ProtocolCodecFilter;
 import com.snail.mina.protocol.handler.ServerHandle;
 import com.snail.mina.protocol.info.RoomFilterInfo;
 import com.snail.mina.protocol.server.RoomServer;
+import com.spring.world.bean.GlobalBeanFactory;
+import com.spring.world.io.WorldIoControl;
 import com.spring.world.io.process.handler.GameServerSessionHandler;
 import com.spring.world.state.WorldStateControl;
 
@@ -38,17 +40,29 @@ public class WorldServerMain {
 	public static void main(String[] args) {
 		start(args);
 		
+		WorldStateControl worldStateControl = GlobalBeanFactory.getBeanByName("WorldStateControl", WorldStateControl.class);
+		worldStateControl.init();
+		
+		WorldIoControl worldIoControl = GlobalBeanFactory.getBeanByName("WorldIoControl", WorldIoControl.class);
+		worldIoControl.init();
+		
 		RoomServer server = new RoomServer();
 		List<RoomFilterInfo> list = new ArrayList<>();
 		list.add(new RoomFilterInfo("codec", new ProtocolCodecFilter(new RequestEncoder(), new RequestDecode())));
 		list.add(new RoomFilterInfo("message", new MessageCodecFilter("Game", ByteOrder.BIG_ENDIAN)));
 		
-		server.start("192.168.1.105", 7001, 4, new ServerHandle(new GameServerSessionHandler(), Executors.newCachedThreadPool()), false, list);
+		server.start("127.0.0.1", 7001, 4, new ServerHandle(new GameServerSessionHandler(), Executors.newCachedThreadPool()), false, list);
 	}
 	
 	@Bean("WorldStateControl")
 	public WorldStateControl getWorldStateControl() {
 		WorldStateControl worldStateControl = new WorldStateControl();
 		return worldStateControl;
+	}
+	
+	@Bean("WorldIoControl")
+	public WorldIoControl getWorldIoControl() {
+		WorldIoControl worldIoControl = new WorldIoControl();
+		return worldIoControl;
 	}
 }

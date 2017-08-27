@@ -28,7 +28,7 @@ public class NetService {
 
 	public void checkSession() {
 		if (!RoomClient.isConnected(serverName)) {
-			connectGame("192.168.1.105", 8088);
+			connectGame("127.0.0.1", 8088);
 		}
 	}
 	

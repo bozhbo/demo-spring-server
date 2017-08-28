@@ -16,18 +16,59 @@ public class TestGoldFlowerConfig {
 	public void testConfig() {
 		GoldFlowerConfig.init();
 		
-		List<GoldFlowerInfo> list = GoldFlowerConfig.map.get(PokerTypeEnum.POKER_TYPE_BOOM);
+//		List<GoldFlowerInfo> list = GoldFlowerConfig.map.get(PokerTypeEnum.POKER_TYPE_BOOM);
+//		
+//		for (GoldFlowerInfo goldFlowerInfo : list) {
+//			System.out.println(goldFlowerInfo.toString());
+//		}
+//		
+//		System.out.println("=============");
+//		
+//		list = GoldFlowerConfig.map.get(PokerTypeEnum.POKER_TYPE_GREAT_GF);
+//		
+//		for (GoldFlowerInfo goldFlowerInfo : list) {
+//			System.out.println(goldFlowerInfo.toString());
+//		}
+//		
+//		System.out.println("=============");
+//		
+//		list = GoldFlowerConfig.map.get(PokerTypeEnum.POKER_TYPE_GF);
+//		
+//		for (GoldFlowerInfo goldFlowerInfo : list) {
+//			System.out.println(goldFlowerInfo.toString());
+//		}
+//		
+//		System.out.println("+++++++++++++++");
+//		
+//		list = GoldFlowerConfig.map.get(PokerTypeEnum.POKER_TYPE_STRAIGHT);
+//		
+//		for (GoldFlowerInfo goldFlowerInfo : list) {
+//			System.out.println(goldFlowerInfo.toString());
+//		}
+//		
+//		System.out.println("=============");
 		
-		for (GoldFlowerInfo goldFlowerInfo : list) {
-			System.out.println(goldFlowerInfo.toString());
-		}
+//		List<GoldFlowerInfo>  list = GoldFlowerConfig.map.get(PokerTypeEnum.POKER_TYPE_PAIRS);
+//		
+//		for (GoldFlowerInfo goldFlowerInfo : list) {
+//			System.out.println(goldFlowerInfo.toString());
+//		}
 		
-		System.out.println("=============");
+//		List<GoldFlowerInfo>  list = GoldFlowerConfig.map.get(PokerTypeEnum.POKER_TYPE_ALONE);
+//		int i = 0;
+//		
+//		for (GoldFlowerInfo goldFlowerInfo : list) {
+//			System.out.println(goldFlowerInfo.toString());
+//			
+//			if (i++ > 100) {
+//				break;
+//			}
+//		}
 		
-		list = GoldFlowerConfig.map.get(PokerTypeEnum.POKER_TYPE_GREAT_GF);
-		
-		for (GoldFlowerInfo goldFlowerInfo : list) {
-			System.out.println(goldFlowerInfo.toString());
-		}
+//		List<GoldFlowerInfo>  list = GoldFlowerConfig.map.get(PokerTypeEnum.POKER_TYPE_MIN);
+//		
+//		for (GoldFlowerInfo goldFlowerInfo : list) {
+//			System.out.println(goldFlowerInfo.toString());
+//		}
 	}
 }

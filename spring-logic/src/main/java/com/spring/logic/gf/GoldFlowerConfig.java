@@ -28,7 +28,7 @@ public class GoldFlowerConfig {
 	/**
 	 * 
 	 */
-	public static List<GoldFlowerInfo> allList = new ArrayList<>();
+	public static Map<String, GoldFlowerInfo> allMap = new HashMap<>();
 	
 	public static void init() {
 		for (int i = 0; i < 52; i++) {
@@ -94,6 +94,8 @@ public class GoldFlowerConfig {
 		level = setLevel(map.get(PokerTypeEnum.POKER_TYPE_ALONE), level);
 		level = setLevel(map.get(PokerTypeEnum.POKER_TYPE_MIN), level);
 		
+		List<GoldFlowerInfo> allList = new ArrayList<>();
+		
 		allList.addAll(map.get(PokerTypeEnum.POKER_TYPE_BOOM));
 		allList.addAll(map.get(PokerTypeEnum.POKER_TYPE_GREAT_GF));
 		allList.addAll(map.get(PokerTypeEnum.POKER_TYPE_GF));
@@ -101,6 +103,10 @@ public class GoldFlowerConfig {
 		allList.addAll(map.get(PokerTypeEnum.POKER_TYPE_PAIRS));
 		allList.addAll(map.get(PokerTypeEnum.POKER_TYPE_ALONE));
 		allList.addAll(map.get(PokerTypeEnum.POKER_TYPE_MIN));
+		
+		for (GoldFlowerInfo goldFlowerInfo : allList) {
+			allMap.put(goldFlowerInfo.getKey(), goldFlowerInfo);
+		}
 	}
 
 	private static boolean isBoom(int a, int b, int c) {
@@ -174,9 +180,36 @@ public class GoldFlowerConfig {
 		PokerInfo p2 = new PokerInfo(b);
 		PokerInfo p3 = new PokerInfo(c);
 
-		if (Math.abs(p1.getValue() - p2.getValue()) == 1 && Math.abs(p2.getValue() - p3.getValue()) == 1
-				&& Math.abs(p1.getValue() - p3.getValue()) == 1) {
-			return true;
+		int d = Math.abs(p1.getValue() - p2.getValue());
+		int e = Math.abs(p1.getValue() - p3.getValue());
+		int f = Math.abs(p2.getValue() - p3.getValue());
+		
+		if (d == 2) {
+			if (e == 1 && f == 1) {
+				return true;
+			}
+		} else if (e == 2) {
+			if (d == 1 && f == 1) {
+				return true;
+			}
+		} else if (f == 2) {
+			if (e == 1 && d == 1) {
+				return true;
+			}
+		}
+		
+		if (d == 12) {
+			if (p3.getValue() == 12) {
+				return true;
+			}
+		} else if (e == 12) {
+			if (p2.getValue() == 12) {
+				return true;
+			}
+		} else if (f == 12) {
+			if (p1.getValue() == 12) {
+				return true;
+			}
 		}
 
 		return false;
@@ -217,5 +250,9 @@ public class GoldFlowerConfig {
 		}
 
 		return level;
+	}
+	
+	public GoldFlowerInfo getGoldFlowerInfo(String key) {
+		return allMap.get(key);
 	}
 }

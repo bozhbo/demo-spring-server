@@ -12,6 +12,11 @@ public class PokerInfo {
 	 */
 	private byte type;
 	
+	/**
+	 * 原始值
+	 */
+	private byte src;
+	
 	public PokerInfo(int src) {
 		int index = (src - 1) / 13;
 		
@@ -28,6 +33,8 @@ public class PokerInfo {
 			type = 4;
 			value = (byte)(src - 39);
 		}
+		
+		this.src = (byte)src;
 	}
 
 	public byte getValue() {
@@ -46,6 +53,10 @@ public class PokerInfo {
 		this.type = type;
 	}
 
+	public byte getSrc() {
+		return src;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) {
@@ -53,7 +64,7 @@ public class PokerInfo {
 		}
 		
 		if (obj instanceof PokerInfo) {
-			return ((PokerInfo)obj).getValue() == this.type;
+			return ((PokerInfo)obj).getValue() == this.value;
 		} else {
 			return false;
 		}

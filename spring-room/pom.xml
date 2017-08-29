@@ -7,11 +7,11 @@
 		<version>0.0.1</version>
 	</parent>
 
-	<groupId>com.spring.world</groupId>
-	<artifactId>spring-world</artifactId>
+	<groupId>com.spring.room</groupId>
+	<artifactId>spring-room</artifactId>
 	<packaging>jar</packaging>
 
-	<name>spring-world</name>
+	<name>spring-room</name>
 	
 	<dependencies>
 		<dependency>
@@ -23,12 +23,6 @@
 		<dependency>
 			<groupId>com.spring.common</groupId>
 			<artifactId>spring-common</artifactId>
-			<version>0.0.1</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>com.spring.logic</groupId>
-			<artifactId>spring-logic</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 	</dependencies>

@@ -1,5 +1,6 @@
 package com.spring.logic.room.service.impl;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -54,7 +55,7 @@ public class CacheServiceImpl implements CacheService {
 		roomInfo.getList().clear();
 		roomInfo.setRoomState(0);
 		
-		RoomCahce.getPlayingRoomMap().get(roomInfo.getRoomState()).remove(roomInfo.getRoomId());
+		RoomCahce.getPlayingRoomMap().get(roomInfo.getRoomType()).remove(roomInfo.getRoomId());
 		
 		RoomCahce.getEmptyRoomMap().put(roomInfo.getRoomId(), roomInfo);
 	}
@@ -76,6 +77,15 @@ public class CacheServiceImpl implements CacheService {
 		}
 		
 		int index = RoomConfig.getRandom(map.size());
+		Iterator<Integer> it = map.keySet().iterator();
+		
+		while (it.hasNext()) {
+			if (index == 0) {
+				return map.get(it.next());
+			} else {
+				index--;
+			}
+		}
 		
 		return null;
 	}

@@ -13,6 +13,6 @@ public interface RoomService {
 	
 	public void closeRoom(RoomInfo roomInfo);
 	
-	public int randomJoinRoom(RoomTypeEnum roomTypeEnum, RoleInfo roleInfo);
+	public RoomInfo randomJoinRoom(RoomTypeEnum roomTypeEnum, RoleInfo roleInfo);
 	
 }

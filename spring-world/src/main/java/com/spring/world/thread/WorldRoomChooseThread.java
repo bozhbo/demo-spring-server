@@ -5,10 +5,14 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.spring.logic.room.enums.RoomTypeEnum;
 import com.spring.logic.room.event.IRoomEvent;
+import com.spring.logic.room.info.RoomInfo;
+import com.spring.logic.room.service.RoomService;
 import com.spring.world.event.ChooseRoomEvent;
+import com.spring.world.room.service.RoomClientService;
 
 public class WorldRoomChooseThread extends Thread {
 	
@@ -19,6 +23,10 @@ public class WorldRoomChooseThread extends Thread {
 	private LinkedBlockingQueue<IRoomEvent> queue = new LinkedBlockingQueue<IRoomEvent>();
 	
 	private volatile boolean stop;
+	
+	private RoomService roomService;
+	
+	private RoomClientService roomClientService;
 	
 	public WorldRoomChooseThread(RoomTypeEnum roomTypeEnum) {
 		super("RoomType-" + roomTypeEnum.getValue());
@@ -33,10 +41,15 @@ public class WorldRoomChooseThread extends Thread {
 				
 				if (roomEvent != null) {
 					if (roomEvent instanceof ChooseRoomEvent) {
-						
+						RoomInfo roomInfo = this.roomService.randomJoinRoom(roomTypeEnum, ((ChooseRoomEvent)roomEvent).getRoleInfo());
+					
+						if (roomInfo != null) {
+							roomClientService.deployRoleInfo(roomInfo, ((ChooseRoomEvent)roomEvent).getRoleInfo());
+						} else {
+							logger.warn("");
+						}
 					}
 				}
-				
 			} catch (Exception e) {
 				logger.error("", e);
 			}
@@ -55,6 +68,11 @@ public class WorldRoomChooseThread extends Thread {
 
 	public RoomTypeEnum getRoomTypeEnum() {
 		return roomTypeEnum;
+	}
+
+	@Autowired
+	public void setRoomService(RoomService roomService) {
+		this.roomService = roomService;
 	}
 	
 	

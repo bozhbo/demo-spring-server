@@ -5,10 +5,10 @@ import javax.management.relation.RoleInfo;
 import com.spring.logic.room.info.RoomInfo;
 import com.spring.room.control.service.RoomControlService;
 
-public class RoomControlServiceImpl implements RoomControlService {
+public class RoomControlServiceAllImpl implements RoomControlService {
 
 	@Override
-	public int deployRoomInfo(RoomInfo roomInfo) {
+	public int loopRoomInfo(RoomInfo roomInfo) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

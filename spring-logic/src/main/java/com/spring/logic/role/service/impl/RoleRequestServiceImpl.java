@@ -1,16 +1,10 @@
 package com.spring.logic.role.service.impl;
 
 import com.spring.logic.role.info.RoleInfo;
-import com.spring.logic.role.service.RoleRequestService;
+import com.spring.logic.role.service.RoleRoomService;
 import com.spring.logic.room.enums.RoomTypeEnum;
 
-public class RoleRequestServiceImpl implements RoleRequestService {
-
-	@Override
-	public void roleLogin(RoleInfo roleInfo) {
-		// TODO Auto-generated method stub
-		
-	}
+public class RoleRequestServiceImpl implements RoleRoomService {
 
 	@Override
 	public int roleJoinRoomCheck(RoleInfo roleInfo) {

@@ -10,4 +10,6 @@ public interface RoomService {
 
 	public void roomResize(Map<RoomTypeEnum, Integer> roleCountMap, Function<RoomInfo, Integer> deployRoomInfo);
 	
+	public void closeRoom(RoomInfo roomInfo);
+	
 }

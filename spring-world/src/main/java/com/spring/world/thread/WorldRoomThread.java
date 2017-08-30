@@ -9,8 +9,8 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.spring.logic.room.enums.RoomTypeEnum;
+import com.spring.logic.room.info.RoomInfo;
 import com.spring.logic.room.service.RoomService;
-import com.spring.world.io.process.role.login.LoginProcessor;
 import com.spring.world.room.service.RoomClientService;
 
 public class WorldRoomThread extends Thread {
@@ -18,6 +18,7 @@ public class WorldRoomThread extends Thread {
 	private static final Log logger = LogFactory.getLog(WorldRoomThread.class);
 
 	private Map<RoomTypeEnum, Integer> roleCountMap = new HashMap<>();
+	private Map<Integer, Integer> roomMap = new HashMap<>();
 	
 	private RoomService roomService;
 	private RoomClientService roomClientService;
@@ -34,7 +35,7 @@ public class WorldRoomThread extends Thread {
 	public void run() {
 		while (true) {
 			try {
-				this.roomService.roomResize(roleCountMap, (roomInfo) -> {return this.roomClientService.deployRoomInfo(roomInfo);});
+				this.roomService.roomResize(roleCountMap, (roomInfo) -> {return this.deployRoomEnd(roomInfo, this.roomClientService.deployRoomInfo(roomInfo));});
 			} catch (Exception e) {
 				logger.error("WorldRoomThread error", e);
 			} finally {
@@ -45,6 +46,16 @@ public class WorldRoomThread extends Thread {
 				}
 			}
 		}
+	}
+	
+	private int deployRoomEnd(RoomInfo roomInfo, int roomServerId) {
+		if (roomServerId == 0) {
+			this.roomService.closeRoom(roomInfo);
+		} else {
+			roomMap.put(roomInfo.getRoomId(), roomServerId);
+		}
+		
+		return roomServerId;
 	}
 	
 	@Autowired

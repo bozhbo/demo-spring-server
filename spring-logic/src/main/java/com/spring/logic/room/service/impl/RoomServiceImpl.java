@@ -2,8 +2,8 @@ package com.spring.logic.room.service.impl;
 
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.Function;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -46,5 +46,10 @@ public class RoomServiceImpl implements RoomService {
 	@Autowired
 	public void setCacheService(CacheService cacheService) {
 		this.cacheService = cacheService;
+	}
+
+	@Override
+	public void closeRoom(RoomInfo roomInfo) {
+		this.cacheService.closeRoom(roomInfo);
 	}
 }

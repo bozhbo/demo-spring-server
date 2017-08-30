@@ -1,7 +1,9 @@
 package com.spring.room.thread;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
@@ -39,24 +41,23 @@ public class RoomThread implements Runnable {
 			try {
 				IRoomEvent roomEvent = queue.poll(1, TimeUnit.SECONDS);
 				
-				if (roomEvent instanceof DeployRoomEvent) {
-					if (list.size() >= PROCESS_MAX_THREAD_COUNT) {
-						this.roomControlService.deployRoomInfoFailed(((DeployRoomEvent)roomEvent).getRoomInfo());
-					} else {
-						if (!addRoomInfo(list, roomEvent)) {
+				if (roomEvent != null) {
+					if (roomEvent instanceof DeployRoomEvent) {
+						if (list.size() >= PROCESS_MAX_THREAD_COUNT) {
 							this.roomControlService.deployRoomInfoFailed(((DeployRoomEvent)roomEvent).getRoomInfo());
 						} else {
-							this.roomControlService.deployRoomInfoSuccessed(((DeployRoomEvent)roomEvent).getRoomInfo());
+							if (!addRoomInfo(list, roomEvent)) {
+								this.roomControlService.deployRoomInfoFailed(((DeployRoomEvent)roomEvent).getRoomInfo());
+							} else {
+								if (addRoomInfo(list, roomEvent)) {
+									this.roomControlService.deployRoomInfoSuccessed(((DeployRoomEvent)roomEvent).getRoomInfo());
+								} else {
+									this.roomControlService.deployRoomInfoFailed(((DeployRoomEvent)roomEvent).getRoomInfo());
+								}
+							}
 						}
 					}
-					
-					int result = this.roomControlService.deployRoomInfo(((DeployRoomEvent)roomEvent).getRoomInfo());
-					
-					if (result == 1) {
-						
-					}
 				}
-				
 			} catch (Exception e) {
 				logger.error("", e);
 			}
@@ -67,7 +68,14 @@ public class RoomThread implements Runnable {
 		RoomLoopThread minRoomLoopThread = null;
 		int minValue = THREAD_MAX_ROOM_COUNT;
 		
+		Set<RoomLoopThread> stopSet = new HashSet<>();
+		
 		for (RoomLoopThread roomLoopThread : list) {
+			if (roomLoopThread.isStop()) {
+				stopSet.add(roomLoopThread);
+				continue;
+			}
+			
 			if (roomLoopThread.getRoomSize() < (THREAD_MAX_ROOM_COUNT / 2)) {
 				roomLoopThread.addRoomEvent(roomEvent);
 				return true;
@@ -84,6 +92,11 @@ public class RoomThread implements Runnable {
 		}
 		
 		minRoomLoopThread.addRoomEvent(roomEvent);
+		
+		for (RoomLoopThread roomLoopThread : stopSet) {
+			list.remove(roomLoopThread);
+		}
+		
 		return true;
 	}
 	

@@ -6,7 +6,7 @@ import com.spring.logic.room.info.RoomInfo;
 
 public interface RoomControlService {
 
-	public int deployRoomInfo(RoomInfo roomInfo);
+	public int loopRoomInfo(RoomInfo roomInfo);
 	
 	public int deployRoleInfo(RoomInfo roomInfo, RoleInfo roleInfo);
 	

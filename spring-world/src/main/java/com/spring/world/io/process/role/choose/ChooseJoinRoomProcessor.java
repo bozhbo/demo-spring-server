@@ -11,7 +11,7 @@ import com.snail.mina.protocol.processor.IProcessor;
 import com.spring.common.GameMessageType;
 import com.spring.logic.role.cache.RoleCache;
 import com.spring.logic.role.info.RoleInfo;
-import com.spring.logic.role.service.RoleRequestService;
+import com.spring.logic.role.service.RoleRoomService;
 import com.spring.logic.room.enums.RoomTypeEnum;
 import com.spring.world.io.process.role.login.LoginProcessor;
 
@@ -19,7 +19,7 @@ public class ChooseJoinRoomProcessor implements IProcessor {
 	
 	private static final Log logger = LogFactory.getLog(LoginProcessor.class);
 	
-	private RoleRequestService roleRequestService;
+	private RoleRoomService roleRequestService;
 
 	@Override
 	public void processor(Message message) {
@@ -51,7 +51,7 @@ public class ChooseJoinRoomProcessor implements IProcessor {
 	}
 
 	@Autowired
-	public void setRoleRequestService(RoleRequestService roleRequestService) {
+	public void setRoleRequestService(RoleRoomService roleRequestService) {
 		this.roleRequestService = roleRequestService;
 	}
 

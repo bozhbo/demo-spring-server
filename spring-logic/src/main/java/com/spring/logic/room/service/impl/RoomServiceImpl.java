@@ -5,15 +5,21 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Function;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.spring.logic.role.info.RoleInfo;
 import com.spring.logic.room.RoomConfig;
 import com.spring.logic.room.enums.RoomTypeEnum;
 import com.spring.logic.room.info.RoomInfo;
 import com.spring.logic.room.service.CacheService;
 import com.spring.logic.room.service.RoomService;
+import com.spring.room.thread.RoomLoopThread;
 
 public class RoomServiceImpl implements RoomService {
+	
+	private static final Log logger = LogFactory.getLog(RoomServiceImpl.class);
 	
 	private CacheService cacheService;
 
@@ -43,13 +49,24 @@ public class RoomServiceImpl implements RoomService {
 		}
 	}
 	
-	@Autowired
-	public void setCacheService(CacheService cacheService) {
-		this.cacheService = cacheService;
-	}
-
 	@Override
 	public void closeRoom(RoomInfo roomInfo) {
 		this.cacheService.closeRoom(roomInfo);
+	}
+	
+	public int randomJoinRoom(RoomTypeEnum roomTypeEnum, RoleInfo roleInfo) {
+		if (roleInfo.getRoomId() > 0) {
+			logger.warn("role is in room " + roleInfo.getRoomId());
+			return 0;
+		}
+		
+		
+		
+		return 0;
+	}
+	
+	@Autowired
+	public void setCacheService(CacheService cacheService) {
+		this.cacheService = cacheService;
 	}
 }

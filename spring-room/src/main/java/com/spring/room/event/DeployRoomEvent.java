@@ -1,5 +1,6 @@
 package com.spring.room.event;
 
+import com.spring.logic.room.event.IRoomEvent;
 import com.spring.logic.room.info.RoomInfo;
 
 public class DeployRoomEvent implements IRoomEvent {

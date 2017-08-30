@@ -2,6 +2,7 @@ package com.spring.logic.role.service;
 
 import com.spring.logic.role.info.RoleInfo;
 import com.spring.logic.room.enums.RoomTypeEnum;
+import com.spring.logic.room.info.RoomInfo;
 
 public interface RoleRoomService {
 
@@ -9,5 +10,5 @@ public interface RoleRoomService {
 	
 	public void roleAutoJoinRoom(RoleInfo roleInfo);
 	
-	public void roleChooseJoinRoom(RoleInfo roleInfo, RoomTypeEnum roomTypeEnum);
+	public RoomInfo roleChooseJoinRoom(RoleInfo roleInfo, RoomTypeEnum roomTypeEnum);
 }

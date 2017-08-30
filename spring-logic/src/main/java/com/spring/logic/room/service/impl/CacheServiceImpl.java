@@ -2,6 +2,10 @@ package com.spring.logic.room.service.impl;
 
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.util.Set;
 
 import com.spring.logic.room.RoomConfig;
@@ -11,6 +15,8 @@ import com.spring.logic.room.info.RoomInfo;
 import com.spring.logic.room.service.CacheService;
 
 public class CacheServiceImpl implements CacheService {
+	
+	private static final Log logger = LogFactory.getLog(CacheServiceImpl.class);
 
 	public RoomInfo createRoom(RoomTypeEnum roomTypeEnum) {
 		RoomInfo roomInfo = null;
@@ -59,5 +65,18 @@ public class CacheServiceImpl implements CacheService {
 	
 	public int getPlayingRoomSize(RoomTypeEnum roomTypeEnum) {
 		return RoomCahce.getPlayingRoomMap().get(roomTypeEnum).size();
+	}
+	
+	public RoomInfo randomPlayingRoom(RoomTypeEnum roomTypeEnum) {
+		Map<Integer, RoomInfo> map = RoomCahce.getPlayingRoomMap().get(roomTypeEnum);
+		
+		if (map.size() < 0) {
+			logger.warn("room is not create " + roomTypeEnum.getValue());
+			return null;
+		}
+		
+		int index = RoomConfig.getRandom(map.size());
+		
+		return null;
 	}
 }

@@ -12,4 +12,6 @@ public interface CacheService {
 	public RoomInfo queryRoom(int roomId);
 	
 	public int getPlayingRoomSize(RoomTypeEnum roomTypeEnum);
+	
+	public RoomInfo randomPlayingRoom(RoomTypeEnum roomTypeEnum);
 }

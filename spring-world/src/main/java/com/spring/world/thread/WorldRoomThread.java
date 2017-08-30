@@ -11,11 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.spring.logic.room.enums.RoomTypeEnum;
 import com.spring.logic.room.service.RoomService;
 import com.spring.world.io.process.role.login.LoginProcessor;
-import com.spring.world.room.RoomClientService;
+import com.spring.world.room.service.RoomClientService;
 
 public class WorldRoomThread extends Thread {
 	
-	private static final Log logger = LogFactory.getLog(LoginProcessor.class);
+	private static final Log logger = LogFactory.getLog(WorldRoomThread.class);
 
 	private Map<RoomTypeEnum, Integer> roleCountMap = new HashMap<>();
 	

@@ -53,15 +53,20 @@ public class RoomServiceImpl implements RoomService {
 		this.cacheService.closeRoom(roomInfo);
 	}
 	
-	public int randomJoinRoom(RoomTypeEnum roomTypeEnum, RoleInfo roleInfo) {
+	public RoomInfo randomJoinRoom(RoomTypeEnum roomTypeEnum, RoleInfo roleInfo) {
 		if (roleInfo.getRoomId() > 0) {
 			logger.warn("role is in room " + roleInfo.getRoomId());
-			return 0;
+			return null;
 		}
 		
+		RoomInfo roomInfo = cacheService.randomPlayingRoom(roomTypeEnum);
 		
+		if (roomInfo != null) {
+			roleInfo.setRoomId(roomInfo.getRoomId());
+			return roomInfo;
+		}
 		
-		return 0;
+		return null;
 	}
 	
 	@Autowired

@@ -3,8 +3,9 @@ package com.spring.logic.role.info;
 public class RoleInfo {
 
 	private int roleId;
-	private int roomId;
+	private volatile int roomId;
 	
+	int errorCode;
 	
 	public int getRoleId() {
 		return roleId;
@@ -17,6 +18,12 @@ public class RoleInfo {
 	}
 	public void setRoomId(int roomId) {
 		this.roomId = roomId;
+	}
+	public int getErrorCode() {
+		return errorCode;
+	}
+	public void setErrorCode(int errorCode) {
+		this.errorCode = errorCode;
 	}
 	
 	

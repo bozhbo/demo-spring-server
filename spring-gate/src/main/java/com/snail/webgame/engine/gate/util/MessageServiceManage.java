@@ -85,6 +85,7 @@ public class MessageServiceManage {
 		buffer.putInt(0);// UserID3
 
 		buffer.putInt(MsgType);
+		buffer.putShort((short)0);
 
 		return buffer;
 	}

@@ -7,7 +7,6 @@ import com.snail.client.main.fx.scene.impl.MainScene;
 import com.snail.client.main.fx.scene.impl.SceneScene;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.stage.Stage;
 
 public class ClientMain extends Application {
@@ -37,8 +36,6 @@ public class ClientMain extends Application {
 		sceneControl.forward("Login", null);
 		
 		ClientControl.setSceneControl(sceneControl);
-		
-		new Thread(ClientControl.refreshTask).start();
 	}
 
 	public static void main(String[] args) {

@@ -17,4 +17,8 @@ public class GameMessageType {
 	public static int GAME_CLIENT_ROOM_CHOOSE_JOIN_SEND = 0xA103;
 	
 	public static int GAME_CLIENT_ROOM_CHOOSE_JOIN_RECEIVE = 0xA104;
+	
+	public static int GAME_CLIENT_WORLD_COMMON_SEND = 0xA105;
+	
+	public static int GAME_CLIENT_WORLD_COMMON_RECEIVE = 0xA106;
 }

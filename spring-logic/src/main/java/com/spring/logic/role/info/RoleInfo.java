@@ -3,6 +3,7 @@ package com.spring.logic.role.info;
 public class RoleInfo {
 
 	private int roleId;
+	private int gateId;
 	private volatile int roomId;
 	
 	int errorCode;
@@ -24,6 +25,12 @@ public class RoleInfo {
 	}
 	public void setErrorCode(int errorCode) {
 		this.errorCode = errorCode;
+	}
+	public int getGateId() {
+		return gateId;
+	}
+	public void setGateId(int gateId) {
+		this.gateId = gateId;
 	}
 	
 	

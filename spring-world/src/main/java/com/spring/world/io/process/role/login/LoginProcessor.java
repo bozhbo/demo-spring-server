@@ -2,7 +2,6 @@ package com.spring.world.io.process.role.login;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.boot.SpringApplication;
 
 import com.snail.mina.protocol.info.IRoomBody;
 import com.snail.mina.protocol.info.Message;
@@ -18,6 +17,18 @@ public class LoginProcessor implements IProcessor {
 	public void processor(Message message) {
 		RoomMessageHead head = (RoomMessageHead)message.getiRoomHead();
 		LoginReq req = (LoginReq)message.getiRoomBody();
+		
+		LoginResp resp = new LoginResp();
+		resp.setAccount(req.getAccount());
+		resp.setGateServerId(head.getGateId());
+		resp.setResult(1);
+		resp.setRoleId(1);
+		resp.setRoleName("bob");
+		
+		head.setRoleId(resp.getRoleId());
+		head.setMsgType(GameMessageType.GAME_CLIENT_LOGIN_RECEIVE);
+		message.setiRoomBody(resp);
+		message.sendMessage();
 		
 		logger.info(" === " + req.getAccount());
 	}

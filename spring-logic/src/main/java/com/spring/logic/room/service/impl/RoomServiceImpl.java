@@ -15,7 +15,6 @@ import com.spring.logic.room.enums.RoomTypeEnum;
 import com.spring.logic.room.info.RoomInfo;
 import com.spring.logic.room.service.CacheService;
 import com.spring.logic.room.service.RoomService;
-import com.spring.room.thread.RoomLoopThread;
 
 public class RoomServiceImpl implements RoomService {
 	

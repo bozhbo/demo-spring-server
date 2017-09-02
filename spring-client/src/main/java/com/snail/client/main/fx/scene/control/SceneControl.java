@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.snail.client.main.fx.scene.IScene;
+import com.snail.client.main.fx.scene.ISceneParam;
 
 import javafx.stage.Stage;
 
@@ -24,8 +25,9 @@ public class SceneControl {
 		sceneMap.put(name, scene);
 	}
 
-	public void forward(String name) {
+	public void forward(String name, ISceneParam sceneParam) {
 		if (sceneMap.containsKey(name)) {
+			sceneMap.get(name).init(sceneParam);
 			primaryStage.setScene(sceneMap.get(name).getScene());
 		} else {
 			primaryStage.setScene(sceneMap.get("Error").getScene());

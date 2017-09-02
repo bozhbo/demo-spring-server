@@ -76,7 +76,6 @@ public class RecMsgMgtRunnable  {
 			return ; 
 		}
 		else if(msgType == Command.USER_VERIFY_ROLE_RESP||
-				msgType == Command.USER_CHECK_ROLE_RESP||//用户登录、创建角色和检查角色是否重复的应答
 				msgType == Command.USER_LOGIN_RESP||
 				msgType == Command.USER_ROLE_RESP||
 				msgType == Command.USER_LOGIN_QUEUE_RESP||

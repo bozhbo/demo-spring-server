@@ -12,14 +12,14 @@ public class Command {
 	public static int USER_VERIFY_ROLE_REQ = 0xA001;
 	public static int USER_VERIFY_ROLE_RESP = 0xA002;
 
-	// 游戏客户端验证角色名是否重复
-	public static int USER_CHECK_ROLE_REQ = 0xA003;
-	public static int USER_CHECK_ROLE_RESP = 0xA004;
+	// 游戏客户端用户登录
+	public static int USER_LOGIN_REQ = 0xA003;
+	public static int USER_LOGIN_RESP = 0xA004;
 
 	public static int USER_CREATE_ROLE_REQ = 0xA005; // 游戏客户端创建角色
 
-	public static int USER_LOGIN_REQ = 0xA007; // 游戏客户端用户登录请求
-	public static int USER_LOGIN_RESP = 0xA006; // 游戏客户端用户登录应答
+	//public static int USER_LOGIN_REQ = 0xA007; // 游戏客户端用户登录请求
+	//public static int USER_LOGIN_RESP = 0xA006; // 游戏客户端用户登录应答
 
 	public static int USER_ROLE_RESP = 0xA008; // 通知客户端进入创建角色的帐号
 

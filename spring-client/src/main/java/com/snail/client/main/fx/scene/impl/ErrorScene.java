@@ -1,6 +1,7 @@
 package com.snail.client.main.fx.scene.impl;
 
 import com.snail.client.main.fx.scene.IScene;
+import com.snail.client.main.fx.scene.ISceneParam;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -23,6 +24,12 @@ public class ErrorScene implements IScene {
 	@Override
 	public Scene getScene() {
 		return scene;
+	}
+
+	@Override
+	public void init(ISceneParam sceneParam) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

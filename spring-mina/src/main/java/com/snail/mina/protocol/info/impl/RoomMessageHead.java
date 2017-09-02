@@ -69,7 +69,7 @@ public class RoomMessageHead extends BaseMessageHead {
 		buffer.order(order).putInt(sceneId);
 		buffer.order(order).putInt(msgType);
 		
-		FlashHandleStr.encodeStringB(userState);
+		buffer.put(FlashHandleStr.encodeStringB(userState));
 	}
 	
 	@Override

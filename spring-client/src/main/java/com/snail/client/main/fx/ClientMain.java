@@ -4,8 +4,10 @@ import com.snail.client.main.control.ClientControl;
 import com.snail.client.main.fx.scene.control.SceneControl;
 import com.snail.client.main.fx.scene.impl.ErrorScene;
 import com.snail.client.main.fx.scene.impl.MainScene;
+import com.snail.client.main.fx.scene.impl.SceneScene;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 
 public class ClientMain extends Application {
@@ -20,9 +22,11 @@ public class ClientMain extends Application {
 		
 		MainScene mainScene = new MainScene();
 		ErrorScene errorScene = new ErrorScene();
+		SceneScene sceneScene = new SceneScene();
 		
 		sceneControl.register("Login", mainScene);
 		sceneControl.register("Error", errorScene);
+		sceneControl.register("scene", sceneScene);
 		
 		primaryStage.setTitle("Hello");
 		primaryStage.setScene(mainScene.getScene());
@@ -30,10 +34,17 @@ public class ClientMain extends Application {
 		
 		primaryStage.setOnCloseRequest((event) -> System.exit(0));
 		
-		sceneControl.forward("Login");
+		sceneControl.forward("Login", null);
+		
+		ClientControl.setSceneControl(sceneControl);
+		
+		new Thread(ClientControl.refreshTask).start();
 	}
 
 	public static void main(String[] args) {
 		launch(args);
+		
+		ClientControl.netService.checkSession();
 	}
+	
 }

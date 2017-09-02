@@ -27,6 +27,15 @@ public class Util {
 		}
 		return value;
 	}
+	
+	public static short byteArrayToShort(byte[] b) {
+		short value = 0;
+		for (int i = 0; i < b.length; i++) {
+			short shift = (short)((b.length - 1 - i) * 8);
+			value += (b[i] & 0xFF) << shift;
+		}
+		return value;
+	}
 
 	public static long byteArrayToLong(byte[] b) {
 		long value = 0;

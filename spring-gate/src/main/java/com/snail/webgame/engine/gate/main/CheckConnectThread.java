@@ -53,7 +53,7 @@ public class CheckConnectThread extends Thread {
 
 			if (serverState.isAllNormal()) {
 				try {
-					Thread.sleep(15000);
+					Thread.sleep(60000);
 				} catch (InterruptedException e) {
 					log.error("", e);
 				}
@@ -90,15 +90,6 @@ public class CheckConnectThread extends Thread {
 
 				}
 				GlobalServer.GAME_IS_REGISTER = true;
-			} else if (serverName.equalsIgnoreCase(ServerName.MAIL_SERVER_NAME)) {
-
-				if (GlobalServer.CHAT_IS_REGISTER) {
-					messagemgt.sendActiveServerMessage(session, 1);
-				} else {
-					messagemgt.sendActiveServerMessage(session, 0);
-					session.setAttribute("serverName", ServerName.MAIL_SERVER_NAME);
-				}
-				GlobalServer.CHAT_IS_REGISTER = true;
 			}
 		}
 	}

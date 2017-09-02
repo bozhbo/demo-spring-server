@@ -12,7 +12,7 @@ public class LoginResp extends BaseRoomResp {
 	private int roleId;// 角色Id
 	private String account;// 玩家登陆帐号
 	private String roleName;// 角色名称
-	private short gateServerId;// gate服务器Id
+	private int gateServerId;// gate服务器Id
 
 	@Override
 	public void resp2Bytes(ByteBuffer buffer, ByteOrder order) {
@@ -20,7 +20,7 @@ public class LoginResp extends BaseRoomResp {
 		setInt(buffer, order, roleId);
 		setString(buffer, order, account);
 		setString(buffer, order, roleName);
-		setShort(buffer, order, gateServerId);
+		setInt(buffer, order, gateServerId);
 
 	}
 
@@ -56,11 +56,11 @@ public class LoginResp extends BaseRoomResp {
 		this.roleName = roleName;
 	}
 
-	public short getGateServerId() {
+	public int getGateServerId() {
 		return gateServerId;
 	}
 
-	public void setGateServerId(short gateServerId) {
+	public void setGateServerId(int gateServerId) {
 		this.gateServerId = gateServerId;
 	}
 

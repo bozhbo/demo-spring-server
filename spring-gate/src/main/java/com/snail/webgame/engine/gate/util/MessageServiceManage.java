@@ -155,7 +155,7 @@ public class MessageServiceManage {
 		int result = getResult(message);
 
 		byte b[] = new byte[4];
-		System.arraycopy(message, BODY_INDEX_FIELD_1, b, 0, 4);
+		System.arraycopy(message, INDEX_ROLE_ID, b, 0, 4);
 
 		int roleId = Util.byteArrayToInt(b);
 
@@ -538,11 +538,17 @@ public class MessageServiceManage {
 	 */
 	public int getResult(byte[] message) {
 		byte c[] = new byte[4];
-		System.arraycopy(message, BODY_INDEX_FIELD_0, c, 0, 4);
+		byte s[] = new byte[2];
+		System.arraycopy(message, BODY_INDEX_FIELD_0, s, 0, 2);
+		
+		short len = Util.byteArrayToShort(s);
+		
+		System.arraycopy(message, BODY_INDEX_FIELD_0 + 2 + len, c, 0, 4);
 		int result = Util.byteArrayToInt(c);
 
 		c = null;
-
+		s = null;
+		
 		return result;
 	}
 

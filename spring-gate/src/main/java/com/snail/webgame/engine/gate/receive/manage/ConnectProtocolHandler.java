@@ -173,8 +173,8 @@ public class ConnectProtocolHandler extends IoHandlerAdapter {
 				}
 				return;
 			} else if (msgType == Command.USER_VERIFY_ROLE_REQ || msgType == Command.USER_LOGIN_REQ
-					|| msgType == Command.USER_CREATE_ROLE_REQ || msgType == Command.USER_CHECK_ROLE_REQ
-					|| msgType == Command.USER_LOGIN_QUEUE_REQ || msgType == Command.USER_LOGIN_ACTIVATE_REQ)// 用户登录游戏服务器
+					|| msgType == Command.USER_CREATE_ROLE_REQ || msgType == Command.USER_LOGIN_QUEUE_REQ 
+					|| msgType == Command.USER_LOGIN_ACTIVATE_REQ)// 用户登录游戏服务器
 			{
 				if (msgType == Command.USER_LOGIN_REQ || msgType == Command.USER_VERIFY_ROLE_REQ
 						|| msgType == Command.USER_CREATE_ROLE_REQ) {

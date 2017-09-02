@@ -2,8 +2,8 @@ package com.snail.client.main.fx.scene.impl;
 
 import com.snail.client.main.control.ClientControl;
 import com.snail.client.main.fx.scene.IScene;
+import com.snail.client.main.fx.scene.ISceneParam;
 import com.snail.client.main.fx.scene.control.SceneControl;
-import com.snail.client.main.fx.scene.service.SceneCommonService;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -67,5 +67,11 @@ public class MainScene implements IScene {
 
 	public Scene getScene() {
 		return scene;
+	}
+
+	@Override
+	public void init(ISceneParam sceneParam) {
+		// TODO Auto-generated method stub
+		
 	}
 }

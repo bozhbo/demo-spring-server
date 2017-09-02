@@ -61,13 +61,6 @@ public class SendProtocolHandler extends IoHandlerAdapter {
 					
 				}
 				 
-				else if(serverName.equalsIgnoreCase(ServerName.MAIL_SERVER_NAME))
-				{
-					GlobalServer.CHAT_IS_REGISTER = false;
-
-				}
-				 
-
 				ServerMap.removeSession(serverName);
 				if(session!=null&&session.isConnected())
 				{

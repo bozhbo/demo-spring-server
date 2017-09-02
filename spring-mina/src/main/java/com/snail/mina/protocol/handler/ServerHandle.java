@@ -85,7 +85,7 @@ public class ServerHandle extends IoHandlerAdapter {
 					((SocketSessionConfig) session.getConfig()).setKeepAlive(true);
 					((SocketSessionConfig) session.getConfig()).setTcpNoDelay(true);
 
-					session.setIdleTime(IdleStatus.BOTH_IDLE, 20);
+					session.setIdleTime(IdleStatus.BOTH_IDLE, 600);
 				}
 
 				logger.warn("ServerHandle : Server Session is use default socket setting");

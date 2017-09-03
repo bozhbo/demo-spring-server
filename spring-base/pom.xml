@@ -33,10 +33,12 @@
 	</properties>
 	
 	<modules>
-		<module>spring-common</module>
-		<module>spring-mina</module>
-		<module>spring-gate</module>
-		<module>spring-client</module>
+		<module>../spring-common</module>
+		<module>../spring-mina</module>
+		<module>../spring-logic</module>
+		<module>../spring-gate</module>
+		<module>../spring-room</module>
+		<module>../spring-world</module>
 	</modules>
 
 	<dependencies>

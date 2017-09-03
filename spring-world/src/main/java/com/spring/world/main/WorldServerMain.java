@@ -51,7 +51,7 @@ public class WorldServerMain {
 		list.add(new RoomFilterInfo("codec", new ProtocolCodecFilter(new RequestEncoder(), new RequestDecode())));
 		list.add(new RoomFilterInfo("message", new MessageCodecFilter("Game", ByteOrder.BIG_ENDIAN)));
 		
-		server.start("127.0.0.1", 7001, 4, new ServerHandle(new GameServerSessionHandler(), Executors.newCachedThreadPool()), false, list);
+		server.start("192.168.0.101", 7001, 4, new ServerHandle(new GameServerSessionHandler(), Executors.newCachedThreadPool()), false, list);
 	}
 	
 	@Bean("WorldStateControl")

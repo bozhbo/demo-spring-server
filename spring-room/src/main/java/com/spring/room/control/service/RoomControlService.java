@@ -1,7 +1,7 @@
 package com.spring.room.control.service;
 
-import javax.management.relation.RoleInfo;
 
+import com.spring.logic.role.info.RoleInfo;
 import com.spring.logic.room.info.RoomInfo;
 
 public interface RoomControlService {

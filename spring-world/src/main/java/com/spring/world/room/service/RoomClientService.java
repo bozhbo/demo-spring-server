@@ -19,4 +19,6 @@ public interface RoomClientService {
 	public void roomServerClose(int roomServerId);
 	
 	public void roomInfo(String info);
+	
+	public void autoJoin(RoleInfo roleInfo);
 }

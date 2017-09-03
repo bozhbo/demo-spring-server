@@ -21,4 +21,7 @@ public class GameMessageType {
 	public static int GAME_CLIENT_WORLD_COMMON_SEND = 0xA105;
 	
 	public static int GAME_CLIENT_WORLD_COMMON_RECEIVE = 0xA106;
+	
+	public static int GAME_CLIENT_WORLD_COMMON_SEND_AUTO_START = 1;
+	
 }

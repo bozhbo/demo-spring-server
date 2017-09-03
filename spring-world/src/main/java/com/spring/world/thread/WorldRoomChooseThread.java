@@ -69,6 +69,17 @@ public class WorldRoomChooseThread extends Thread {
 	public RoomTypeEnum getRoomTypeEnum() {
 		return roomTypeEnum;
 	}
+	
+	public boolean addRoomEvent(IRoomEvent roomEvent) {
+		try {
+			queue.add(roomEvent);
+			return true;
+		} catch (Exception e) {
+			logger.error("WorldRoomChooseThread : addRoomEvent error", e);
+		}
+		
+		return false;
+	}
 
 	@Autowired
 	public void setRoomService(RoomService roomService) {

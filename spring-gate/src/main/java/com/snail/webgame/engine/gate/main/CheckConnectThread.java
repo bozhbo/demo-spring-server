@@ -53,7 +53,7 @@ public class CheckConnectThread extends Thread {
 
 			if (serverState.isAllNormal()) {
 				try {
-					Thread.sleep(5000);
+					Thread.sleep(60000);
 				} catch (InterruptedException e) {
 					log.error("", e);
 				}

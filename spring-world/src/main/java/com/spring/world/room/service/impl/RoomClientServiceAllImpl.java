@@ -1,17 +1,23 @@
 package com.spring.world.room.service.impl;
 
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.spring.logic.role.info.RoleInfo;
+import com.spring.logic.room.enums.RoomTypeEnum;
 import com.spring.logic.room.info.RoomInfo;
 import com.spring.logic.util.LogicUtil;
+import com.spring.room.control.service.RoomControlService;
 import com.spring.world.cache.RoomServerCache;
+import com.spring.world.config.WorldConfig;
+import com.spring.world.event.ChooseRoomEvent;
 import com.spring.world.info.RoomServerInfo;
 import com.spring.world.room.service.RoomClientService;
+import com.spring.world.thread.WorldRoomChooseThread;
 
 /**
  * 单一进程实现
@@ -22,6 +28,8 @@ import com.spring.world.room.service.RoomClientService;
 public class RoomClientServiceAllImpl implements RoomClientService {
 	
 	private static final Log logger = LogFactory.getLog(RoomClientServiceAllImpl.class);
+	
+	private RoomControlService roomControlService;
 	
 	@Override
 	public void init() {
@@ -60,7 +68,7 @@ public class RoomClientServiceAllImpl implements RoomClientService {
 
 	@Override
 	public int deployRoleInfo(RoomInfo roomInfo, RoleInfo roleInfo) {
-		// TODO Auto-generated method stub
+		this.roomControlService.deployRoleInfo(roomInfo, roleInfo);
 		return 0;
 	}
 
@@ -95,5 +103,19 @@ public class RoomClientServiceAllImpl implements RoomClientService {
 		}
 	}
 
+	@Override
+	public void autoJoin(RoleInfo roleInfo) {
+		WorldRoomChooseThread worldRoomChooseThread = WorldConfig.getWorldRoomChooseThread(RoomTypeEnum.ROOM_TYPE_NEW);
+		ChooseRoomEvent chooseRoomEvent = new ChooseRoomEvent();
+		chooseRoomEvent.setRoleInfo(roleInfo);
+		
+		worldRoomChooseThread.addRoomEvent(chooseRoomEvent);
+	}
+
+	@Autowired
+	public void setRoomControlService(RoomControlService roomControlService) {
+		this.roomControlService = roomControlService;
+	}
+	
 	
 }

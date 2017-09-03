@@ -2,12 +2,14 @@ package com.spring.world.io.process.active;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Component;
 
 import com.snail.mina.protocol.info.IRoomBody;
 import com.snail.mina.protocol.info.Message;
 import com.snail.mina.protocol.info.impl.RoomMessageHead;
 import com.snail.mina.protocol.processor.IProcessor;
 
+@Component
 public class ActiveProcessor implements IProcessor {
 	
 	private static final Log logger = LogFactory.getLog(ActiveProcessor.class);

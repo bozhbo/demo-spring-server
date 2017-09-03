@@ -17,16 +17,16 @@
 	<black-list-time>3600</black-list-time><!-- 黑名单存亡时间（秒） -->
 	<local-server>
 		<gate-server-id>1</gate-server-id><!-- 连接服务器ID -->
-		<local-ip>192.168.0.101</local-ip><!-- 本地监听IP -->
+		<local-ip>127.0.0.1</local-ip><!-- 本地监听IP -->
 		<local-port>8088</local-port><!-- 本地监听端口 -->
-		<remote-ip>192.168.0.101</remote-ip><!-- 外网监听IP -->
+		<remote-ip>127.0.0.1</remote-ip><!-- 外网监听IP -->
 		<remote-port>80</remote-port><!-- 外网监听端口 -->
 	</local-server>
 
 	<conncet-server>
 		<server>
 			<name>GameServer</name>
-			<ip>192.168.0.101</ip>
+			<ip>127.0.0.1</ip>
 			<port>7001</port> 
 		</server>
 	</conncet-server>

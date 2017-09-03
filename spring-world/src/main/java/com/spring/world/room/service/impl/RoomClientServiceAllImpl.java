@@ -6,6 +6,7 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.spring.logic.role.info.RoleInfo;
 import com.spring.logic.room.enums.RoomTypeEnum;
@@ -25,6 +26,7 @@ import com.spring.world.thread.WorldRoomChooseThread;
  * @author zhoubo
  *
  */
+@Service
 public class RoomClientServiceAllImpl implements RoomClientService {
 	
 	private static final Log logger = LogFactory.getLog(RoomClientServiceAllImpl.class);
@@ -33,8 +35,12 @@ public class RoomClientServiceAllImpl implements RoomClientService {
 	
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
+		RoomServerInfo roomServerInfo = new RoomServerInfo();
+		roomServerInfo.setRoleCount(0);
+		roomServerInfo.setRoomCount(0);
+		roomServerInfo.setRoomServerId(1);
 		
+		RoomServerCache.addRoomServerInfo(roomServerInfo);
 	}
 
 	@Override
@@ -49,7 +55,7 @@ public class RoomClientServiceAllImpl implements RoomClientService {
 		}
 		
 		for (Entry<Integer, RoomServerInfo> entry : set) {
-			if (entry.getValue().getRoomCount() < 20) {
+			if (entry.getValue().getRoomCount() < 100) {
 				sendRoomInfo(roomInfo, entry.getValue());
 				return entry.getValue().getRoomServerId();
 			}

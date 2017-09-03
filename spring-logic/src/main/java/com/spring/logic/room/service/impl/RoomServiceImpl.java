@@ -8,6 +8,7 @@ import java.util.function.Function;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.spring.logic.role.info.RoleInfo;
 import com.spring.logic.room.RoomConfig;
@@ -16,12 +17,13 @@ import com.spring.logic.room.info.RoomInfo;
 import com.spring.logic.room.service.CacheService;
 import com.spring.logic.room.service.RoomService;
 
+@Service
 public class RoomServiceImpl implements RoomService {
 	
 	private static final Log logger = LogFactory.getLog(RoomServiceImpl.class);
 	
 	private CacheService cacheService;
-
+	
 	@Override
 	public void roomResize(Map<RoomTypeEnum, Integer> roleCountMap, Function<RoomInfo, Integer> deployRoomInfo) {
 		Set<Entry<RoomTypeEnum, Integer>> set = roleCountMap.entrySet();

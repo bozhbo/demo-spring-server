@@ -6,7 +6,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.spring.logic.room.enums.RoomTypeEnum;
 import com.spring.logic.room.info.RoomInfo;
@@ -58,12 +57,10 @@ public class WorldRoomThread extends Thread {
 		return roomServerId;
 	}
 	
-	@Autowired
 	public void setRoomService(RoomService roomService) {
 		this.roomService = roomService;
 	}
 
-	@Autowired
 	public void setRoomClientService(RoomClientService roomClientService) {
 		this.roomClientService = roomClientService;
 	}

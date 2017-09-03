@@ -14,4 +14,8 @@ public class GlobalBeanFactory {
 			return (T)obj;
 		}
 	}
+	
+	public static <T> T getBeanByName(Class<T> clazz) {
+		return WorldServerMain.context.getBean(clazz);
+	}
 }

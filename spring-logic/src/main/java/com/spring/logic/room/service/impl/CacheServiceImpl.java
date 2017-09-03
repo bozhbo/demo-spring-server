@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
@@ -15,6 +16,7 @@ import com.spring.logic.room.enums.RoomTypeEnum;
 import com.spring.logic.room.info.RoomInfo;
 import com.spring.logic.room.service.CacheService;
 
+@Service
 public class CacheServiceImpl implements CacheService {
 	
 	private static final Log logger = LogFactory.getLog(CacheServiceImpl.class);

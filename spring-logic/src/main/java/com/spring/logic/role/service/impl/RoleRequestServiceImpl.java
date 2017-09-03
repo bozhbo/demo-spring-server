@@ -1,10 +1,13 @@
 package com.spring.logic.role.service.impl;
 
+import org.springframework.stereotype.Service;
+
 import com.spring.logic.role.info.RoleInfo;
 import com.spring.logic.role.service.RoleRoomService;
 import com.spring.logic.room.enums.RoomTypeEnum;
 import com.spring.logic.room.info.RoomInfo;
 
+@Service
 public class RoleRequestServiceImpl implements RoleRoomService {
 
 	@Override

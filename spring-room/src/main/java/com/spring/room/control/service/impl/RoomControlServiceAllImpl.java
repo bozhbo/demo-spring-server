@@ -1,10 +1,13 @@
 package com.spring.room.control.service.impl;
 
 
+import org.springframework.stereotype.Service;
+
 import com.spring.logic.role.info.RoleInfo;
 import com.spring.logic.room.info.RoomInfo;
 import com.spring.room.control.service.RoomControlService;
 
+@Service
 public class RoomControlServiceAllImpl implements RoomControlService {
 
 	@Override

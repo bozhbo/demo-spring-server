@@ -2,6 +2,7 @@ package com.spring.world.io.process.role.login;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Component;
 
 import com.snail.mina.protocol.info.IRoomBody;
 import com.snail.mina.protocol.info.Message;
@@ -11,10 +12,11 @@ import com.spring.common.GameMessageType;
 import com.spring.logic.role.cache.RoleCache;
 import com.spring.logic.role.info.RoleInfo;
 
+@Component
 public class LoginProcessor implements IProcessor {
 	
 	private static final Log logger = LogFactory.getLog(LoginProcessor.class);
-
+	
 	@Override
 	public void processor(Message message) {
 		RoomMessageHead head = (RoomMessageHead)message.getiRoomHead();

@@ -24,4 +24,6 @@ public class GameMessageType {
 	
 	public static int GAME_CLIENT_WORLD_COMMON_SEND_AUTO_START = 1;
 	
+	public static int GAME_CLIENT_ROOM_JOIN = 0xA202;
+	
 }

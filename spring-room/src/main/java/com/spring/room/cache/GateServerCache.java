@@ -1,4 +1,4 @@
-package com.spring.world.cache;
+package com.spring.room.cache;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,19 +11,19 @@ public class GateServerCache {
 
 	private static Map<String, IoSession> gateServerMap = new ConcurrentHashMap<>();
 	
-	public static void addIoSession(String gateServerName, IoSession session) {
+	public void addIoSession(String gateServerName, IoSession session) {
 		gateServerMap.put(gateServerName, session);
 	}
 	
-	public static void removeIoSession(String gateServerName) {
+	public void removeIoSession(String gateServerName) {
 		gateServerMap.remove(gateServerName);
 	}
 	
-	public static IoSession getIoSession(String gateServerName) {
+	public IoSession getIoSession(String gateServerName) {
 		return gateServerMap.get(gateServerName);
 	}
 	
-	public static IoSession getIoSession(int gateId) {
+	public IoSession getIoSession(int gateId) {
 		return gateServerMap.get(ServerName.GATE_SERVER_NAME + "-" + gateId);
 	}
 }

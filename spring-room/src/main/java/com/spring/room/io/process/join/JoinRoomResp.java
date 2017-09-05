@@ -1,62 +1,74 @@
-package com.spring.logic.role.info;
+package com.spring.room.io.process.join;
 
-public class RoleInfo {
+import java.nio.ByteOrder;
 
+import org.apache.mina.common.ByteBuffer;
+
+import com.snail.mina.protocol.info.impl.BaseRoomResp;
+
+public class JoinRoomResp extends BaseRoomResp {
+	
+	private int roomId;
 	private int roleId;
-	private int gateId;
-	private volatile int roomId;
 	private String roleName;
 	private int gold;
 	private int vipLevel;
 	private String header;
 	
-	int errorCode;
-	
-	public int getRoleId() {
-		return roleId;
+	@Override
+	public void resp2Bytes(ByteBuffer buffer, ByteOrder order) {
+		setInt(buffer, order, roomId);
+		setInt(buffer, order, roleId);
+		setString(buffer, order, roleName);
+		setInt(buffer, order, gold);
+		setInt(buffer, order, vipLevel);
+		setString(buffer, order, header);
 	}
-	public void setRoleId(int roleId) {
-		this.roleId = roleId;
-	}
+
 	public int getRoomId() {
 		return roomId;
 	}
+
 	public void setRoomId(int roomId) {
 		this.roomId = roomId;
 	}
-	public int getErrorCode() {
-		return errorCode;
+
+	public int getRoleId() {
+		return roleId;
 	}
-	public void setErrorCode(int errorCode) {
-		this.errorCode = errorCode;
+
+	public void setRoleId(int roleId) {
+		this.roleId = roleId;
 	}
-	public int getGateId() {
-		return gateId;
-	}
-	public void setGateId(int gateId) {
-		this.gateId = gateId;
-	}
+
 	public String getRoleName() {
 		return roleName;
 	}
+
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
 	}
+
 	public int getGold() {
 		return gold;
 	}
+
 	public void setGold(int gold) {
 		this.gold = gold;
 	}
+
 	public int getVipLevel() {
 		return vipLevel;
 	}
+
 	public void setVipLevel(int vipLevel) {
 		this.vipLevel = vipLevel;
 	}
+
 	public String getHeader() {
 		return header;
 	}
+
 	public void setHeader(String header) {
 		this.header = header;
 	}

@@ -9,7 +9,7 @@ public class RoomConfig {
 	private static RoomThread roomThread;
 	
 	public static void init() {
-		roomThread = new RoomThread();
+		roomThread = new RoomThread(8);
 		roomThread.setRoomControlService(GlobalBeanFactory.getBeanByName(RoomControlService.class));
 		roomThread.start();
 	}

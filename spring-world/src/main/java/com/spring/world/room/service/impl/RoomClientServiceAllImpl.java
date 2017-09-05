@@ -74,7 +74,7 @@ public class RoomClientServiceAllImpl implements RoomClientService {
 
 	@Override
 	public int deployRoleInfo(RoomInfo roomInfo, RoleInfo roleInfo) {
-		this.roomControlService.deployRoleInfo(roomInfo, roleInfo);
+		//this.roomControlService.deployRoleInfo(roomInfo, roleInfo);
 		return 0;
 	}
 

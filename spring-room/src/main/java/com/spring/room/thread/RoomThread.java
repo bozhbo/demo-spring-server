@@ -15,7 +15,7 @@ import com.spring.logic.room.event.IRoomEvent;
 import com.spring.room.control.service.RoomControlService;
 import com.spring.room.event.DeployRoomEvent;
 
-public class RoomThread implements Runnable {
+public class RoomThread extends Thread {
 	
 	private static final Log logger = LogFactory.getLog(RoomThread.class);
 	
@@ -56,6 +56,8 @@ public class RoomThread implements Runnable {
 								}
 							}
 						}
+					} else if (roomEvent instanceof deployr) {
+						
 					}
 				}
 			} catch (Exception e) {

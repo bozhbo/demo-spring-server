@@ -6,6 +6,12 @@ import java.util.List;
 import com.spring.logic.role.info.RoleInfo;
 import com.spring.logic.room.enums.RoomTypeEnum;
 
+/**
+ * 用于管理房间对象
+ * 
+ * @author zhoubo
+ *
+ */
 public class RoomInfo {
 
 	private int roomId;

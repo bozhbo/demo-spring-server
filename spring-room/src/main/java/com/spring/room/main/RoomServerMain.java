@@ -18,13 +18,14 @@ import com.snail.mina.protocol.handler.ClientHandle;
 import com.snail.mina.protocol.handler.ServerHandle;
 import com.snail.mina.protocol.info.RoomFilterInfo;
 import com.snail.mina.protocol.server.RoomServer;
+import com.spring.logic.room.RoomConfig;
 import com.spring.room.io.process.handler.RoomClientSessionHandler;
 import com.spring.room.io.process.handler.RoomServerSessionHandler;
 
 public class RoomServerMain {
 
-public static ConfigurableApplicationContext context = null;
-	
+	public static ConfigurableApplicationContext context = null;
+
 	public static void start(String[] args) {
 		SpringApplication springApplication = new SpringApplication(RoomServerMain.class);
 
@@ -37,18 +38,23 @@ public static ConfigurableApplicationContext context = null;
 	public static void main(String[] args) {
 		start(args);
 		
+		RoomConfig.init();
+
 		RoomServer server = new RoomServer();
 		List<RoomFilterInfo> list = new ArrayList<>();
 		list.add(new RoomFilterInfo("codec", new ProtocolCodecFilter(new RequestEncoder(), new RequestDecode())));
 		list.add(new RoomFilterInfo("message", new MessageCodecFilter("Game", ByteOrder.BIG_ENDIAN)));
-		
-		server.start("127.0.0.1", 7002, 4, new ServerHandle(new RoomServerSessionHandler(), Executors.newCachedThreadPool()), false, list);
-		
+
+		server.start("127.0.0.1", 7002, 4,
+				new ServerHandle(new RoomServerSessionHandler(), Executors.newCachedThreadPool()), false, list);
+
 		try {
-			RoomClient.connect("127.0.0.1", 7001, "127.0.0.1", "room", "GameServer", new ClientHandle(new RoomClientSessionHandler(), Executors.newCachedThreadPool()), list, true, true);
+			RoomClient.connect("127.0.0.1", 7001, "127.0.0.1", "room", "GameServer",
+					new ClientHandle(new RoomClientSessionHandler(), Executors.newCachedThreadPool()), list, true,
+					true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 }

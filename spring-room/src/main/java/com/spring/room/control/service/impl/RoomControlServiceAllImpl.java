@@ -1,30 +1,36 @@
 package com.spring.room.control.service.impl;
 
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.snail.mina.protocol.info.Message;
 import com.spring.logic.role.info.RoleInfo;
 import com.spring.logic.room.RoomConfig;
 import com.spring.logic.room.info.PlayingRoomInfo;
 import com.spring.logic.room.info.RoomInfo;
+import com.spring.logic.server.cache.RoomServerCache;
+import com.spring.logic.server.info.RoomServerInfo;
+import com.spring.room.config.RoomServerConfig;
 import com.spring.room.control.service.RoomControlService;
-import com.spring.room.control.service.RoomMessageService;
+import com.spring.room.control.service.RoomLogicService;
 
+/**
+ * room-world合并实现
+ * 
+ * @author zhoubo
+ *
+ */
 @Service
 public class RoomControlServiceAllImpl implements RoomControlService {
 	
-	private RoomMessageService roomMessageService;
+	private RoomLogicService roomLogicService;
 
 	@Override
 	public int loopRoomInfo(PlayingRoomInfo playingRoomInfo) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
+
 	@Override
 	public PlayingRoomInfo deployRoomInfo(RoomInfo roomInfo) {
 		RoomInfo newRoomInfo = new RoomInfo(roomInfo.getRoomId());
@@ -43,7 +49,7 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 		
 		playingRoomInfo.getRoomInfo().getList().add(roleInfo);
 		
-		sendJoinRoomMsg(playingRoomInfo, roleInfo);
+		this.roomLogicService.sendJoinRoomMsg(playingRoomInfo, roleInfo);
 		
 		return 1;
 	}
@@ -73,17 +79,21 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 	}
 
 	@Override
-	public void sendJoinRoomMsg(PlayingRoomInfo playingRoomInfo, RoleInfo roleInfo) {
-		List<RoleInfo> list = playingRoomInfo.getRoomInfo().getList();
+	public void reportRoomServerInfo(int roomCount, int roleCount) {
+		RoomServerInfo roomServerInfo = RoomServerCache.getRoomServerInfo(RoomServerConfig.ROOM_ID);
 		
-		for (RoleInfo roleInfo2 : list) {
-			Message message = this.roomMessageService.createJoinRoomMsg(playingRoomInfo.getRoomInfo().getRoomId(), roleInfo2.getRoleId(), roleInfo);
+		if (roomServerInfo == null) {
+			roomServerInfo = new RoomServerInfo();
+			roomServerInfo.setRoomServerId(RoomServerConfig.ROOM_ID);
+			RoomServerCache.addRoomServerInfo(roomServerInfo);
 		}
+		
+		roomServerInfo.setRoleCount(roleCount);
+		roomServerInfo.setRoomCount(roomCount);
 	}
-
+	
 	@Autowired
-	public void setRoomMessageService(RoomMessageService roomMessageService) {
-		this.roomMessageService = roomMessageService;
+	public void setRoomLogicService(RoomLogicService roomLogicService) {
+		this.roomLogicService = roomLogicService;
 	}
-
 }

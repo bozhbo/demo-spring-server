@@ -28,7 +28,7 @@ public class WorldRoomChooseThread extends Thread {
 	private RoomClientService roomClientService;
 	
 	public WorldRoomChooseThread(RoomTypeEnum roomTypeEnum) {
-		super("RoomType-" + roomTypeEnum.getValue());
+		super("WorldRoomChooseThread-" + roomTypeEnum.getValue());
 		this.roomTypeEnum = roomTypeEnum;
 	}
 

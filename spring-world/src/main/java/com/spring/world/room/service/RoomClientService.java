@@ -2,7 +2,7 @@ package com.spring.world.room.service;
 
 import com.spring.logic.role.info.RoleInfo;
 import com.spring.logic.room.info.RoomInfo;
-import com.spring.world.info.RoomServerInfo;
+import com.spring.logic.server.info.RoomServerInfo;
 
 public interface RoomClientService {
 	
@@ -20,5 +20,10 @@ public interface RoomClientService {
 	
 	public void roomInfo(String info);
 	
+	/**
+	 * 快速开始
+	 * 
+	 * @param roleInfo
+	 */
 	public void autoJoin(RoleInfo roleInfo);
 }

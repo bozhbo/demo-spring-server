@@ -1,6 +1,6 @@
 package com.spring.world.state.event.impl;
 
-import com.spring.world.bean.GlobalBeanFactory;
+import com.spring.logic.bean.GlobalBeanFactory;
 import com.spring.world.state.WorldStateControl;
 import com.spring.world.state.enums.WorldServerEnum;
 import com.spring.world.state.enums.WorldServerEventEnum;

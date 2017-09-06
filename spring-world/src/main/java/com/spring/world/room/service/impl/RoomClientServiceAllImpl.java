@@ -11,12 +11,15 @@ import org.springframework.stereotype.Service;
 import com.spring.logic.role.info.RoleInfo;
 import com.spring.logic.room.enums.RoomTypeEnum;
 import com.spring.logic.room.info.RoomInfo;
+import com.spring.logic.server.cache.RoomServerCache;
+import com.spring.logic.server.info.RoomServerInfo;
 import com.spring.logic.util.LogicUtil;
+import com.spring.room.config.RoomServerConfig;
 import com.spring.room.control.service.RoomControlService;
-import com.spring.world.cache.RoomServerCache;
+import com.spring.room.event.DeployRoleInfoEvent;
+import com.spring.room.event.DeployRoomEvent;
 import com.spring.world.config.WorldConfig;
 import com.spring.world.event.ChooseRoomEvent;
-import com.spring.world.info.RoomServerInfo;
 import com.spring.world.room.service.RoomClientService;
 import com.spring.world.thread.WorldRoomChooseThread;
 
@@ -68,14 +71,22 @@ public class RoomClientServiceAllImpl implements RoomClientService {
 	
 	@Override
 	public int sendRoomInfo(RoomInfo roomInfo, RoomServerInfo roomServerInfo) {
-		// TODO Auto-generated method stub
+		DeployRoomEvent deployRoomEvent = new DeployRoomEvent();
+		deployRoomEvent.setRoomInfo(roomInfo);
+		
+		RoomServerConfig.getRoomThread().addRoomEvent(deployRoomEvent);
 		return 0;
 	}
 
 	@Override
 	public int deployRoleInfo(RoomInfo roomInfo, RoleInfo roleInfo) {
-		//this.roomControlService.deployRoleInfo(roomInfo, roleInfo);
-		return 0;
+		DeployRoleInfoEvent deployRoleInfoEvent = new DeployRoleInfoEvent();
+		deployRoleInfoEvent.setRoleInfo(roleInfo);
+		deployRoleInfoEvent.setRoomInfo(roomInfo);
+		
+		RoomServerConfig.getRoomThread().addRoomEvent(deployRoleInfoEvent);
+		
+		return 1;
 	}
 
 	@Override
@@ -111,6 +122,10 @@ public class RoomClientServiceAllImpl implements RoomClientService {
 
 	@Override
 	public void autoJoin(RoleInfo roleInfo) {
+		if (roleInfo.getRoomId() > 0) {
+			// TODO 先退出房间
+		}
+		
 		WorldRoomChooseThread worldRoomChooseThread = WorldConfig.getWorldRoomChooseThread(RoomTypeEnum.ROOM_TYPE_NEW);
 		ChooseRoomEvent chooseRoomEvent = new ChooseRoomEvent();
 		chooseRoomEvent.setRoleInfo(roleInfo);

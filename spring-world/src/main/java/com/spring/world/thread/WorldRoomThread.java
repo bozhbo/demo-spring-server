@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import com.spring.logic.room.enums.RoomTypeEnum;
 import com.spring.logic.room.info.RoomInfo;
 import com.spring.logic.room.service.RoomService;
+import com.spring.logic.server.cache.RoomServerCache;
 import com.spring.world.room.service.RoomClientService;
 
 public class WorldRoomThread extends Thread {
@@ -23,6 +24,7 @@ public class WorldRoomThread extends Thread {
 	private RoomClientService roomClientService;
 	
 	public WorldRoomThread() {
+		super("WorldRoomThread-1");
 		roleCountMap.put(RoomTypeEnum.ROOM_TYPE_NEW, 0);
 		roleCountMap.put(RoomTypeEnum.ROOM_TYPE_LEVEL1, 0);
 		roleCountMap.put(RoomTypeEnum.ROOM_TYPE_LEVEL2, 0);
@@ -34,7 +36,9 @@ public class WorldRoomThread extends Thread {
 	public void run() {
 		while (true) {
 			try {
-				this.roomService.roomResize(roleCountMap, (roomInfo) -> {return this.deployRoomEnd(roomInfo, this.roomClientService.deployRoomInfo(roomInfo));});
+				if (RoomServerCache.getSet().size() > 0) {
+					this.roomService.roomResize(roleCountMap, (roomInfo) -> {return this.deployRoomEnd(roomInfo, this.roomClientService.deployRoomInfo(roomInfo));});
+				}
 			} catch (Exception e) {
 				logger.error("WorldRoomThread error", e);
 			} finally {

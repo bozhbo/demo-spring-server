@@ -1,4 +1,4 @@
-package com.spring.world.info;
+package com.spring.logic.server.info;
 
 public class RoomServerInfo {
 

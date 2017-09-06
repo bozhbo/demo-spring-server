@@ -5,11 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.snail.client.main.net.handler.GameClientHandler;
-import com.snail.client.main.net.process.login.LoginProcessor;
 import com.snail.mina.protocol.client.RoomClient;
 import com.snail.mina.protocol.code.RequestDecode;
 import com.snail.mina.protocol.code.RequestEncoder;
-import com.snail.mina.protocol.config.RoomMessageConfig;
 import com.snail.mina.protocol.filter.MessageCodecFilter;
 import com.snail.mina.protocol.filter.ProtocolCodecFilter;
 import com.snail.mina.protocol.info.Message;
@@ -21,9 +19,7 @@ public class NetService {
 	private String serverName = "GameServer";
 	
 	public void init() {
-		RoomMessageConfig.addProcessor(new LoginProcessor());
 		
-		RoomMessageConfig.initProcessor();
 	}
 
 	public void checkSession() {

@@ -1,4 +1,4 @@
-package com.spring.room.bean;
+package com.spring.logic.bean;
 
 import org.springframework.context.ConfigurableApplicationContext;
 

@@ -19,6 +19,18 @@
 			<artifactId>gson</artifactId>
 			<version>2.3.1</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.spring.mina</groupId>
+			<artifactId>spring-mina</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.spring.common</groupId>
+			<artifactId>spring-common</artifactId>
+			<version>0.0.1</version>
+		</dependency>
 	</dependencies>
 
 

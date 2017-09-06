@@ -1,5 +1,6 @@
 package com.snail.client.main.fx;
 
+import com.google.gson.GsonBuilder;
 import com.snail.client.main.control.ClientControl;
 import com.snail.client.main.fx.scene.control.SceneControl;
 import com.snail.client.main.fx.scene.impl.ErrorScene;
@@ -39,6 +40,8 @@ public class ClientMain extends Application {
 	}
 
 	public static void main(String[] args) {
+		ClientControl.gson = new GsonBuilder().setDateFormat("MM/dd/yyyy HH:mm:ss").create();
+		
 		launch(args);
 		
 		ClientControl.netService.checkSession();

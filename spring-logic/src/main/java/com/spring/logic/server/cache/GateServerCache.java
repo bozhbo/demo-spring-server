@@ -1,4 +1,4 @@
-package com.spring.world.cache;
+package com.spring.logic.server.cache;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

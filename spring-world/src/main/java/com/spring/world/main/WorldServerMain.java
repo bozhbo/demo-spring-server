@@ -8,7 +8,6 @@ import java.util.concurrent.Executors;
 import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -20,8 +19,8 @@ import com.snail.mina.protocol.filter.ProtocolCodecFilter;
 import com.snail.mina.protocol.handler.ServerHandle;
 import com.snail.mina.protocol.info.RoomFilterInfo;
 import com.snail.mina.protocol.server.RoomServer;
-import com.spring.logic.room.RoomConfig;
-import com.spring.world.bean.GlobalBeanFactory;
+import com.spring.logic.bean.GlobalBeanFactory;
+import com.spring.room.config.RoomServerConfig;
 import com.spring.world.config.WorldConfig;
 import com.spring.world.io.WorldIoControl;
 import com.spring.world.io.process.handler.GameServerSessionHandler;
@@ -32,21 +31,21 @@ import com.spring.world.state.WorldStateControl;
 @ComponentScan("com.spring")
 public class WorldServerMain {
 
-	public static ConfigurableApplicationContext context = null;
-	
 	public static void start(String[] args) {
 		SpringApplication springApplication = new SpringApplication(WorldServerMain.class);
 
 		springApplication.setBannerMode(Mode.LOG);
 		springApplication.setLogStartupInfo(true);
 
-		context = springApplication.run(args);
+		GlobalBeanFactory.context = springApplication.run(args);
 	}
 
 	public static void main(String[] args) {
 		start(args);
 		
 		WorldConfig.init();
+		
+		launchRoomServer();
 		
 		WorldStateControl worldStateControl = GlobalBeanFactory.getBeanByName("WorldStateControl", WorldStateControl.class);
 		worldStateControl.init();
@@ -63,9 +62,7 @@ public class WorldServerMain {
 	}
 	
 	public static void launchRoomServer() {
-		com.spring.room.bean.GlobalBeanFactory.context = WorldServerMain.context;
-		
-		RoomConfig.init();
+		RoomServerConfig.init();
 	}
 	
 	@Bean("WorldStateControl")

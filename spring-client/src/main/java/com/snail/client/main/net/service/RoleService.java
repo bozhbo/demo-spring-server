@@ -3,7 +3,10 @@ package com.snail.client.main.net.service;
 import java.util.UUID;
 
 import com.snail.client.main.control.ClientControl;
+import com.snail.client.main.fx.scene.param.RoomParam;
 import com.snail.client.main.fx.scene.param.SceneParam;
+import com.snail.client.main.net.msg.common.CommonResp;
+import com.snail.client.main.net.msg.join.JoinRoomResp;
 import com.snail.client.main.net.msg.login.LoginReq;
 import com.snail.client.main.net.msg.login.LoginResp;
 import com.snail.mina.protocol.info.Message;
@@ -43,6 +46,25 @@ public class RoleService {
 	}
 	
 	public void fastStart() {
+		ClientControl.netService.checkSession();
 		
+		RoomMessageHead head = new RoomMessageHead();
+		head.setMsgType(GameMessageType.GAME_CLIENT_WORLD_COMMON_SEND);
+		
+		CommonResp req = new CommonResp();
+		req.setOptionType(GameMessageType.GAME_CLIENT_WORLD_COMMON_SEND_AUTO_START);
+		req.setOptionStr("");
+		
+		Message message = new Message();
+		message.setiRoomHead(head);
+		message.setiRoomBody(req);
+		
+		ClientControl.netService.sendMessage(message);
+	}
+	
+	public void joinRoomEnd(JoinRoomResp resp) {
+		Platform.runLater(() -> {
+			ClientControl.sceneControl.forward("room", new RoomParam(resp));
+	    });
 	}
 }

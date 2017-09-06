@@ -11,6 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.spring.logic.bean.GlobalBeanFactory;
 import com.spring.logic.room.RoomConfig;
 import com.spring.logic.room.event.IRoomEvent;
 import com.spring.room.control.service.RoomControlService;
@@ -65,6 +66,7 @@ public class RoomThread extends Thread {
 
 		for (int i = 0; i < loopThreadSize; i++) {
 			RoomLoopThread roomLoopThread = new RoomLoopThread();
+			roomLoopThread.setRoomControlService(GlobalBeanFactory.getBeanByName(RoomControlService.class));
 			roomLoopThread.setName("RoomLoopThread-" + lastIndex++);
 			roomLoopThread.start();
 			list.add(roomLoopThread);
@@ -73,6 +75,8 @@ public class RoomThread extends Thread {
 
 	@Override
 	public void run() {
+		long roomInfoTime = System.currentTimeMillis();
+		
 		while (true) {
 			try {
 				IRoomEvent roomEvent = queue.poll(1, TimeUnit.SECONDS);
@@ -93,6 +97,21 @@ public class RoomThread extends Thread {
 							this.roomControlService.deployRoleInfoSuccessed(((DeployRoleInfoEvent) roomEvent).getRoomInfo(), ((DeployRoleInfoEvent) roomEvent).getRoleInfo());
 						}
 					}
+				}
+				
+				if (System.currentTimeMillis() - roomInfoTime > 5000) {
+					// 定时报告房间信息和玩家信息
+					int roomCount = 0;
+					int roleCount = 0;
+					
+					for (RoomLoopThread roomLoopThread : list) {
+						roomCount += roomLoopThread.getRoomSize();
+						roleCount += roomLoopThread.getAllRoles();
+					}
+					
+					this.roomControlService.reportRoomServerInfo(roomCount, roleCount);
+					
+					roomInfoTime = System.currentTimeMillis();
 				}
 			} catch (Exception e) {
 				logger.error("", e);
@@ -134,6 +153,7 @@ public class RoomThread extends Thread {
 			list.remove(roomLoopThread);
 			
 			RoomLoopThread newRoomLoopThread = new RoomLoopThread();
+			newRoomLoopThread.setRoomControlService(GlobalBeanFactory.getBeanByName(RoomControlService.class));
 			newRoomLoopThread.setName("RoomLoopThread-" + lastIndex++);
 			newRoomLoopThread.start();
 			list.add(newRoomLoopThread);

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import com.snail.mina.protocol.info.IRoomBody;
 import com.snail.mina.protocol.info.Message;
 import com.snail.mina.protocol.processor.IProcessor;
-import com.spring.world.cache.GateServerCache;
+import com.spring.logic.server.cache.GateServerCache;
 
 @Component
 public class ActiveProcessor implements IProcessor {

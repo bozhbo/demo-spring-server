@@ -3,10 +3,10 @@ package com.spring.world.config;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.spring.logic.bean.GlobalBeanFactory;
 import com.spring.logic.room.cache.RoomCahce;
 import com.spring.logic.room.enums.RoomTypeEnum;
 import com.spring.logic.room.service.RoomService;
-import com.spring.world.bean.GlobalBeanFactory;
 import com.spring.world.room.service.RoomClientService;
 import com.spring.world.thread.WorldRoomChooseThread;
 import com.spring.world.thread.WorldRoomThread;

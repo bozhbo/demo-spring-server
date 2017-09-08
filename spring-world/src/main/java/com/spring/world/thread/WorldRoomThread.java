@@ -1,17 +1,7 @@
 package com.spring.world.thread;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import com.spring.logic.room.enums.RoomTypeEnum;
-import com.spring.logic.room.info.RoomInfo;
-import com.spring.logic.room.service.RoomService;
-import com.spring.logic.server.cache.RoomServerCache;
-import com.spring.world.room.service.RoomClientService;
 
 public class WorldRoomThread extends Thread {
 	

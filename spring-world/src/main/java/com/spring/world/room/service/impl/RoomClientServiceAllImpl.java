@@ -1,6 +1,7 @@
 package com.spring.world.room.service.impl;
 
 import java.util.Map.Entry;
+import java.util.function.Function;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -47,46 +48,6 @@ public class RoomClientServiceAllImpl implements RoomClientService {
 		RoomServerCache.addRoomServerInfo(roomServerInfo);
 	}
 
-	@Override
-	public int deployRoomInfo(RoomInfo roomInfo) {
-		if (roomInfo == null) {
-			return 0;
-		}
-		
-		synchronized (roomInfo) {
-			if (roomInfo.getCurRoomServerId() > 0) {
-				return 1;
-			}
-			
-			Set<Entry<Integer, RoomServerInfo>> set = RoomServerCache.getSet();
-			RoomServerInfo roomServerInfo = null;
-			int minRoleCount = Integer.MAX_VALUE;
-			
-			for (Entry<Integer, RoomServerInfo> entry : set) {
-				if (entry.getValue().getRoleCount() < 100) {
-					RoomServerConfig.getRoomThread().addRoomEvent(new DeployRoomEvent(roomInfo));
-					roomInfo.setCurRoomServerId(entry.getValue().getRoomServerId());
-					return entry.getValue().getRoomServerId();
-				} else {
-					if (minRoleCount > entry.getValue().getRoleCount()) {
-						roomServerInfo = entry.getValue();
-						minRoleCount = entry.getValue().getRoleCount();
-					}
-				}
-			}
-			
-			if (roomServerInfo != null) {
-				RoomServerConfig.getRoomThread().addRoomEvent(new DeployRoomEvent(roomInfo));
-				roomInfo.setCurRoomServerId(roomServerInfo.getRoomServerId());
-				return roomServerInfo.getRoomServerId();
-			}
-		}
-		
-		logger.warn("deployRoomInfo failed");
-		
-		return 0;
-	}
-	
 	@Override
 	public int removeRoomInfo(RoomInfo roomInfo) {
 		RoomServerConfig.getRoomThread().addRoomEvent(new RemoveRoomEvent(roomInfo));
@@ -166,23 +127,41 @@ public class RoomClientServiceAllImpl implements RoomClientService {
 			return;
 		}
 		
-		RoomInfo roomInfo = this.roomService.randomJoinRoom(RoomTypeEnum.ROOM_TYPE_NEW, roleInfo);
+		int roomId = this.roomService.joinRoom(RoomTypeEnum.ROOM_TYPE_NEW, roleInfo.getRoleId());
 		
-		if (roomInfo == null) {
+		if (roomId == 0) {
 			logger.warn("role join room failed for no room");
 			// TODO send error
 			return;
 		}
 		
-		result = deployRoomInfo(roomInfo);
+		if (this.roomService.needDeployRoom(roomId)) {
+			int roomServerId = getMinTpsRoomServer();
+			//this.roomService.deployRoomAndSet(roomId, roomServerId, (RoomInfo t) -> {RoomServerConfig.getRoomThread().addRoomEvent(new DeployRoomEvent(t));});
+		}
+	}
+	
+	private int getMinTpsRoomServer() {
+		Set<Entry<Integer, RoomServerInfo>> set = RoomServerCache.getSet();
+		RoomServerInfo roomServerInfo = null;
+		int minRoleCount = Integer.MAX_VALUE;
 		
-		if (result != 1) {
-			logger.warn("role join room failed for no room");
-			// TODO send error
-			return;
+		for (Entry<Integer, RoomServerInfo> entry : set) {
+			if (entry.getValue().getRoleCount() < 100) {
+				return entry.getValue().getRoomServerId();
+			} else {
+				if (minRoleCount > entry.getValue().getRoleCount()) {
+					roomServerInfo = entry.getValue();
+					minRoleCount = entry.getValue().getRoleCount();
+				}
+			}
 		}
 		
-		deployRoleInfo(roomInfo, roleInfo);
+		if (roomServerInfo != null) {
+			return roomServerInfo.getRoomServerId();
+		}
+		
+		return 0;
 	}
 
 	@Override

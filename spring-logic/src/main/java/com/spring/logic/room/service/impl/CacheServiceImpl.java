@@ -25,7 +25,7 @@ public class CacheServiceImpl implements CacheService {
 		return RoomCahce.getAllRoomMap().get(roomId);
 	}
 	
-	public RoomInfo randomJoinRoom(int roleId, RoomTypeEnum roomTypeEnum) {
+	public int randomJoinRoom(int roleId, RoomTypeEnum roomTypeEnum) {
 		Map<Integer, RoomInfo> map = RoomCahce.getPlayingRoomMap().get(roomTypeEnum);
 		
 		if (RoomCahce.needCreateRoom(roomTypeEnum)) {
@@ -41,9 +41,11 @@ public class CacheServiceImpl implements CacheService {
 				Collections.shuffle(list);
 				
 				for (RoomInfo roomInfo : list) {
-					if (roomInfo.getList().size() < RoomConfig.ROOM_MAX_ROLES) {
-						roomInfo.getList().add(roleId);
-						return roomInfo;
+					synchronized (roomInfo) {
+						if (roomInfo.getList().size() < RoomConfig.ROOM_MAX_ROLES) {
+							roomInfo.getList().add(roleId);
+							return roomInfo.getRoomId();
+						}
 					}
 				}
 			} else {
@@ -54,9 +56,11 @@ public class CacheServiceImpl implements CacheService {
 					Collections.shuffle(subList);
 					
 					for (RoomInfo roomInfo : subList) {
-						if (roomInfo.getList().size() < RoomConfig.ROOM_MAX_ROLES) {
-							roomInfo.getList().add(roleId);
-							return roomInfo;
+						synchronized (roomInfo) {
+							if (roomInfo.getList().size() < RoomConfig.ROOM_MAX_ROLES) {
+								roomInfo.getList().add(roleId);
+								return roomInfo.getRoomId();
+							}
 						}
 					}
 				}
@@ -67,7 +71,7 @@ public class CacheServiceImpl implements CacheService {
 			}
 		}
 		
-		return null;
+		return 0;
 	}
 
 	@Override
@@ -85,12 +89,14 @@ public class CacheServiceImpl implements CacheService {
 		}
 		
 		synchronized (map) {
-			if (roomInfo.getList().remove(new Integer(roleId))) {
-				RoomCahce.decrementRole(roomTypeEnum);
-			}
-			
-			if (roomInfo.getList().isEmpty() && !RoomCahce.needCreateRoom(roomTypeEnum)) {
-				closeRoom(roomInfo);
+			synchronized (roomInfo) {
+				if (roomInfo.getList().remove(new Integer(roleId))) {
+					RoomCahce.decrementRole(roomTypeEnum);
+				}
+				
+				if (roomInfo.getList().isEmpty() && !RoomCahce.needCreateRoom(roomTypeEnum)) {
+					closeRoom(roomInfo);
+				}
 			}
 		}
 		
@@ -133,12 +139,22 @@ public class CacheServiceImpl implements CacheService {
 	}
 	
 	private void closeRoom(RoomInfo roomInfo) {
-		roomInfo.getList().clear();
-		roomInfo.setRoomState(0);
+		if (roomInfo == null) {
+			return;
+		}
 		
-		RoomCahce.getPlayingRoomMap().get(roomInfo.getRoomType()).remove(roomInfo.getRoomId());
-		RoomCahce.getPlayingRoomListMap().get(roomInfo.getRoomType()).remove(roomInfo);
-		RoomCahce.getEmptyRoomMap().put(roomInfo.getRoomId(), roomInfo);
+		Map<Integer, RoomInfo> map = RoomCahce.getPlayingRoomMap().get(roomInfo.getRoomType());
+		
+		synchronized (map) {
+			synchronized (roomInfo) {
+				roomInfo.getList().clear();
+				roomInfo.setRoomState(0);
+				
+				RoomCahce.getPlayingRoomMap().get(roomInfo.getRoomType()).remove(roomInfo.getRoomId());
+				RoomCahce.getPlayingRoomListMap().get(roomInfo.getRoomType()).remove(roomInfo);
+				RoomCahce.getEmptyRoomMap().put(roomInfo.getRoomId(), roomInfo);
+			}
+		}
 	}
 
 	@Override
@@ -148,7 +164,9 @@ public class CacheServiceImpl implements CacheService {
 		Set<Entry<Integer, RoomInfo>> set = RoomCahce.getAllRoomMap().entrySet();
 		
 		for (Entry<Integer, RoomInfo> entry : set) {
-			logger.info(entry.getValue().toString());
+			synchronized (entry.getValue()) {
+				logger.info(entry.getValue().toString());
+			}
 		}
 		
 		logger.info("end print room info");

@@ -9,12 +9,38 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.spring.logic.room.enums.RoomTypeEnum;
 import com.spring.logic.room.info.RoomInfo;
 
+/**
+ * 房间缓存, 用于管理房间的创建和回收
+ * 此缓存由RoomService负责操作
+ * 
+ * @author Administrator
+ *
+ */
 public class RoomCahce {
 
+	/**
+	 * 全部房间
+	 */
 	private static Map<Integer, RoomInfo> allRoomMap = new ConcurrentHashMap<Integer, RoomInfo>();
+	
+	/**
+	 * 使用中房间
+	 */
 	private static Map<RoomTypeEnum, Map<Integer, RoomInfo>> playingRoomMap = new ConcurrentHashMap<RoomTypeEnum, Map<Integer, RoomInfo>>();
+	
+	/**
+	 * 使用中房间(用于随机)
+	 */
 	private static Map<RoomTypeEnum, List<RoomInfo>> playingRoomListMap = new ConcurrentHashMap<RoomTypeEnum, List<RoomInfo>>();
+	
+	/**
+	 * 回收后房间
+	 */
 	private static Map<Integer, RoomInfo> emptyRoomMap = new ConcurrentHashMap<Integer, RoomInfo>();
+	
+	/**
+	 * 各类型房间人数
+	 */
 	private static Map<RoomTypeEnum, AtomicInteger> playingRoleMap = new ConcurrentHashMap<RoomTypeEnum, AtomicInteger>();
 	
 	/**

@@ -20,6 +20,17 @@
 			<msgType>0xA010</msgType>
 			<msgType>0xA011</msgType>
 			<msgType>0xA012</msgType>
+			
+			<msgType>0xA101</msgType>
+			<msgType>0xA103</msgType>
+			<msgType>0xA105</msgType>
+			<msgType>0xA107</msgType>
+			<msgType>0xA109</msgType>
+			<msgType>0xA111</msgType>
+			<msgType>0xA113</msgType>
+			<msgType>0xA115</msgType>
+			<msgType>0xA117</msgType>
+			<msgType>0xA119</msgType>
 		</message>
 
 		<message>

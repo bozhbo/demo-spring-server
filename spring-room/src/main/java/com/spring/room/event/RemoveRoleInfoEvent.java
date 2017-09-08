@@ -4,12 +4,12 @@ import com.spring.logic.role.info.RoleInfo;
 import com.spring.logic.room.event.IRoomEvent;
 import com.spring.logic.room.info.RoomInfo;
 
-public class DeployRoleInfoEvent implements IRoomEvent {
+public class RemoveRoleInfoEvent implements IRoomEvent {
 
 	private RoomInfo roomInfo;
 	private RoleInfo roleInfo;
 	
-	public DeployRoleInfoEvent(RoomInfo roomInfo, RoleInfo roleInfo) {
+	public RemoveRoleInfoEvent(RoomInfo roomInfo, RoleInfo roleInfo) {
 		this.roomInfo = roomInfo;
 		this.roleInfo = roleInfo;
 	}

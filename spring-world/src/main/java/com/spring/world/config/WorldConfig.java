@@ -19,20 +19,20 @@ public class WorldConfig {
 	public static void init() {
 		RoomCahce.init();
 		
-		worldRoomThread = new WorldRoomThread();
-		worldRoomThread.setRoomService(GlobalBeanFactory.getBeanByName(RoomService.class));
-		worldRoomThread.setRoomClientService(GlobalBeanFactory.getBeanByName(RoomClientService.class));
-		worldRoomThread.start();
-		
-		RoomTypeEnum[] enums = RoomTypeEnum.values();
-		
-		for (RoomTypeEnum roomTypeEnum : enums) {
-			WorldRoomChooseThread worldRoomChooseThread = new WorldRoomChooseThread(roomTypeEnum);
-			worldRoomChooseThread.setRoomService(GlobalBeanFactory.getBeanByName(RoomService.class));
-			worldRoomChooseThread.setRoomClientService(GlobalBeanFactory.getBeanByName(RoomClientService.class));
-			roomChooseThreadMap.put(roomTypeEnum, worldRoomChooseThread);
-			roomChooseThreadMap.get(roomTypeEnum).start();
-		}
+//		worldRoomThread = new WorldRoomThread();
+//		worldRoomThread.setRoomService(GlobalBeanFactory.getBeanByName(RoomService.class));
+//		worldRoomThread.setRoomClientService(GlobalBeanFactory.getBeanByName(RoomClientService.class));
+//		worldRoomThread.start();
+//		
+//		RoomTypeEnum[] enums = RoomTypeEnum.values();
+//		
+//		for (RoomTypeEnum roomTypeEnum : enums) {
+//			WorldRoomChooseThread worldRoomChooseThread = new WorldRoomChooseThread(roomTypeEnum);
+//			worldRoomChooseThread.setRoomService(GlobalBeanFactory.getBeanByName(RoomService.class));
+//			worldRoomChooseThread.setRoomClientService(GlobalBeanFactory.getBeanByName(RoomClientService.class));
+//			roomChooseThreadMap.put(roomTypeEnum, worldRoomChooseThread);
+//			roomChooseThreadMap.get(roomTypeEnum).start();
+//		}
 	}
 	
 	public static WorldRoomChooseThread getWorldRoomChooseThread(RoomTypeEnum roomTypeEnum) {

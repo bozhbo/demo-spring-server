@@ -1,5 +1,11 @@
 package com.spring.logic.room.info;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.spring.logic.role.info.RoleInfo;
+import com.spring.logic.room.enums.RoomTypeEnum;
+
 /**
  * 用于房间服务器运行对象
  * 
@@ -8,19 +14,39 @@ package com.spring.logic.room.info;
  */
 public class PlayingRoomInfo {
 
-	private RoomInfo roomInfo;
+	private int roomId;
+	private RoomTypeEnum roomType;
 	
-	public PlayingRoomInfo(RoomInfo roomInfo) {
-		this.roomInfo = roomInfo;
+	private List<RoleInfo> list = new ArrayList<>();
+	
+	public PlayingRoomInfo(int roomId, RoomTypeEnum roomType) {
+		this.roomId = roomId;
+		this.roomType = roomType;
 	}
 
-	public RoomInfo getRoomInfo() {
-		return roomInfo;
+	public int getRoomId() {
+		return roomId;
 	}
 
-	public void setRoomInfo(RoomInfo roomInfo) {
-		this.roomInfo = roomInfo;
+	public void setRoomId(int roomId) {
+		this.roomId = roomId;
 	}
-	
+
+	public RoomTypeEnum getRoomType() {
+		return roomType;
+	}
+
+	public void setRoomType(RoomTypeEnum roomType) {
+		this.roomType = roomType;
+	}
+
+	public List<RoleInfo> getList() {
+		return list;
+	}
+
+	public void setList(List<RoleInfo> list) {
+		this.list = list;
+	}
+
 	
 }

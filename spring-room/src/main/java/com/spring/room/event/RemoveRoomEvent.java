@@ -3,11 +3,11 @@ package com.spring.room.event;
 import com.spring.logic.room.event.IRoomEvent;
 import com.spring.logic.room.info.RoomInfo;
 
-public class DeployRoomEvent implements IRoomEvent {
+public class RemoveRoomEvent implements IRoomEvent {
 
 	private RoomInfo roomInfo;
 	
-	public DeployRoomEvent(RoomInfo roomInfo) {
+	public RemoveRoomEvent(RoomInfo roomInfo) {
 		this.roomInfo = roomInfo;
 	}
 

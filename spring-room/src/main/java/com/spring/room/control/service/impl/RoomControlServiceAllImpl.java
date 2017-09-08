@@ -1,6 +1,8 @@
 package com.spring.room.control.service.impl;
 
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,11 +10,9 @@ import com.spring.logic.role.info.RoleInfo;
 import com.spring.logic.room.RoomConfig;
 import com.spring.logic.room.info.PlayingRoomInfo;
 import com.spring.logic.room.info.RoomInfo;
-import com.spring.logic.server.cache.RoomServerCache;
-import com.spring.logic.server.info.RoomServerInfo;
-import com.spring.room.config.RoomServerConfig;
 import com.spring.room.control.service.RoomControlService;
 import com.spring.room.control.service.RoomLogicService;
+import com.spring.room.thread.RoomThread;
 
 /**
  * room-world合并实现
@@ -22,6 +22,8 @@ import com.spring.room.control.service.RoomLogicService;
  */
 @Service
 public class RoomControlServiceAllImpl implements RoomControlService {
+	
+	private static final Log logger = LogFactory.getLog(RoomControlServiceAllImpl.class);
 	
 	private RoomLogicService roomLogicService;
 
@@ -33,65 +35,37 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 
 	@Override
 	public PlayingRoomInfo deployRoomInfo(RoomInfo roomInfo) {
-		RoomInfo newRoomInfo = new RoomInfo(roomInfo.getRoomId());
-		newRoomInfo.setRoomType(roomInfo.getRoomType());
-		
-		PlayingRoomInfo playingRoomInfo = new PlayingRoomInfo(newRoomInfo);
+		PlayingRoomInfo playingRoomInfo = new PlayingRoomInfo(roomInfo.getRoomId(), roomInfo.getRoomType());
 		
 		return playingRoomInfo;
 	}
 
 	@Override
 	public int deployRoleInfo(PlayingRoomInfo playingRoomInfo, RoleInfo roleInfo) {
-		if (playingRoomInfo.getRoomInfo().getList().size() >= RoomConfig.ROOM_MAX_ROLES) {
+		if (playingRoomInfo.getList().size() >= RoomConfig.ROOM_MAX_ROLES) {
+			logger.warn("deploy playing role failed for room is full");
 			return 0;
 		}
 		
-		playingRoomInfo.getRoomInfo().getList().add(roleInfo);
+		playingRoomInfo.getList().add(roleInfo);
 		
 		this.roomLogicService.sendJoinRoomMsg(playingRoomInfo, roleInfo);
 		
 		return 1;
 	}
-
-	@Override
-	public int deployRoomInfoSuccessed(RoomInfo roomInfo) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int deployRoomInfoFailed(RoomInfo roomInfo) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int deployRoleInfoSuccessed(RoomInfo roomInfo, RoleInfo roleInfo) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int deployRoleInfoFailed(RoomInfo roomInfo, RoleInfo roleInfo) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void reportRoomServerInfo(int roomCount, int roleCount) {
-		RoomServerInfo roomServerInfo = RoomServerCache.getRoomServerInfo(RoomServerConfig.ROOM_ID);
-		
-		if (roomServerInfo == null) {
-			roomServerInfo = new RoomServerInfo();
-			roomServerInfo.setRoomServerId(RoomServerConfig.ROOM_ID);
-			RoomServerCache.addRoomServerInfo(roomServerInfo);
-		}
-		
-		roomServerInfo.setRoleCount(roleCount);
-		roomServerInfo.setRoomCount(roomCount);
-	}
 	
+	@Override
+	public PlayingRoomInfo removeRoomInfo(PlayingRoomInfo playingRoomInfo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int removeRoleInfo(PlayingRoomInfo playingRoomInfo, RoleInfo roleInfo) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	@Autowired
 	public void setRoomLogicService(RoomLogicService roomLogicService) {
 		this.roomLogicService = roomLogicService;

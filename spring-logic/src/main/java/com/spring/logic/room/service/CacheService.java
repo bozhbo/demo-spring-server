@@ -5,13 +5,11 @@ import com.spring.logic.room.info.RoomInfo;
 
 public interface CacheService {
 
-	public RoomInfo createRoom(RoomTypeEnum roomTypeEnum);
-	
-	public void closeRoom(RoomInfo roomInfo);
-	
 	public RoomInfo queryRoom(int roomId);
 	
-	public int getPlayingRoomSize(RoomTypeEnum roomTypeEnum);
+	public RoomInfo randomJoinRoom(int roleId, RoomTypeEnum roomTypeEnum);
 	
-	public RoomInfo randomPlayingRoom(RoomTypeEnum roomTypeEnum);
+	public boolean leaveRoom(int roleId, int roomId, RoomTypeEnum roomTypeEnum);
+	
+	public void printAllRooms();
 }

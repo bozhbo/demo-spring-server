@@ -21,10 +21,10 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 
 	@Override
 	public void sendJoinRoomMsg(PlayingRoomInfo playingRoomInfo, RoleInfo roleInfo) {
-		List<RoleInfo> list = playingRoomInfo.getRoomInfo().getList();
+		List<RoleInfo> list = playingRoomInfo.getList();
 		
 		for (RoleInfo roleInfo2 : list) {
-			Message message = this.roomMessageService.createJoinRoomMsg(playingRoomInfo.getRoomInfo().getRoomId(), roleInfo2.getRoleId(), roleInfo);
+			Message message = this.roomMessageService.createJoinRoomMsg(playingRoomInfo.getRoomId(), roleInfo2.getRoleId(), roleInfo);
 			this.serverMessageService.sendMessageByGateId(roleInfo2.getGateId(), message);
 		}
 	}

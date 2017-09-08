@@ -25,13 +25,20 @@ public class CommonProcessor implements IProcessor {
 	public void processor(Message message) {
 		RoomMessageHead head = (RoomMessageHead)message.getiRoomHead();
 		CommonReq req = (CommonReq)message.getiRoomBody();
+		RoleInfo roleInfo = RoleCache.getRoleInfo(head.getRoleId());
 		
-		if (req.getOptionType() == GameMessageType.GAME_CLIENT_WORLD_COMMON_SEND_AUTO_START) {
-			// 自动开始
-			RoleInfo roleInfo = RoleCache.getRoleInfo(head.getRoleId());
-			
-			if (roleInfo != null) {
+		if (roleInfo == null) {
+			// TODO error msg
+			return;
+		}
+		
+		synchronized (roleInfo) {
+			if (req.getOptionType() == GameMessageType.GAME_CLIENT_WORLD_COMMON_SEND_AUTO_START) {
+				// 快速开始
 				this.roomClientService.autoJoin(roleInfo);
+			} else if (req.getOptionType() == GameMessageType.GAME_CLIENT_WORLD_COMMON_SEND_LEAVE_ROOM) {
+				// 返回大厅
+				this.roomClientService.leaveRoom(roleInfo);
 			}
 		}
 	}
@@ -50,6 +57,4 @@ public class CommonProcessor implements IProcessor {
 	public void setRoomClientService(RoomClientService roomClientService) {
 		this.roomClientService = roomClientService;
 	}
-
-	
 }

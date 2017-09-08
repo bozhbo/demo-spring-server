@@ -70,13 +70,7 @@ public class RoomLoopThread extends Thread {
 				
 				if (roomEvent != null) {
 					if (roomEvent instanceof DeployRoomEvent) {
-						PlayingRoomInfo playingRoomInfo = roomControlService.deployRoomInfo(((DeployRoomEvent)roomEvent).getRoomInfo());
-						
-						if (playingRoomInfo == null) {
-							roomControlService.deployRoomInfoFailed(((DeployRoomEvent)roomEvent).getRoomInfo());
-						} else {
-							map.put(playingRoomInfo.getRoomInfo().getRoomId(), playingRoomInfo);
-						}
+						map.put(((DeployRoomEvent)roomEvent).getRoomInfo().getRoomId(), roomControlService.deployRoomInfo(((DeployRoomEvent)roomEvent).getRoomInfo()));
 					} else if (roomEvent instanceof DeployRoleInfoEvent) {
 						
 					}
@@ -139,6 +133,14 @@ public class RoomLoopThread extends Thread {
 	
 	public int getAllRoles() {
 		return allRoles;
+	}
+	
+	public void setMap(Map<Integer, PlayingRoomInfo> map) {
+		this.map = map;
+	}
+
+	public Map<Integer, PlayingRoomInfo> getMap() {
+		return map;
 	}
 
 	@Autowired

@@ -5,6 +5,7 @@ import com.snail.client.main.control.ClientControl;
 import com.snail.client.main.fx.scene.control.SceneControl;
 import com.snail.client.main.fx.scene.impl.ErrorScene;
 import com.snail.client.main.fx.scene.impl.MainScene;
+import com.snail.client.main.fx.scene.impl.RoomScene;
 import com.snail.client.main.fx.scene.impl.SceneScene;
 
 import javafx.application.Application;
@@ -23,10 +24,12 @@ public class ClientMain extends Application {
 		MainScene mainScene = new MainScene();
 		ErrorScene errorScene = new ErrorScene();
 		SceneScene sceneScene = new SceneScene();
+		RoomScene roomScene = new RoomScene();
 		
 		sceneControl.register("Login", mainScene);
 		sceneControl.register("Error", errorScene);
 		sceneControl.register("scene", sceneScene);
+		sceneControl.register("room", roomScene);
 		
 		primaryStage.setTitle("Hello");
 		primaryStage.setScene(mainScene.getScene());

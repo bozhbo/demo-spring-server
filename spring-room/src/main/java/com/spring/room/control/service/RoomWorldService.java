@@ -1,45 +1,9 @@
-package com.spring.world.room.service;
+package com.spring.room.control.service;
 
 import com.spring.logic.role.info.RoleInfo;
 import com.spring.logic.room.info.RoomInfo;
 
-public interface RoomClientService {
-	
-	public void init();
-
-	/**
-	 * 发送RoomServer添加房间
-	 * 
-	 * @param roomInfo
-	 * @return
-	 */
-	public int deployRoomInfo(RoomInfo roomInfo);
-	
-	/**
-	 * 发送RoomServer删除房间
-	 * 
-	 * @param roomInfo
-	 * @return
-	 */
-	public int removeRoomInfo(RoomInfo roomInfo);
-	
-	/**
-	 * 发送RoomServer添加角色
-	 * 
-	 * @param roomInfo
-	 * @param roleInfo
-	 * @return
-	 */
-	public int deployRoleInfo(RoomInfo roomInfo, RoleInfo roleInfo);
-	
-	/**
-	 * 发送RoomServer删除角色
-	 * 
-	 * @param roomInfo
-	 * @param roleInfo
-	 * @return
-	 */
-	public int removeRoleInfo(RoomInfo roomInfo, RoleInfo roleInfo);
+public interface RoomWorldService {
 	
 	/**
 	 * 返回world添加房间成功
@@ -110,16 +74,7 @@ public interface RoomClientService {
 	public int removeRoleInfoFailed(RoomInfo roomInfo, RoleInfo roleInfo);
 	
 	/**
-	 * 快速开始
-	 * 
-	 * @param roleInfo
+	 * 发送房间服务器信息
 	 */
-	public void autoJoin(RoleInfo roleInfo);
-	
-	/**
-	 * 离开房间
-	 * 
-	 * @param roleInfo
-	 */
-	public void leaveRoom(RoleInfo roleInfo);
+	public void reportRoomServerInfo(int roomCount, int roleCount);
 }

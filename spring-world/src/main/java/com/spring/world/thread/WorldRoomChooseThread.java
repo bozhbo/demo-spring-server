@@ -15,78 +15,78 @@ import com.spring.world.room.service.RoomClientService;
 
 public class WorldRoomChooseThread extends Thread {
 	
-	private static final Log logger = LogFactory.getLog(WorldRoomChooseThread.class);
-	
-	private RoomTypeEnum roomTypeEnum;
-	
-	private LinkedBlockingQueue<IRoomEvent> queue = new LinkedBlockingQueue<IRoomEvent>();
-	
-	private volatile boolean stop;
-	
-	private RoomService roomService;
-	
-	private RoomClientService roomClientService;
-	
-	public WorldRoomChooseThread(RoomTypeEnum roomTypeEnum) {
-		super("WorldRoomChooseThread-" + roomTypeEnum.getValue());
-		this.roomTypeEnum = roomTypeEnum;
-	}
-
-	@Override
-	public void run() {
-		while (!stop) {
-			try {
-				IRoomEvent roomEvent = queue.poll(1, TimeUnit.SECONDS);
-				
-				if (roomEvent != null) {
-					if (roomEvent instanceof ChooseRoomEvent) {
-						RoomInfo roomInfo = this.roomService.randomJoinRoom(roomTypeEnum, ((ChooseRoomEvent)roomEvent).getRoleInfo());
-					
-						if (roomInfo != null) {
-							roomClientService.deployRoleInfo(roomInfo, ((ChooseRoomEvent)roomEvent).getRoleInfo());
-						} else {
-							logger.warn("");
-						}
-					}
-				}
-			} catch (Exception e) {
-				logger.error("", e);
-			}
-		}
-		
-		stop = true;
-	}
-
-	public boolean isStop() {
-		return stop;
-	}
-	
-	public void cancel() {
-		stop = true;
-	}
-
-	public RoomTypeEnum getRoomTypeEnum() {
-		return roomTypeEnum;
-	}
-	
-	public boolean addRoomEvent(IRoomEvent roomEvent) {
-		try {
-			queue.add(roomEvent);
-			return true;
-		} catch (Exception e) {
-			logger.error("WorldRoomChooseThread : addRoomEvent error", e);
-		}
-		
-		return false;
-	}
-
-	public void setRoomService(RoomService roomService) {
-		this.roomService = roomService;
-	}
-
-	public void setRoomClientService(RoomClientService roomClientService) {
-		this.roomClientService = roomClientService;
-	}
+//	private static final Log logger = LogFactory.getLog(WorldRoomChooseThread.class);
+//	
+//	private RoomTypeEnum roomTypeEnum;
+//	
+//	private LinkedBlockingQueue<IRoomEvent> queue = new LinkedBlockingQueue<IRoomEvent>();
+//	
+//	private volatile boolean stop;
+//	
+//	private RoomService roomService;
+//	
+//	private RoomClientService roomClientService;
+//	
+//	public WorldRoomChooseThread(RoomTypeEnum roomTypeEnum) {
+//		super("WorldRoomChooseThread-" + roomTypeEnum.getValue());
+//		this.roomTypeEnum = roomTypeEnum;
+//	}
+//
+//	@Override
+//	public void run() {
+//		while (!stop) {
+//			try {
+//				IRoomEvent roomEvent = queue.poll(1, TimeUnit.SECONDS);
+//				
+//				if (roomEvent != null) {
+//					if (roomEvent instanceof ChooseRoomEvent) {
+//						RoomInfo roomInfo = this.roomService.randomJoinRoom(roomTypeEnum, ((ChooseRoomEvent)roomEvent).getRoleInfo());
+//					
+//						if (roomInfo != null) {
+//							roomClientService.deployRoleInfo(roomInfo, ((ChooseRoomEvent)roomEvent).getRoleInfo());
+//						} else {
+//							logger.warn("");
+//						}
+//					}
+//				}
+//			} catch (Exception e) {
+//				logger.error("", e);
+//			}
+//		}
+//		
+//		stop = true;
+//	}
+//
+//	public boolean isStop() {
+//		return stop;
+//	}
+//	
+//	public void cancel() {
+//		stop = true;
+//	}
+//
+//	public RoomTypeEnum getRoomTypeEnum() {
+//		return roomTypeEnum;
+//	}
+//	
+//	public boolean addRoomEvent(IRoomEvent roomEvent) {
+//		try {
+//			queue.add(roomEvent);
+//			return true;
+//		} catch (Exception e) {
+//			logger.error("WorldRoomChooseThread : addRoomEvent error", e);
+//		}
+//		
+//		return false;
+//	}
+//
+//	public void setRoomService(RoomService roomService) {
+//		this.roomService = roomService;
+//	}
+//
+//	public void setRoomClientService(RoomClientService roomClientService) {
+//		this.roomClientService = roomClientService;
+//	}
 	
 	
 }

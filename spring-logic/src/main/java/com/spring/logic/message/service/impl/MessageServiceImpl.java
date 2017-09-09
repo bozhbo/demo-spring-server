@@ -3,10 +3,12 @@ package com.spring.logic.message.service.impl;
 import org.apache.mina.common.IoSession;
 import org.springframework.stereotype.Service;
 
+import com.snail.mina.protocol.client.RoomClient;
 import com.snail.mina.protocol.info.IRoomBody;
 import com.snail.mina.protocol.info.Message;
 import com.snail.mina.protocol.info.impl.RoomMessageHead;
 import com.spring.common.GameMessageType;
+import com.spring.common.ServerName;
 import com.spring.logic.message.service.MessageService;
 import com.spring.logic.server.cache.GateServerCache;
 import com.spring.logic.server.cache.RoomServerCache;
@@ -107,6 +109,11 @@ public class MessageServiceImpl implements MessageService {
 	}
 	
 	@Override
+	public boolean sendWorldMessage(Message message) {
+		return RoomClient.sendMessage(ServerName.GAME_SERVER_NAME, message);
+	}
+	
+	@Override
 	public Message createErrorMessage(int errorCode, String addInfo) {
 		Message message = new Message();
 		RoomMessageHead head = new RoomMessageHead();
@@ -117,4 +124,6 @@ public class MessageServiceImpl implements MessageService {
 		
 		return message;
 	}
+
+	
 }

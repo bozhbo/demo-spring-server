@@ -22,6 +22,8 @@ public interface MessageService {
 	
 	public boolean sendRoomMessage(int roomServerId, int msgType, IRoomBody body);
 	
+	public boolean sendWorldMessage(Message message);
+	
 	public Message createErrorMessage(int errorCode, String addInfo);
 	
 }

@@ -2,13 +2,23 @@ package com.spring.common;
 
 public class GameMessageType {
 	
-	public static int WORLD_2_ROOM_DEPLOY_ROOM = 0xFC01;
+	public static int WORLD_2_ROOM_DEPLOY_ROOM_REQ = 0xFC01;
 	
-	public static int WORLD_2_ROOM_REMOVE_ROOM = 0xFC03;
+	public static int WORLD_2_ROOM_DEPLOY_ROOM_RESP = 0xFC02;
 	
-	public static int WORLD_2_ROOM_DEPLOY_ROLE = 0xFC05;
+	public static int WORLD_2_ROOM_REMOVE_ROOM_REQ = 0xFC03;
 	
-	public static int WORLD_2_ROOM_REMOVE_ROLE = 0xFC07;
+	public static int WORLD_2_ROOM_REMOVE_ROOM_RESP = 0xFC04;
+	
+	public static int WORLD_2_ROOM_DEPLOY_ROLE_REQ = 0xFC05;
+	
+	public static int WORLD_2_ROOM_DEPLOY_ROLE_RESP = 0xFC06;
+	
+	public static int WORLD_2_ROOM_REMOVE_ROLE_REQ = 0xFC07;
+	
+	public static int WORLD_2_ROOM_REMOVE_ROLE_RESP = 0xFC08;
+	
+	public static int ROOM_2_WORLD_ROOM_INFO = 0xFC10;
 
 	/**
 	 * 登录请求

@@ -53,17 +53,17 @@ public class RoomServerServiceImpl implements RoomServerService {
 		req.setRoomId(roomId);
 		req.setRoomType(roomTypeEnum.getValue());
 		
-		return this.messageService.sendRoomMessage(roomServerId, GameMessageType.WORLD_2_ROOM_DEPLOY_ROOM, req);
+		return this.messageService.sendRoomMessage(roomServerId, GameMessageType.WORLD_2_ROOM_DEPLOY_ROOM_REQ, req);
 	}
 	
 	@Override
 	public boolean deployRoleInfo(int roomServerId, DeployRoleReq deployRoleReq) {
-		return this.messageService.sendRoomMessage(roomServerId, GameMessageType.WORLD_2_ROOM_DEPLOY_ROLE, deployRoleReq);
+		return this.messageService.sendRoomMessage(roomServerId, GameMessageType.WORLD_2_ROOM_DEPLOY_ROLE_REQ, deployRoleReq);
 	}
 	
 	@Override
 	public boolean removeRoleInfo(int roomServerId, RemoveRoleReq removeRoleReq) {
-		return this.messageService.sendRoomMessage(roomServerId, GameMessageType.WORLD_2_ROOM_REMOVE_ROLE, removeRoleReq);
+		return this.messageService.sendRoomMessage(roomServerId, GameMessageType.WORLD_2_ROOM_REMOVE_ROLE_REQ, removeRoleReq);
 	}
 	
 	@Autowired

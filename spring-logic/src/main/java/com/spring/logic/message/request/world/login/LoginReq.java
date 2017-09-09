@@ -1,4 +1,4 @@
-package com.spring.world.io.process.role.login;
+package com.spring.logic.message.request.world.login;
 
 import java.nio.ByteOrder;
 

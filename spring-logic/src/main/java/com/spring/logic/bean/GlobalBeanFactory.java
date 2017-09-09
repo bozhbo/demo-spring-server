@@ -20,4 +20,8 @@ public class GlobalBeanFactory {
 	public static <T> T getBeanByName(Class<T> clazz) {
 		return context.getBean(clazz);
 	}
+	
+	public static String getEnvironmentProperty(String key, String defaultValue) {
+		return context.getEnvironment().getProperty(key, defaultValue);
+	}
 }

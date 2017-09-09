@@ -1,23 +1,33 @@
 package com.spring.room.event;
 
+import com.spring.logic.room.enums.RoomTypeEnum;
 import com.spring.logic.room.event.IRoomEvent;
-import com.spring.logic.room.info.RoomInfo;
 
 public class DeployRoomEvent implements IRoomEvent {
 
-	private RoomInfo roomInfo;
+	private int roomId;
+	private RoomTypeEnum roomType;
 	
-	public DeployRoomEvent(RoomInfo roomInfo) {
-		this.roomInfo = roomInfo;
+	public DeployRoomEvent(int roomId, RoomTypeEnum roomType) {
+		this.roomId = roomId;
+		this.roomType = roomType;
 	}
 
-	public RoomInfo getRoomInfo() {
-		return roomInfo;
+	public int getRoomId() {
+		return roomId;
 	}
 
-	public void setRoomInfo(RoomInfo roomInfo) {
-		this.roomInfo = roomInfo;
+	public void setRoomId(int roomId) {
+		this.roomId = roomId;
 	}
-	
+
+	public RoomTypeEnum getRoomType() {
+		return roomType;
+	}
+
+	public void setRoomType(RoomTypeEnum roomType) {
+		this.roomType = roomType;
+	}
+
 	
 }

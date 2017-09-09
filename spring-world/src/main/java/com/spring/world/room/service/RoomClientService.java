@@ -109,17 +109,4 @@ public interface RoomClientService {
 	 */
 	public int removeRoleInfoFailed(RoomInfo roomInfo, RoleInfo roleInfo);
 	
-	/**
-	 * 快速开始
-	 * 
-	 * @param roleInfo
-	 */
-	public void autoJoin(RoleInfo roleInfo);
-	
-	/**
-	 * 离开房间
-	 * 
-	 * @param roleInfo
-	 */
-	public void leaveRoom(RoleInfo roleInfo);
 }

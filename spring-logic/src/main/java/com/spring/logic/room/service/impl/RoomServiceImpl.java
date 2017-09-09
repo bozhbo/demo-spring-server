@@ -58,7 +58,7 @@ public class RoomServiceImpl implements RoomService {
 		}
 	}
 	
-	public void deployRoomAndSet(int roomId, int roomServerId, Function<RoomInfo, Void> function) {
+	public void deployRoomAndSet(int roomId, int roomServerId, Function<RoomInfo, Integer> function) {
 		RoomInfo roomInfo = queryRoom(roomId);
 		
 		if (roomInfo == null) {
@@ -70,6 +70,19 @@ public class RoomServiceImpl implements RoomService {
 				roomInfo.setCurRoomServerId(roomServerId);
 				function.apply(roomInfo);
 			}
+		}
+	}
+
+	@Override
+	public int getRoomServerId(int roomId) {
+		RoomInfo roomInfo = queryRoom(roomId);
+		
+		if (roomInfo == null) {
+			return 0;
+		}
+		
+		synchronized (roomInfo) {
+			return roomInfo.getCurRoomServerId();
 		}
 	}
 }

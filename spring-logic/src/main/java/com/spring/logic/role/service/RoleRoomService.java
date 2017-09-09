@@ -1,14 +1,26 @@
 package com.spring.logic.role.service;
 
 import com.spring.logic.role.info.RoleInfo;
-import com.spring.logic.room.enums.RoomTypeEnum;
-import com.spring.logic.room.info.RoomInfo;
 
+/**
+ * 角色房间请求Service
+ * 
+ * @author Administrator
+ *
+ */
 public interface RoleRoomService {
 
-	public int roleJoinRoomCheck(RoleInfo roleInfo);
+	/**
+	 * 快速开始
+	 * 
+	 * @param roleInfo
+	 */
+	public void autoJoin(RoleInfo roleInfo);
 	
-	public void roleAutoJoinRoom(RoleInfo roleInfo);
-	
-	public RoomInfo roleChooseJoinRoom(RoleInfo roleInfo, RoomTypeEnum roomTypeEnum);
+	/**
+	 * 离开房间
+	 * 
+	 * @param roleInfo
+	 */
+	public void leaveRoom(RoleInfo roleInfo);
 }

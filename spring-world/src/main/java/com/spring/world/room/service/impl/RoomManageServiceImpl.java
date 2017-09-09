@@ -43,4 +43,10 @@ public class RoomManageServiceImpl implements RoomManageService {
 		}
 	}
 
+	@Override
+	public void roomServerShutDown(int roomServerId) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

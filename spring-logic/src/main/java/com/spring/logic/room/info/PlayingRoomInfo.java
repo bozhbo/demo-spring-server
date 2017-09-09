@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.spring.logic.role.info.RoleInfo;
+import com.spring.logic.role.info.RoomRoleInfo;
 import com.spring.logic.room.enums.RoomTypeEnum;
 
 /**
@@ -17,7 +18,7 @@ public class PlayingRoomInfo {
 	private int roomId;
 	private RoomTypeEnum roomType;
 	
-	private List<RoleInfo> list = new ArrayList<>();
+	private List<RoomRoleInfo> list = new ArrayList<>();
 	
 	public PlayingRoomInfo(int roomId, RoomTypeEnum roomType) {
 		this.roomId = roomId;
@@ -40,11 +41,11 @@ public class PlayingRoomInfo {
 		this.roomType = roomType;
 	}
 
-	public List<RoleInfo> getList() {
+	public List<RoomRoleInfo> getList() {
 		return list;
 	}
 
-	public void setList(List<RoleInfo> list) {
+	public void setList(List<RoomRoleInfo> list) {
 		this.list = list;
 	}
 

@@ -1,6 +1,8 @@
 package com.spring.logic.server.cache;
 
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.mina.common.IoSession;
@@ -25,5 +27,9 @@ public class GateServerCache {
 	
 	public static IoSession getIoSession(int gateId) {
 		return gateServerMap.get(ServerName.GATE_SERVER_NAME + "-" + gateId);
+	}
+	
+	public static Set<Entry<String, IoSession>> getSet() {
+		return gateServerMap.entrySet();
 	}
 }

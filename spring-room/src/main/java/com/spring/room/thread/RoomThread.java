@@ -97,30 +97,30 @@ public class RoomThread extends Thread {
 					if (roomEvent instanceof DeployRoomEvent) {
 						// world发起添加房间
 						if (addRoomInfo(list, roomEvent)) {
-							this.roomWorldService.deployRoomInfoSuccessed(((DeployRoomEvent) roomEvent).getRoomInfo());
+							this.roomWorldService.deployRoomInfoSuccessed(((DeployRoomEvent) roomEvent).getRoomId());
 						} else {
-							this.roomWorldService.deployRoomInfoFailed(((DeployRoomEvent) roomEvent).getRoomInfo());
+							this.roomWorldService.deployRoomInfoFailed(((DeployRoomEvent) roomEvent).getRoomId());
 						}
 					} else if (roomEvent instanceof DeployRoleInfoEvent) {
 						// world发起玩家加入房间
 						if (addRoleInfo(list, roomEvent)) {
-							this.roomWorldService.deployRoleInfoSuccessed(((DeployRoleInfoEvent) roomEvent).getRoomInfo(), ((DeployRoleInfoEvent) roomEvent).getRoleInfo());
+							// 由RoomLoopThread线程负责通知
 						} else {
-							this.roomWorldService.deployRoleInfoSuccessed(((DeployRoleInfoEvent) roomEvent).getRoomInfo(), ((DeployRoleInfoEvent) roomEvent).getRoleInfo());
+							this.roomWorldService.deployRoleInfoSuccessed(((DeployRoleInfoEvent) roomEvent).getReq().getRoomId(), ((DeployRoleInfoEvent) roomEvent).getReq().getRoleId());
 						}
 					} else if (roomEvent instanceof RemoveRoomEvent) {
 						// world发起移除房间
 						if (removeRoomInfo(roomEvent)) {
-							this.roomWorldService.removeRoomInfoSuccessed(((RemoveRoomEvent) roomEvent).getRoomInfo());
+							this.roomWorldService.removeRoomInfoSuccessed(((RemoveRoomEvent) roomEvent).getRoomId());
 						} else {
-							this.roomWorldService.removeRoomInfoFailed(((RemoveRoomEvent) roomEvent).getRoomInfo());
+							this.roomWorldService.removeRoomInfoFailed(((RemoveRoomEvent) roomEvent).getRoomId());
 						}
 					} else if (roomEvent instanceof RemoveRoleInfoEvent) {
 						// world发起玩家移除房间
 						if (removeRoleInfo(roomEvent)) {
-							this.roomWorldService.removeRoleInfoSuccessed(((RemoveRoleInfoEvent) roomEvent).getRoomInfo(), ((RemoveRoleInfoEvent) roomEvent).getRoleInfo());
+							this.roomWorldService.removeRoleInfoSuccessed(((RemoveRoleInfoEvent) roomEvent).getReq().getRoomId(), ((RemoveRoleInfoEvent) roomEvent).getReq().getRoleId());
 						} else {
-							this.roomWorldService.removeRoleInfoFailed(((RemoveRoleInfoEvent) roomEvent).getRoomInfo(), ((RemoveRoleInfoEvent) roomEvent).getRoleInfo());
+							this.roomWorldService.removeRoleInfoFailed(((RemoveRoleInfoEvent) roomEvent).getReq().getRoomId(), ((RemoveRoleInfoEvent) roomEvent).getReq().getRoleId());
 						}
 					}
 				}
@@ -166,7 +166,7 @@ public class RoomThread extends Thread {
 
 			if (roomLoopThread.getRoomSize() < (THREAD_MAX_ROOM_COUNT / 2)) {
 				if (roomLoopThread.addRoomEvent(roomEvent)) {
-					roomMap.put(((DeployRoomEvent) roomEvent).getRoomInfo().getRoomId(), roomLoopThread);
+					roomMap.put(((DeployRoomEvent) roomEvent).getRoomId(), roomLoopThread);
 					return true;
 				} else {
 					return false;
@@ -202,7 +202,8 @@ public class RoomThread extends Thread {
 		}
 
 		if (minRoomLoopThread.addRoomEvent(roomEvent)) {
-			roomMap.put(((DeployRoomEvent) roomEvent).getRoomInfo().getRoomId(), minRoomLoopThread);return true;
+			roomMap.put(((DeployRoomEvent) roomEvent).getRoomId(), minRoomLoopThread);
+			return true;
 		} else {
 			return false;
 		}
@@ -215,14 +216,14 @@ public class RoomThread extends Thread {
 	 * @return
 	 */
 	private boolean removeRoomInfo(IRoomEvent roomEvent) {
-		RoomLoopThread roomLoopThread = roomMap.get(((RemoveRoomEvent) roomEvent).getRoomInfo().getRoomId());
+		RoomLoopThread roomLoopThread = roomMap.get(((RemoveRoomEvent) roomEvent).getRoomId());
 		
 		if (roomLoopThread == null) {
 			return false;
 		}
 		
 		if (roomLoopThread.addRoomEvent(roomEvent)) {
-			roomMap.remove(((RemoveRoomEvent) roomEvent).getRoomInfo().getRoomId());
+			roomMap.remove(((RemoveRoomEvent) roomEvent).getRoomId());
 			return true;
 		} else {
 			return false;
@@ -263,7 +264,7 @@ public class RoomThread extends Thread {
 	 * @return
 	 */
 	private boolean removeRoleInfo(IRoomEvent roomEvent) {
-		RoomLoopThread roomLoopThread = roomMap.get(((RemoveRoleInfoEvent) roomEvent).getRoomInfo().getRoomId());
+		RoomLoopThread roomLoopThread = roomMap.get(((RemoveRoleInfoEvent) roomEvent).getReq().getRoomId());
 		
 		if (roomLoopThread == null) {
 			return false;

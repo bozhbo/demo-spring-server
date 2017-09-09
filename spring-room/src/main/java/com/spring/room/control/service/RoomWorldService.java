@@ -1,8 +1,5 @@
 package com.spring.room.control.service;
 
-import com.spring.logic.role.info.RoleInfo;
-import com.spring.logic.room.info.RoomInfo;
-
 public interface RoomWorldService {
 	
 	/**
@@ -11,7 +8,7 @@ public interface RoomWorldService {
 	 * @param roomInfo
 	 * @return
 	 */
-	public int deployRoomInfoSuccessed(RoomInfo roomInfo);
+	public int deployRoomInfoSuccessed(int roomId);
 	
 	/**
 	 * 返回world添加房间失败
@@ -19,7 +16,7 @@ public interface RoomWorldService {
 	 * @param roomInfo
 	 * @return
 	 */
-	public int deployRoomInfoFailed(RoomInfo roomInfo);
+	public int deployRoomInfoFailed(int roomId);
 	
 	/**
 	 * 返回world移除房间成功
@@ -27,7 +24,7 @@ public interface RoomWorldService {
 	 * @param roomInfo
 	 * @return
 	 */
-	public int removeRoomInfoSuccessed(RoomInfo roomInfo);
+	public int removeRoomInfoSuccessed(int roomId);
 	
 	/**
 	 * 返回world移除房间失败
@@ -35,7 +32,7 @@ public interface RoomWorldService {
 	 * @param roomInfo
 	 * @return
 	 */
-	public int removeRoomInfoFailed(RoomInfo roomInfo);
+	public int removeRoomInfoFailed(int roomId);
 	
 	/**
 	 * 返回world添加玩家成功
@@ -44,7 +41,7 @@ public interface RoomWorldService {
 	 * @param roleInfo
 	 * @return
 	 */
-	public int deployRoleInfoSuccessed(RoomInfo roomInfo, RoleInfo roleInfo);
+	public int deployRoleInfoSuccessed(int roomId, int roleId);
 	
 	/**
 	 * 返回world添加玩家失败
@@ -53,7 +50,7 @@ public interface RoomWorldService {
 	 * @param roleInfo
 	 * @return
 	 */
-	public int deployRoleInfoFailed(RoomInfo roomInfo, RoleInfo roleInfo);
+	public int deployRoleInfoFailed(int roomId, int roleId);
 	
 	/**
 	 * 返回world移除玩家成功
@@ -62,7 +59,7 @@ public interface RoomWorldService {
 	 * @param roleInfo
 	 * @return
 	 */
-	public int removeRoleInfoSuccessed(RoomInfo roomInfo, RoleInfo roleInfo);
+	public int removeRoleInfoSuccessed(int roomId, int roleId);
 	
 	/**
 	 * 返回world移除玩家失败
@@ -71,7 +68,7 @@ public interface RoomWorldService {
 	 * @param roleInfo
 	 * @return
 	 */
-	public int removeRoleInfoFailed(RoomInfo roomInfo, RoleInfo roleInfo);
+	public int removeRoleInfoFailed(int roomId, int roleId);
 	
 	/**
 	 * 发送房间服务器信息

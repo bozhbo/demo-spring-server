@@ -8,6 +8,8 @@ public class Command {
 	public static int REPORT_SERVER_NUM = 0xfffD;// 报告当前通讯服务器在线人数
 	public static int GAME_SERVER_ACTIVE_REQ = 0xfffE;// 游戏服务器端定时激活连接
 	public static int GAME_CLIENT_ACTIVE_REQ = 0xffff;// 游戏客户端定时激活连接
+	
+	public static int ROOM_SERVER_INFO_REQ = 0xfff9;// Room服务器通知信息
 
 	public static int USER_VERIFY_ROLE_REQ = 0xA001;
 	public static int USER_VERIFY_ROLE_RESP = 0xA002;

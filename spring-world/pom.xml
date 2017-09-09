@@ -31,12 +31,6 @@
 			<artifactId>spring-logic</artifactId>
 			<version>0.0.1</version>
 		</dependency>
-		
-		<dependency>
-			<groupId>com.spring.room</groupId>
-			<artifactId>spring-room</artifactId>
-			<version>0.0.1</version>
-		</dependency>
 	</dependencies>
 	
 	<build>

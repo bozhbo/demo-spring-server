@@ -1,4 +1,4 @@
-package com.spring.world.io.process.role.init;
+package com.spring.logic.message.request.world.init;
 
 import java.nio.ByteOrder;
 

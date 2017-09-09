@@ -11,11 +11,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.spring.logic.role.info.RoomRoleInfo;
 import com.spring.logic.room.event.IRoomEvent;
 import com.spring.logic.room.info.PlayingRoomInfo;
 import com.spring.room.control.service.RoomControlService;
+import com.spring.room.control.service.RoomLogicService;
 import com.spring.room.event.DeployRoleInfoEvent;
 import com.spring.room.event.DeployRoomEvent;
+import com.spring.room.event.RemoveRoleInfoEvent;
+import com.spring.room.event.RemoveRoomEvent;
 
 /**
  * 房间循环线程
@@ -59,6 +63,8 @@ public class RoomLoopThread extends Thread {
 	 */
 	private RoomControlService roomControlService;
 	
+	private RoomLogicService roomLogicService;
+	
 	@Override
 	public void run() {
 		long sleepTime = SLEEP_TIME;
@@ -70,9 +76,27 @@ public class RoomLoopThread extends Thread {
 				
 				if (roomEvent != null) {
 					if (roomEvent instanceof DeployRoomEvent) {
-						map.put(((DeployRoomEvent)roomEvent).getRoomInfo().getRoomId(), roomControlService.deployRoomInfo(((DeployRoomEvent)roomEvent).getRoomInfo()));
+						PlayingRoomInfo playingRoomInfo = roomLogicService.createPlayingRoomInfo(((DeployRoomEvent)roomEvent).getRoomId(), ((DeployRoomEvent)roomEvent).getRoomType());
+						map.put(playingRoomInfo.getRoomId(), playingRoomInfo);
+					} else if (roomEvent instanceof RemoveRoomEvent) {
+						PlayingRoomInfo playingRoomInfo = map.get(((RemoveRoomEvent)roomEvent).getRoomId());
+					
+						if (playingRoomInfo != null) {
+							playingRoomInfo.getList().forEach((roleInfo) -> roomLogicService.removeRole(playingRoomInfo, roleInfo.getRoleId()));
+						}
 					} else if (roomEvent instanceof DeployRoleInfoEvent) {
+						PlayingRoomInfo playingRoomInfo = map.get(((DeployRoleInfoEvent)roomEvent).getReq().getRoomId());
 						
+						if (playingRoomInfo != null) {
+							RoomRoleInfo roomRoleInfo = roomLogicService.createRoomRoleInfo(playingRoomInfo, ((DeployRoleInfoEvent)roomEvent).getReq());
+							roomLogicService.addRole(playingRoomInfo, roomRoleInfo);
+						}
+					} else if (roomEvent instanceof RemoveRoleInfoEvent) {
+						PlayingRoomInfo playingRoomInfo = map.get(((RemoveRoleInfoEvent)roomEvent).getReq().getRoomId());
+					
+						if (playingRoomInfo != null) {
+							roomLogicService.removeRole(playingRoomInfo, ((RemoveRoleInfoEvent)roomEvent).getReq().getRoleId());
+						}
 					}
 					
 					long start = System.currentTimeMillis();
@@ -141,6 +165,11 @@ public class RoomLoopThread extends Thread {
 
 	public Map<Integer, PlayingRoomInfo> getMap() {
 		return map;
+	}
+	
+	@Autowired
+	public void setRoomLogicService(RoomLogicService roomLogicService) {
+		this.roomLogicService = roomLogicService;
 	}
 
 	@Autowired

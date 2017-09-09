@@ -108,8 +108,6 @@ public class ServerHandle extends IoHandlerAdapter {
 				if (session != null && session.isConnected()) {
 					session.write(in);
 				}
-			} else if (message.getiRoomHead().getMsgType() == RoomValue.MESSAGE_TYPE_HEARTBEAT_FE01) {
-				// Gate心跳连接，不返回
 			} else {
 				if (ioHandler != null) {
 					if (!ioHandler.checkRoleMessage(session, message.getiRoomHead())) {

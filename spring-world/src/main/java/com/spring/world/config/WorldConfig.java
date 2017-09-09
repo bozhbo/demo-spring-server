@@ -3,11 +3,9 @@ package com.spring.world.config;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.spring.logic.bean.GlobalBeanFactory;
 import com.spring.logic.room.cache.RoomCahce;
 import com.spring.logic.room.enums.RoomTypeEnum;
-import com.spring.logic.room.service.RoomService;
-import com.spring.world.room.service.RoomClientService;
+import com.spring.logic.util.LogicUtil;
 import com.spring.world.thread.WorldRoomChooseThread;
 import com.spring.world.thread.WorldRoomThread;
 
@@ -18,6 +16,8 @@ public class WorldConfig {
 	
 	public static void init() {
 		RoomCahce.init();
+		
+		LogicUtil.initJson();
 		
 //		worldRoomThread = new WorldRoomThread();
 //		worldRoomThread.setRoomService(GlobalBeanFactory.getBeanByName(RoomService.class));

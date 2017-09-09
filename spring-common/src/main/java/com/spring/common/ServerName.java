@@ -16,5 +16,5 @@ public class ServerName {
 	
 	public static String MAIL_SERVER_NAME = "MailServer";
 	
-	public static String PUSH_SERVER_NAME = "PushServer";
+	public static String ROOM_SERVER_NAME = "RoomServer";
 }

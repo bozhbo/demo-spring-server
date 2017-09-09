@@ -1,5 +1,6 @@
 package com.snail.webgame.engine.gate.util;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
@@ -530,6 +531,23 @@ public class MessageServiceManage {
 			m = null;
 		}
 
+	}
+	
+	public String getUserStat(byte[] message) {
+		byte s[] = new byte[2];
+		System.arraycopy(message, BODY_INDEX_FIELD_0, s, 0, 2);
+		
+		short len = Util.byteArrayToShort(s);
+		
+		if (len == 0) {
+			return null;
+		} else {
+			try {
+				return new String(message, BODY_INDEX_FIELD_0 + 2, len, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				return null;
+			}
+		}
 	}
 
 	/**

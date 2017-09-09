@@ -1,23 +1,22 @@
 package com.spring.room.event;
 
 import com.spring.logic.room.event.IRoomEvent;
-import com.spring.logic.room.info.RoomInfo;
 
 public class RemoveRoomEvent implements IRoomEvent {
 
-	private RoomInfo roomInfo;
+	private int roomId;
 	
-	public RemoveRoomEvent(RoomInfo roomInfo) {
-		this.roomInfo = roomInfo;
+	public RemoveRoomEvent(int roomId) {
+		this.roomId = roomId;
 	}
 
-	public RoomInfo getRoomInfo() {
-		return roomInfo;
+	public int getRoomId() {
+		return roomId;
 	}
 
-	public void setRoomInfo(RoomInfo roomInfo) {
-		this.roomInfo = roomInfo;
+	public void setRoomId(int roomId) {
+		this.roomId = roomId;
 	}
-	
+
 	
 }

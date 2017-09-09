@@ -22,5 +22,8 @@ public interface RoomService {
 	
 	public boolean needDeployRoom(int roomId);
 	
-	public void deployRoomAndSet(int roomId, int roomServerId, Function<RoomInfo, Void> function);
+	public void deployRoomAndSet(int roomId, int roomServerId, Function<RoomInfo, Integer> function);
+	
+	public int getRoomServerId(int roomId);
+
 }

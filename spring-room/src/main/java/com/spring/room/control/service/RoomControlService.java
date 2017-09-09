@@ -15,39 +15,4 @@ public interface RoomControlService {
 	 */
 	public int loopRoomInfo(PlayingRoomInfo playingRoomInfo);
 	
-	/**
-	 * world要求添加房间
-	 * 
-	 * @param roomInfo
-	 * @return
-	 */
-	public PlayingRoomInfo deployRoomInfo(RoomInfo roomInfo);
-	
-	/**
-	 * world要求移除房间
-	 * 
-	 * @param roomInfo
-	 * @return
-	 */
-	public PlayingRoomInfo removeRoomInfo(RoomInfo roomInfo);
-	
-	/**
-	 * world要求添加玩家
-	 * 
-	 * @param playingRoomInfo
-	 * @param roleInfo
-	 * @return
-	 */
-	public int deployRoleInfo(PlayingRoomInfo playingRoomInfo, RoleInfo roleInfo);
-	
-	/**
-	 * world要求移除房间玩家
-	 * 
-	 * @param playingRoomInfo
-	 * @param roleInfo
-	 * @return
-	 */
-	public int removeRoleInfo(RoomInfo roomInfo, RoleInfo roleInfo);
-	
-	
 }

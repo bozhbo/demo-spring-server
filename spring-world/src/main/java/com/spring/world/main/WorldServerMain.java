@@ -20,7 +20,6 @@ import com.snail.mina.protocol.handler.ServerHandle;
 import com.snail.mina.protocol.info.RoomFilterInfo;
 import com.snail.mina.protocol.server.RoomServer;
 import com.spring.logic.bean.GlobalBeanFactory;
-import com.spring.room.config.RoomServerConfig;
 import com.spring.world.config.WorldConfig;
 import com.spring.world.io.WorldIoControl;
 import com.spring.world.io.process.handler.GameServerSessionHandler;
@@ -45,8 +44,6 @@ public class WorldServerMain {
 		
 		WorldConfig.init();
 		
-		launchRoomServer();
-		
 		WorldStateControl worldStateControl = GlobalBeanFactory.getBeanByName("WorldStateControl", WorldStateControl.class);
 		worldStateControl.init();
 		
@@ -59,10 +56,6 @@ public class WorldServerMain {
 		list.add(new RoomFilterInfo("message", new MessageCodecFilter("Game", ByteOrder.BIG_ENDIAN)));
 		
 		server.start("127.0.0.1", 7001, 4, new ServerHandle(new GameServerSessionHandler(), Executors.newCachedThreadPool()), false, list);
-	}
-	
-	public static void launchRoomServer() {
-		RoomServerConfig.init();
 	}
 	
 	@Bean("WorldStateControl")

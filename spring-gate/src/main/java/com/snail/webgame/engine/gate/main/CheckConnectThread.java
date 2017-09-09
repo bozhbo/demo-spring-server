@@ -53,7 +53,7 @@ public class CheckConnectThread extends Thread {
 
 			if (serverState.isAllNormal()) {
 				try {
-					Thread.sleep(60000);
+					Thread.sleep(10000);
 				} catch (InterruptedException e) {
 					log.error("", e);
 				}
@@ -71,8 +71,12 @@ public class CheckConnectThread extends Thread {
 	public void checkConnect(String serverName) {
 		IoSession session = ServerMap.getSession(serverName);
 		if (session == null || !session.isConnected()) {
-
+			if (serverName.equalsIgnoreCase(ServerName.GAME_SERVER_NAME)) {
+				GlobalServer.GAME_IS_REGISTER = false;
+			}
+			
 			session = Connect.connectServer(serverName, handlerAdapter);
+			
 			if (session != null) {
 				ServerMap.addSession(serverName, session);
 			}
@@ -90,6 +94,13 @@ public class CheckConnectThread extends Thread {
 
 				}
 				GlobalServer.GAME_IS_REGISTER = true;
+			} else if (serverName.startsWith(ServerName.ROOM_SERVER_NAME)) {
+				if (session.getAttribute(serverName) == null) {
+					messagemgt.sendActiveServerMessage(session, 1);
+					session.setAttribute(serverName, "1");
+				} else {
+					messagemgt.sendActiveServerMessage(session, 0);
+				}
 			}
 		}
 	}

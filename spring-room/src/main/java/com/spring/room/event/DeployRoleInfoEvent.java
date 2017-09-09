@@ -1,30 +1,22 @@
 package com.spring.room.event;
 
-import com.spring.logic.role.info.RoleInfo;
+import com.spring.logic.message.request.server.DeployRoleReq;
 import com.spring.logic.room.event.IRoomEvent;
-import com.spring.logic.room.info.RoomInfo;
 
 public class DeployRoleInfoEvent implements IRoomEvent {
 
-	private RoomInfo roomInfo;
-	private RoleInfo roleInfo;
+	private DeployRoleReq req;
 	
-	public DeployRoleInfoEvent(RoomInfo roomInfo, RoleInfo roleInfo) {
-		this.roomInfo = roomInfo;
-		this.roleInfo = roleInfo;
+	public DeployRoleInfoEvent(DeployRoleReq req) {
+		this.req = req;
 	}
-	
-	public RoomInfo getRoomInfo() {
-		return roomInfo;
+
+	public DeployRoleReq getReq() {
+		return req;
 	}
-	public void setRoomInfo(RoomInfo roomInfo) {
-		this.roomInfo = roomInfo;
-	}
-	public RoleInfo getRoleInfo() {
-		return roleInfo;
-	}
-	public void setRoleInfo(RoleInfo roleInfo) {
-		this.roleInfo = roleInfo;
+
+	public void setReq(DeployRoleReq req) {
+		this.req = req;
 	}
 	
 	

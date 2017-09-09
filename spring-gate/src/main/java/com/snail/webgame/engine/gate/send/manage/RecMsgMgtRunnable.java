@@ -3,15 +3,20 @@ package com.snail.webgame.engine.gate.send.manage;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.mina.common.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.snail.webgame.engine.gate.cache.SequenceMap;
+import com.snail.webgame.engine.gate.cache.ServerMap;
+import com.snail.webgame.engine.gate.common.ConnectConfig;
 import com.snail.webgame.engine.gate.common.ContentValue;
 import com.snail.webgame.engine.gate.common.DisconnectPhase;
 import com.snail.webgame.engine.gate.config.Command;
+import com.snail.webgame.engine.gate.config.GlobalServer;
+import com.snail.webgame.engine.gate.config.WebGameConfig;
 import com.snail.webgame.engine.gate.threadpool.GlobalSendMessageManager;
 import com.snail.webgame.engine.gate.util.IdentityMap;
 import com.snail.webgame.engine.gate.util.MessageServiceManage;
@@ -140,6 +145,42 @@ public class RecMsgMgtRunnable  {
 		} else if (msgType == Command.USER_MSG_SEND_RESP) {
 			// 批量发送消息
 			GlobalSendMessageManager.nextProcessor().addMessage(message);
+			return;
+		} else if (msgType == Command.ROOM_SERVER_INFO_REQ) {
+			String userState = msgmgt.getUserStat(message);
+			
+			if (userState != null) {
+				String[] strs = userState.split(",");
+				Map<String, ConnectConfig> map = WebGameConfig.getInstance().getConnectConfig();
+				
+				if (!map.containsKey(strs[2])) {
+					ConnectConfig connectConfig = new ConnectConfig();
+					
+					connectConfig.setServerIP(strs[0]);
+					connectConfig.setServerPort(Integer.parseInt(strs[1]));
+					connectConfig.setServerName(strs[2]);
+					
+					GlobalServer.GAME_IS_REGISTER = false;
+					
+					map.put(connectConfig.getServerName(), connectConfig);
+				} else {
+					ConnectConfig connectConfig = map.get(strs[2]);
+					
+					if (!connectConfig.getServerIP().equals(strs[0]) || connectConfig.getServerPort() != Integer.parseInt(strs[1])) {
+						connectConfig.setServerIP(strs[0]);
+						connectConfig.setServerPort(Integer.parseInt(strs[1]));
+						
+						GlobalServer.GAME_IS_REGISTER = false;
+						
+						IoSession session = ServerMap.getSession(strs[2]);
+						
+						if (session != null) {
+							session.close();
+						}
+					}
+				}
+			}
+			
 			return;
 		}
 

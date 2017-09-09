@@ -1,6 +1,14 @@
 package com.spring.common;
 
 public class GameMessageType {
+	
+	public static int WORLD_2_ROOM_DEPLOY_ROOM = 0xFC01;
+	
+	public static int WORLD_2_ROOM_REMOVE_ROOM = 0xFC03;
+	
+	public static int WORLD_2_ROOM_DEPLOY_ROLE = 0xFC05;
+	
+	public static int WORLD_2_ROOM_REMOVE_ROLE = 0xFC07;
 
 	/**
 	 * 登录请求
@@ -22,13 +30,10 @@ public class GameMessageType {
 	 */
 	public static int GAME_CLIENT_INIT_RECEIVE = 0xA006;
 	
-	public static int GAME_CLIENT_ROOM_AUTO_JOIN_SEND = 0xA101;
-	
-	public static int GAME_CLIENT_ROOM_AUTO_JOIN_RECEIVE = 0xA102;
-	
-	public static int GAME_CLIENT_ROOM_CHOOSE_JOIN_SEND = 0xA103;
-	
-	public static int GAME_CLIENT_ROOM_CHOOSE_JOIN_RECEIVE = 0xA104;
+	/**
+	 * 错误信息
+	 */
+	public static int GAME_CLIENT_ERROR_RECEIVE = 0xA022;
 	
 	/**
 	 * 通用请求
@@ -54,5 +59,7 @@ public class GameMessageType {
 	 * 新加入成员响应
 	 */
 	public static int GAME_CLIENT_ROOM_JOIN = 0xA202;
+	
+	public static int ROOM_CLIENT_ROOM_INIT = 0xA204;
 	
 }

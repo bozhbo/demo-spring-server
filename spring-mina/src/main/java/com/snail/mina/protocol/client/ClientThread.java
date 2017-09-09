@@ -72,8 +72,12 @@ public class ClientThread implements Runnable {
 		this.serverName = serverName;
 		this.remoteServerName = remoteServerName;
 		this.ioHandler = ioHandler;
-		this.sessionStateHandler = null;
-		this.handlerExecutor = null;
+		
+		if (this.ioHandler instanceof ClientHandle) {
+			this.sessionStateHandler = ((ClientHandle)this.ioHandler).getIoHandler();
+			this.handlerExecutor = ((ClientHandle)this.ioHandler).getExecutor();
+		}
+		
 		this.ioFiterList = ioFiterList;
 		
 		this.heartbeat = heartbeat;

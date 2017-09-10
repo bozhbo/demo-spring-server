@@ -28,7 +28,7 @@ public class RoleRemoveProcessor implements IProcessor {
 
 	@Override
 	public int getMsgType() {
-		return GameMessageType.WORLD_2_ROOM_REMOVE_ROLE;
+		return GameMessageType.WORLD_2_ROOM_REMOVE_ROLE_REQ;
 	}
 
 }

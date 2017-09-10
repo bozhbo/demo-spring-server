@@ -15,13 +15,10 @@ import java.util.concurrent.Future;
 //import org.critterai.nav.SearchState;
 //import org.critterai.nav.TriCell;
 //import org.critterai.nav.TriNavMesh;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.spring.common.info.Point2D;
 
 public class LocationHelper {
-	private static final Logger logger = LoggerFactory.getLogger("logs");
 	public final static int POOL_SIZE = 5;
 
 //	private TriNavMesh mesh;

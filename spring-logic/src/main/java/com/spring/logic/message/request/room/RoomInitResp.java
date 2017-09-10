@@ -13,7 +13,6 @@ public class RoomInitResp extends BaseRoomResp {
 	@Override
 	public void resp2Bytes(ByteBuffer buffer, ByteOrder order) {
 		setInt(buffer, order, roomId);
-		
 	}
 
 	public int getRoomId() {

@@ -10,9 +10,6 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * DESede/DES/BlowFish
  * DESede 的 key长度是24个字节
@@ -22,7 +19,6 @@ import org.slf4j.LoggerFactory;
  */
 public class CodeUtil {
 
-	private static final Logger log =LoggerFactory.getLogger("logs");
 	private static Map<String, byte[]> secretKeyMap = new HashMap<String, byte[]>();
 	public static String Md5(String plainText ) 
 	{ 

@@ -40,11 +40,6 @@ public class RoomServiceImpl implements RoomService {
 		return false;
 	}
 	
-	@Autowired
-	public void setCacheService(CacheService cacheService) {
-		this.cacheService = cacheService;
-	}
-
 	@Override
 	public boolean needDeployRoom(int roomId) {
 		RoomInfo roomInfo = queryRoom(roomId);
@@ -84,5 +79,17 @@ public class RoomServiceImpl implements RoomService {
 		synchronized (roomInfo) {
 			return roomInfo.getCurRoomServerId();
 		}
+	}
+
+	@Override
+	public void closeRoom(int roomId) {
+		// TODO 检查角色是否删除
+		
+		cacheService.closeRoom(roomId);
+	}
+	
+	@Autowired
+	public void setCacheService(CacheService cacheService) {
+		this.cacheService = cacheService;
 	}
 }

@@ -25,5 +25,7 @@ public interface RoomService {
 	public void deployRoomAndSet(int roomId, int roomServerId, Function<RoomInfo, Integer> function);
 	
 	public int getRoomServerId(int roomId);
+	
+	public void closeRoom(int roomId);
 
 }

@@ -28,7 +28,7 @@ public class RoleDeployProcessor implements IProcessor {
 
 	@Override
 	public int getMsgType() {
-		return GameMessageType.WORLD_2_ROOM_DEPLOY_ROLE;
+		return GameMessageType.WORLD_2_ROOM_DEPLOY_ROLE_REQ;
 	}
 
 }

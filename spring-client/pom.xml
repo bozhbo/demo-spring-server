@@ -7,6 +7,8 @@
 		<version>0.0.1</version>
 	</parent>
 
+	<!-- mvn jfx:jar -->
+
 	<groupId>com.spring.client</groupId>
 	<artifactId>spring-client</artifactId>
 	<packaging>jar</packaging>

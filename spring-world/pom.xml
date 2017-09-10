@@ -15,6 +15,11 @@
 	
 	<dependencies>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+	
+		<dependency>
 			<groupId>com.spring.mina</groupId>
 			<artifactId>spring-mina</artifactId>
 			<version>0.0.1</version>
@@ -29,6 +34,12 @@
 		<dependency>
 			<groupId>com.spring.logic</groupId>
 			<artifactId>spring-logic</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.spring.world.game</groupId>
+			<artifactId>spring-world-logic</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 	</dependencies>

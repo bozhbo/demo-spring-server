@@ -103,6 +103,17 @@ public class CacheServiceImpl implements CacheService {
 		return true;
 	}
 	
+	@Override
+	public void closeRoom(int roomId) {
+		RoomInfo roomInfo = queryRoom(roomId);
+		
+		if (roomInfo != null) {
+			closeRoom(roomInfo);
+			
+			
+		}
+	}
+	
 	private RoomInfo createRoom(RoomTypeEnum roomTypeEnum) {
 		RoomInfo roomInfo = null;
 		Map<Integer, RoomInfo> emptyRoomMap = RoomCahce.getEmptyRoomMap();
@@ -171,4 +182,6 @@ public class CacheServiceImpl implements CacheService {
 		
 		logger.info("end print room info");
 	}
+
+	
 }

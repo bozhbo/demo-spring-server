@@ -18,5 +18,9 @@ public interface CacheService {
 	
 	public boolean leaveRoom(int roleId, int roomId, RoomTypeEnum roomTypeEnum);
 	
+	public void closeRoom(int roomId);
+	
 	public void printAllRooms();
+	
+	
 }

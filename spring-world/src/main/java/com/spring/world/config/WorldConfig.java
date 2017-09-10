@@ -1,41 +1,24 @@
 package com.spring.world.config;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
+import com.spring.logic.bean.GlobalBeanFactory;
 import com.spring.logic.room.cache.RoomCahce;
-import com.spring.logic.room.enums.RoomTypeEnum;
 import com.spring.logic.util.LogicUtil;
-import com.spring.world.thread.WorldRoomChooseThread;
-import com.spring.world.thread.WorldRoomThread;
 
 public class WorldConfig {
-
-	private static WorldRoomThread worldRoomThread;
-	private static Map<RoomTypeEnum, WorldRoomChooseThread> roomChooseThreadMap = new ConcurrentHashMap<>();
 	
+	public static String WORLD_SERVER_IP;
+	
+	public static int WORLD_SERVER_PORT;
+	
+	public static int WORLD_SERVER_CPU_PROCESS;
+
 	public static void init() {
 		RoomCahce.init();
 		
 		LogicUtil.initJson();
 		
-//		worldRoomThread = new WorldRoomThread();
-//		worldRoomThread.setRoomService(GlobalBeanFactory.getBeanByName(RoomService.class));
-//		worldRoomThread.setRoomClientService(GlobalBeanFactory.getBeanByName(RoomClientService.class));
-//		worldRoomThread.start();
-//		
-//		RoomTypeEnum[] enums = RoomTypeEnum.values();
-//		
-//		for (RoomTypeEnum roomTypeEnum : enums) {
-//			WorldRoomChooseThread worldRoomChooseThread = new WorldRoomChooseThread(roomTypeEnum);
-//			worldRoomChooseThread.setRoomService(GlobalBeanFactory.getBeanByName(RoomService.class));
-//			worldRoomChooseThread.setRoomClientService(GlobalBeanFactory.getBeanByName(RoomClientService.class));
-//			roomChooseThreadMap.put(roomTypeEnum, worldRoomChooseThread);
-//			roomChooseThreadMap.get(roomTypeEnum).start();
-//		}
-	}
-	
-	public static WorldRoomChooseThread getWorldRoomChooseThread(RoomTypeEnum roomTypeEnum) {
-		return roomChooseThreadMap.get(roomTypeEnum);
+		WORLD_SERVER_IP = GlobalBeanFactory.getEnvironmentProperty("world.server.ip", "127.0.0.1");
+		WORLD_SERVER_PORT = Integer.parseInt(GlobalBeanFactory.getEnvironmentProperty("world.server.port", "7001"));
+		WORLD_SERVER_CPU_PROCESS = Integer.parseInt(GlobalBeanFactory.getEnvironmentProperty("world.server.process", "4"));
 	}
 }

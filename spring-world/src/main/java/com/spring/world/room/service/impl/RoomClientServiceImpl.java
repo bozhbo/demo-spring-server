@@ -93,16 +93,4 @@ public class RoomClientServiceImpl implements RoomClientService {
 		return 0;
 	}
 
-	@Override
-	public void autoJoin(RoleInfo roleInfo) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void leaveRoom(RoleInfo roleInfo) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

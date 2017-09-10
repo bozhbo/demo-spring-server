@@ -9,7 +9,8 @@ import com.snail.mina.protocol.info.Message;
 import com.snail.mina.protocol.info.impl.RoomMessageHead;
 import com.snail.mina.protocol.processor.IProcessor;
 import com.spring.common.GameMessageType;
-import com.spring.logic.request.login.LoginReq;
+import com.spring.logic.message.request.world.login.LoginReq;
+import com.spring.logic.message.request.world.login.LoginResp;
 import com.spring.logic.role.service.RoleLoginService;
 
 @Component
@@ -23,9 +24,7 @@ public class LoginProcessor implements IProcessor {
 	public void processor(Message message) {
 		RoomMessageHead head = (RoomMessageHead) message.getiRoomHead();
 		LoginReq req = (LoginReq) message.getiRoomBody();
-
-		GolfFlowerResp resp = new GolfFlowerResp();
-		resp.setVersion(100);
+		LoginResp resp = new LoginResp();
 
 		this.roleLoginService.roleLogin(head.getGateId(), head.getRoleId(), req.getAccount(), req.getMd5Pass(),
 				req.getValidate(), resp, (r) -> {

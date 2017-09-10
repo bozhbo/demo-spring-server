@@ -24,7 +24,7 @@ public class RoomDeployProcessor implements IProcessor {
 
 	@Override
 	public int getMsgType() {
-		return GameMessageType.WORLD_2_ROOM_DEPLOY_ROOM;
+		return GameMessageType.WORLD_2_ROOM_DEPLOY_ROOM_REQ;
 	}
 
 }

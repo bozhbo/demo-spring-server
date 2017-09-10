@@ -12,14 +12,14 @@ import com.snail.mina.protocol.processor.IProcessor;
 import com.spring.common.GameMessageType;
 import com.spring.logic.role.cache.RoleCache;
 import com.spring.logic.role.info.RoleInfo;
-import com.spring.world.room.service.RoomClientService;
+import com.spring.logic.role.service.RoleRoomService;
 
 @Component
 public class CommonProcessor implements IProcessor {
 	
 	private static final Log logger = LogFactory.getLog(CommonProcessor.class);
 	
-	private RoomClientService roomClientService;
+	private RoleRoomService roleRoomService;
 
 	@Override
 	public void processor(Message message) {
@@ -35,10 +35,10 @@ public class CommonProcessor implements IProcessor {
 		synchronized (roleInfo) {
 			if (req.getOptionType() == GameMessageType.GAME_CLIENT_WORLD_COMMON_SEND_AUTO_START) {
 				// 快速开始
-				this.roomClientService.autoJoin(roleInfo);
+				this.roleRoomService.autoJoin(roleInfo);
 			} else if (req.getOptionType() == GameMessageType.GAME_CLIENT_WORLD_COMMON_SEND_LEAVE_ROOM) {
 				// 返回大厅
-				this.roomClientService.leaveRoom(roleInfo);
+				this.roleRoomService.leaveRoom(roleInfo);
 			}
 		}
 	}
@@ -54,7 +54,7 @@ public class CommonProcessor implements IProcessor {
 	}
 
 	@Autowired
-	public void setRoomClientService(RoomClientService roomClientService) {
-		this.roomClientService = roomClientService;
+	public void setRoleRoomService(RoleRoomService roleRoomService) {
+		this.roleRoomService = roleRoomService;
 	}
 }

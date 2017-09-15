@@ -3,6 +3,7 @@ package com.spring.world.io.process.server.room;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.snail.mina.protocol.info.IRoomBody;
 import com.snail.mina.protocol.info.Message;
@@ -11,6 +12,7 @@ import com.spring.common.GameMessageType;
 import com.spring.logic.message.request.server.DeployRoomResp;
 import com.spring.logic.room.service.RoomService;
 
+@Component
 public class DeployRoomProcessor implements IProcessor {
 	
 	private static final Log logger = LogFactory.getLog(DeployRoomProcessor.class);

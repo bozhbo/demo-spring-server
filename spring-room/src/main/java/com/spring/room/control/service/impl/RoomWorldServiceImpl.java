@@ -1,5 +1,7 @@
 package com.spring.room.control.service.impl;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ import com.spring.room.control.service.RoomWorldService;
 @Service
 public class RoomWorldServiceImpl implements RoomWorldService {
 	
+	private static final Log logger = LogFactory.getLog(RoomWorldServiceImpl.class);
+	
 	private MessageService messageService;
 
 	@Override
@@ -28,6 +32,8 @@ public class RoomWorldServiceImpl implements RoomWorldService {
 		
 		Message message = messageService.createMessage(GameMessageType.WORLD_2_ROOM_DEPLOY_ROOM_RESP, 0, "", resp);
 		messageService.sendWorldMessage(message);
+		
+		logger.info("deploy room success " + roomId);
 		
 		return 1;
 	}
@@ -40,6 +46,8 @@ public class RoomWorldServiceImpl implements RoomWorldService {
 		
 		Message message = messageService.createMessage(GameMessageType.WORLD_2_ROOM_DEPLOY_ROOM_RESP, 0, "", resp);
 		messageService.sendWorldMessage(message);
+		
+		logger.info("deploy room failed " + roomId);
 		
 		return 1;
 	}
@@ -64,6 +72,8 @@ public class RoomWorldServiceImpl implements RoomWorldService {
 		Message message = messageService.createMessage(GameMessageType.WORLD_2_ROOM_DEPLOY_ROLE_RESP, 0, "", resp);
 		messageService.sendWorldMessage(message);
 		
+		logger.info("deploy role success " + roomId + ", roleId = " + roleId);
+		
 		return 1;
 	}
 
@@ -76,6 +86,8 @@ public class RoomWorldServiceImpl implements RoomWorldService {
 		
 		Message message = messageService.createMessage(GameMessageType.WORLD_2_ROOM_DEPLOY_ROLE_RESP, 0, "", resp);
 		messageService.sendWorldMessage(message);
+		
+		logger.info("deploy role failed " + roomId + ", roleId = " + roleId);
 		
 		return 1;
 	}
@@ -109,19 +121,16 @@ public class RoomWorldServiceImpl implements RoomWorldService {
 	@Override
 	public void reportRoomServerInfo(int roomCount, int roleCount) {
 		RoomServerInfo sendRoomServerInfo = new RoomServerInfo();
-		RoomServerInfo roomServerInfo = RoomServerCache.getRoomServerInfo(RoomServerConfig.ROOM_SERVER_ID);
 		
-		if (roomServerInfo != null) {
-			sendRoomServerInfo.setIp(roomServerInfo.getIp());
-			sendRoomServerInfo.setPort(roomServerInfo.getPort());
-			sendRoomServerInfo.setRoomServerId(roomServerInfo.getRoomServerId());
-			sendRoomServerInfo.setServerName(roomServerInfo.getServerName());
-			sendRoomServerInfo.setSession(null);
-			sendRoomServerInfo.setRoleCount(roomCount);
-			sendRoomServerInfo.setRoomCount(roleCount);
-			
-			messageService.sendWorldMessage(messageService.createMessage(GameMessageType.ROOM_2_WORLD_ROOM_INFO, 0, LogicUtil.tojson(sendRoomServerInfo)));
-		}
+		sendRoomServerInfo.setIp(RoomServerConfig.ROOM_SERVER_IP);
+		sendRoomServerInfo.setPort(RoomServerConfig.ROOM_SERVER_PORT);
+		sendRoomServerInfo.setRoomServerId(RoomServerConfig.ROOM_SERVER_ID);
+		sendRoomServerInfo.setServerName(RoomServerConfig.ROOM_SERVER_ID + "");
+		sendRoomServerInfo.setSession(null);
+		sendRoomServerInfo.setRoleCount(roomCount);
+		sendRoomServerInfo.setRoomCount(roleCount);
+		
+		messageService.sendWorldMessage(messageService.createMessage(GameMessageType.ROOM_2_WORLD_ROOM_INFO, 0, LogicUtil.tojson(sendRoomServerInfo)));
 	}
 
 	@Autowired

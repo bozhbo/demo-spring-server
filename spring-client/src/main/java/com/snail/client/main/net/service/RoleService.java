@@ -3,15 +3,17 @@ package com.snail.client.main.net.service;
 import java.util.UUID;
 
 import com.snail.client.main.control.ClientControl;
+import com.snail.client.main.fx.scene.param.RoomInitParam;
 import com.snail.client.main.fx.scene.param.RoomParam;
 import com.snail.client.main.fx.scene.param.SceneParam;
 import com.snail.client.main.net.msg.common.CommonResp;
-import com.snail.client.main.net.msg.join.JoinRoomResp;
 import com.snail.client.main.net.msg.login.LoginReq;
 import com.snail.client.main.net.msg.login.LoginResp;
 import com.snail.mina.protocol.info.Message;
 import com.snail.mina.protocol.info.impl.RoomMessageHead;
 import com.spring.common.GameMessageType;
+import com.spring.room.game.message.init.GameRoomInitResp;
+import com.spring.room.game.message.init.GameRoomRoleInfoRes;
 
 import javafx.application.Platform;
 
@@ -62,9 +64,15 @@ public class RoleService {
 		ClientControl.netService.sendMessage(message);
 	}
 	
-	public void joinRoomEnd(JoinRoomResp resp) {
+	public void joinRoomEnd(GameRoomRoleInfoRes resp) {
 		Platform.runLater(() -> {
 			ClientControl.sceneControl.forward("room", new RoomParam(resp));
+	    });
+	}
+	
+	public void roomInit(GameRoomInitResp resp) {
+		Platform.runLater(() -> {
+			ClientControl.sceneControl.forward("room", new RoomInitParam(resp));
 	    });
 	}
 }

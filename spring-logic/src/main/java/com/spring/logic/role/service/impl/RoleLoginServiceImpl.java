@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.snail.mina.protocol.info.Message;
+import com.snail.mina.protocol.info.impl.RoomMessageHead;
 import com.spring.common.GameMessageType;
 import com.spring.logic.message.request.world.login.LoginResp;
 import com.spring.logic.message.service.MessageService;
@@ -19,7 +20,7 @@ public class RoleLoginServiceImpl implements RoleLoginService {
 	private MessageService messageService;
 
 	@Override
-	public void roleLogin(int gateId, int roleId, String account, String password, String validate, LoginResp resp, Function<LoginResp, Integer> function) {
+	public void roleLogin(int gateId, int roleId, String account, String password, String validate, RoomMessageHead head, LoginResp resp, Function<LoginResp, Integer> function) {
 		RoleInfo roleInfo = RoleCache.getRoleInfo(roleId);
 		
 		if (roleInfo == null) {
@@ -31,6 +32,9 @@ public class RoleLoginServiceImpl implements RoleLoginService {
 		
 		roleInfo.setGateId(gateId);
 		
+		head.setRoleId(account.hashCode());
+		head.setMsgType(GameMessageType.GAME_CLIENT_LOGIN_RECEIVE);
+		
 		resp.setResult(1);
 		resp.setAccount(account);
 		resp.setGateServerId(gateId);
@@ -40,7 +44,8 @@ public class RoleLoginServiceImpl implements RoleLoginService {
 		int errorCode = function.apply(resp);
 		
 		if (errorCode == 1) {
-			this.messageService.sendGateMessage(gateId, GameMessageType.GAME_CLIENT_LOGIN_RECEIVE, resp);
+			Message message = this.messageService.createMessage(head, resp);
+			this.messageService.sendGateMessage(gateId, message);
 		} else {
 			Message message = this.messageService.createErrorMessage(errorCode, "");
 			this.messageService.sendGateMessage(gateId, message);

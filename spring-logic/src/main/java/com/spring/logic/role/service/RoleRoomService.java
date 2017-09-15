@@ -1,6 +1,8 @@
 package com.spring.logic.role.service;
 
+import com.spring.logic.message.request.server.DeployRoleReq;
 import com.spring.logic.role.info.RoleInfo;
+import com.spring.logic.room.enums.RoomTypeEnum;
 
 /**
  * 角色房间请求Service
@@ -15,7 +17,7 @@ public interface RoleRoomService {
 	 * 
 	 * @param roleInfo
 	 */
-	public void autoJoin(RoleInfo roleInfo);
+	public void autoJoin(RoleInfo roleInfo, RoomTypeEnum roomTypeEnum, DeployRoleReq deployRoleReq);
 	
 	/**
 	 * 离开房间

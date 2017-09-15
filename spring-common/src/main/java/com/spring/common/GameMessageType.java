@@ -70,6 +70,9 @@ public class GameMessageType {
 	 */
 	public static int GAME_CLIENT_ROOM_JOIN = 0xA202;
 	
+	/**
+	 * 房间当前信息
+	 */
 	public static int ROOM_CLIENT_ROOM_INIT = 0xA204;
 	
 }

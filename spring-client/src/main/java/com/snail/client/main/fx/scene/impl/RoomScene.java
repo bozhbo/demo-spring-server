@@ -1,10 +1,14 @@
 package com.snail.client.main.fx.scene.impl;
 
+import java.util.List;
+
 import com.snail.client.main.control.ClientControl;
 import com.snail.client.main.fx.scene.IScene;
 import com.snail.client.main.fx.scene.ISceneParam;
 import com.snail.client.main.fx.scene.control.SceneControl;
+import com.snail.client.main.fx.scene.param.RoomInitParam;
 import com.snail.client.main.fx.scene.param.RoomParam;
+import com.spring.room.game.message.init.GameRoomRoleInfoRes;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -56,12 +60,23 @@ public class RoomScene implements IScene {
 
 	@Override
 	public void init(ISceneParam sceneParam) {
-		RoomParam roomParam = (RoomParam)sceneParam;
-		
-		if (roomParam.getResp().getRoleId() == ClientControl.MY_ROLE_ID) {
-			// 自己
-		} else {
-			scenetitle.setText("New one:" + ClientControl.tojson(roomParam.getResp()));
+		if (sceneParam instanceof RoomParam) {
+			RoomParam roomParam = (RoomParam)sceneParam;
+			
+			if (roomParam.getResp().getRoleId() == ClientControl.MY_ROLE_ID) {
+				// 自己
+			} else {
+				scenetitle.setText("New one:" + ClientControl.tojson(roomParam.getResp()));
+			}
+		} else if (sceneParam instanceof RoomInitParam) {
+			RoomInitParam roomInitParam = (RoomInitParam)sceneParam;
+			
+			int roomId = roomInitParam.getResp().getRoomId();
+			List<GameRoomRoleInfoRes> list = roomInitParam.getResp().getList();
+			
+			for (GameRoomRoleInfoRes gameRoomRoleInfoRes : list) {
+				
+			}
 		}
 	}
 }

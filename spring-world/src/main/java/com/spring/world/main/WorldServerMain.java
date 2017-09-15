@@ -55,7 +55,7 @@ public class WorldServerMain {
 		list.add(new RoomFilterInfo("codec", new ProtocolCodecFilter(new RequestEncoder(), new RequestDecode())));
 		list.add(new RoomFilterInfo("message", new MessageCodecFilter("Game", ByteOrder.BIG_ENDIAN)));
 		
-		server.start(WorldConfig.WORLD_SERVER_IP, WorldConfig.WORLD_SERVER_PORT, 4, new ServerHandle(new GameServerSessionHandler(), Executors.newCachedThreadPool()), false, list);
+		server.start(WorldConfig.WORLD_SERVER_IP, WorldConfig.WORLD_SERVER_PORT, 4, new ServerHandle(GlobalBeanFactory.getBeanByName(GameServerSessionHandler.class), Executors.newCachedThreadPool()), false, list);
 	}
 	
 	@Bean("WorldStateControl")
@@ -68,5 +68,11 @@ public class WorldServerMain {
 	public WorldIoControl getWorldIoControl() {
 		WorldIoControl worldIoControl = new WorldIoControl();
 		return worldIoControl;
+	}
+	
+	@Bean("GameServerSessionHandler")
+	public GameServerSessionHandler getGameServerSessionHandler() {
+		GameServerSessionHandler gameServerSessionHandler = new GameServerSessionHandler();
+		return gameServerSessionHandler;
 	}
 }

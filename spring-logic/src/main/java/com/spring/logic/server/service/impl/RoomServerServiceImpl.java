@@ -4,6 +4,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.spring.common.GameMessageType;
 import com.spring.logic.message.request.server.DeployRoleReq;
@@ -15,6 +16,7 @@ import com.spring.logic.server.cache.RoomServerCache;
 import com.spring.logic.server.info.RoomServerInfo;
 import com.spring.logic.server.service.RoomServerService;
 
+@Service
 public class RoomServerServiceImpl implements RoomServerService {
 	
 	private MessageService messageService;

@@ -1,5 +1,8 @@
 package com.spring.room.io.process.deploy;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.snail.mina.protocol.info.IRoomBody;
 import com.snail.mina.protocol.info.Message;
 import com.snail.mina.protocol.processor.IProcessor;
@@ -11,10 +14,14 @@ import com.spring.room.event.DeployRoomEvent;
 
 public class RoomDeployProcessor implements IProcessor {
 	
+	private static final Log logger = LogFactory.getLog(RoomDeployProcessor.class);
+	
 	@Override
 	public void processor(Message message) {
 		DeployRoomReq req = (DeployRoomReq)message.getiRoomBody();
-		RoomServerConfig.getRoomThread().addRoomEvent(new DeployRoomEvent(req.getRoomId(), RoomTypeEnum.valueOf(req.getRoomType() + "")));
+		RoomServerConfig.getRoomThread().addRoomEvent(new DeployRoomEvent(req.getRoomId(), RoomTypeEnum.transfer(req.getRoomType())));
+	
+		logger.info("start deploy room " + req.getRoomId());
 	}
 
 	@Override

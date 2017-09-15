@@ -36,6 +36,7 @@ public class ActiveProcessor implements IProcessor {
 		}
 		
 		if (req.getFlag() == 0) {
+			// 通知Gate所有RoomServer
 			Set<Entry<Integer, RoomServerInfo>> set = RoomServerCache.getSet();
 			
 			for (Entry<Integer, RoomServerInfo> entry2 : set) {

@@ -1,21 +1,21 @@
 package com.snail.client.main.fx.scene.param;
 
 import com.snail.client.main.fx.scene.ISceneParam;
-import com.snail.client.main.net.msg.join.JoinRoomResp;
+import com.spring.room.game.message.init.GameRoomRoleInfoRes;
 
 public class RoomParam implements ISceneParam {
 	
-	private JoinRoomResp resp;
+	private GameRoomRoleInfoRes resp;
 	
-	public RoomParam(JoinRoomResp resp) {
+	public RoomParam(GameRoomRoleInfoRes resp) {
 		this.resp = resp;
 	}
 	
-	public JoinRoomResp getResp() {
+	public GameRoomRoleInfoRes getResp() {
 		return resp;
 	}
 
-	public void setResp(JoinRoomResp resp) {
+	public void setResp(GameRoomRoleInfoRes resp) {
 		this.resp = resp;
 	}
 }

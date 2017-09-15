@@ -23,20 +23,20 @@ public class RoleRoomServiceImpl implements RoleRoomService {
 	
 	private RoomService roomService;
 	
-	private RoleBusinessService roleLogicService;
+	// private RoleBusinessService roleLogicService;
 	
 	private MessageService messageService;
 	
 	private RoomServerService roomServerService;
 
 	@Override
-	public void autoJoin(RoleInfo roleInfo) {
+	public void autoJoin(RoleInfo roleInfo, RoomTypeEnum roomTypeEnum, DeployRoleReq deployRoleReq) {
 		if (roleInfo.getRoomId() > 0) {
 			// TODO deploy to room server
 			return;
 		}
 		
-		RoomTypeEnum roomTypeEnum = this.roleLogicService.getRoomType(roleInfo);
+		// RoomTypeEnum roomTypeEnum = this.roleLogicService.getRoomType(roleInfo);
 		
 		int roomId = this.roomService.joinRoom(roomTypeEnum, roleInfo.getRoleId());
 		
@@ -57,7 +57,7 @@ public class RoleRoomServiceImpl implements RoleRoomService {
 			this.roomService.deployRoomAndSet(roomId, roomServerId, (t) -> {roomServerService.deployRoomInfo(roomServerId, roomId, roomTypeEnum); return 1;});
 		}
 		
-		DeployRoleReq deployRoleReq = this.roleLogicService.getDeployRoleMessage(roleInfo);
+		// DeployRoleReq deployRoleReq = this.roleLogicService.getDeployRoleMessage(roleInfo);
 		
 		if (deployRoleReq != null) {
 			int roomServerId = roomService.getRoomServerId(roomId);
@@ -105,15 +105,11 @@ public class RoleRoomServiceImpl implements RoleRoomService {
 	}
 
 	@Autowired
-	public void setRoleLogicService(RoleBusinessService roleLogicService) {
-		this.roleLogicService = roleLogicService;
-	}
-
-	@Autowired
 	public void setMessageService(MessageService messageService) {
 		this.messageService = messageService;
 	}
 
+	@Autowired
 	public void setRoomServerService(RoomServerService roomServerService) {
 		this.roomServerService = roomServerService;
 	}

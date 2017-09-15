@@ -19,6 +19,7 @@ import com.spring.logic.room.RoomConfig;
 import com.spring.logic.room.event.IRoomEvent;
 import com.spring.logic.room.info.PlayingRoomInfo;
 import com.spring.room.control.service.RoomControlService;
+import com.spring.room.control.service.RoomLogicService;
 import com.spring.room.control.service.RoomWorldService;
 import com.spring.room.event.DeployRoleInfoEvent;
 import com.spring.room.event.DeployRoomEvent;
@@ -79,6 +80,7 @@ public class RoomThread extends Thread {
 		for (int i = 0; i < loopThreadSize; i++) {
 			RoomLoopThread roomLoopThread = new RoomLoopThread();
 			roomLoopThread.setRoomControlService(GlobalBeanFactory.getBeanByName(RoomControlService.class));
+			roomLoopThread.setRoomLogicService(GlobalBeanFactory.getBeanByName(RoomLogicService.class));
 			roomLoopThread.setName("RoomLoopThread-" + lastIndex++);
 			roomLoopThread.start();
 			list.add(roomLoopThread);
@@ -184,6 +186,7 @@ public class RoomThread extends Thread {
 			
 			RoomLoopThread newRoomLoopThread = new RoomLoopThread();
 			newRoomLoopThread.setRoomControlService(GlobalBeanFactory.getBeanByName(RoomControlService.class));
+			newRoomLoopThread.setRoomLogicService(GlobalBeanFactory.getBeanByName(RoomLogicService.class));
 			newRoomLoopThread.setName("RoomLoopThread-" + lastIndex++);
 			newRoomLoopThread.setMap(roomLoopThread.getMap());
 			newRoomLoopThread.start();

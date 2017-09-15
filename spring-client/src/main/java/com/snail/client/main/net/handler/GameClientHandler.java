@@ -4,11 +4,12 @@ import org.apache.mina.common.IoHandlerAdapter;
 import org.apache.mina.common.IoSession;
 
 import com.snail.client.main.control.ClientControl;
-import com.snail.client.main.net.msg.join.JoinRoomResp;
 import com.snail.client.main.net.msg.login.LoginResp;
 import com.snail.mina.protocol.info.Message;
 import com.snail.mina.protocol.info.impl.RoomMessageHead;
 import com.spring.common.GameMessageType;
+import com.spring.room.game.message.init.GameRoomInitResp;
+import com.spring.room.game.message.init.GameRoomRoleInfoRes;
 
 public class GameClientHandler extends IoHandlerAdapter {
 	
@@ -29,7 +30,10 @@ public class GameClientHandler extends IoHandlerAdapter {
 			ClientControl.roleService.loginEnd((LoginResp)msg.getiRoomBody());
 		} else if (msgType == GameMessageType.GAME_CLIENT_ROOM_JOIN) {
 			// 加入新玩家
-			ClientControl.roleService.joinRoomEnd((JoinRoomResp)msg.getiRoomBody());
+			ClientControl.roleService.joinRoomEnd((GameRoomRoleInfoRes)msg.getiRoomBody());
+		} else if (msgType == GameMessageType.ROOM_CLIENT_ROOM_INIT) {
+			// 加入新玩家
+			ClientControl.roleService.roomInit((GameRoomInitResp)msg.getiRoomBody());
 		}
 	}
 }

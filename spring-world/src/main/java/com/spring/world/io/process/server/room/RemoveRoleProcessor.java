@@ -3,6 +3,7 @@ package com.spring.world.io.process.server.room;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.snail.mina.protocol.info.IRoomBody;
 import com.snail.mina.protocol.info.Message;
@@ -13,6 +14,7 @@ import com.spring.logic.role.cache.RoleCache;
 import com.spring.logic.role.info.RoleInfo;
 import com.spring.logic.room.service.RoomService;
 
+@Component
 public class RemoveRoleProcessor implements IProcessor {
 
 	private static final Log logger = LogFactory.getLog(DeployRoleProcessor.class);

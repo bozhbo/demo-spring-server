@@ -2,6 +2,7 @@ package com.spring.world.io.process.role.login;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.snail.mina.protocol.info.IRoomBody;
@@ -27,7 +28,7 @@ public class LoginProcessor implements IProcessor {
 		LoginResp resp = new LoginResp();
 
 		this.roleLoginService.roleLogin(head.getGateId(), head.getRoleId(), req.getAccount(), req.getMd5Pass(),
-				req.getValidate(), resp, (r) -> {
+				req.getValidate(), head, resp, (r) -> {
 					return 1;
 				});
 
@@ -44,6 +45,7 @@ public class LoginProcessor implements IProcessor {
 		return GameMessageType.GAME_CLIENT_LOGIN_SEND;
 	}
 
+	@Autowired
 	public void setRoleLoginService(RoleLoginService roleLoginService) {
 		this.roleLoginService = roleLoginService;
 	}

@@ -10,9 +10,12 @@ import com.snail.mina.protocol.info.Message;
 import com.snail.mina.protocol.info.impl.RoomMessageHead;
 import com.snail.mina.protocol.processor.IProcessor;
 import com.spring.common.GameMessageType;
+import com.spring.logic.business.service.RoleBusinessService;
+import com.spring.logic.message.request.server.DeployRoleReq;
 import com.spring.logic.role.cache.RoleCache;
 import com.spring.logic.role.info.RoleInfo;
 import com.spring.logic.role.service.RoleRoomService;
+import com.spring.logic.room.enums.RoomTypeEnum;
 
 @Component
 public class CommonProcessor implements IProcessor {
@@ -20,6 +23,8 @@ public class CommonProcessor implements IProcessor {
 	private static final Log logger = LogFactory.getLog(CommonProcessor.class);
 	
 	private RoleRoomService roleRoomService;
+	
+	private RoleBusinessService roleLogicService;
 
 	@Override
 	public void processor(Message message) {
@@ -35,7 +40,10 @@ public class CommonProcessor implements IProcessor {
 		synchronized (roleInfo) {
 			if (req.getOptionType() == GameMessageType.GAME_CLIENT_WORLD_COMMON_SEND_AUTO_START) {
 				// 快速开始
-				this.roleRoomService.autoJoin(roleInfo);
+				RoomTypeEnum roomTypeEnum = this.roleLogicService.getRoomType(roleInfo);
+				DeployRoleReq deployRoleReq = this.roleLogicService.getDeployRoleMessage(roleInfo);
+				
+				this.roleRoomService.autoJoin(roleInfo, roomTypeEnum, deployRoleReq);
 			} else if (req.getOptionType() == GameMessageType.GAME_CLIENT_WORLD_COMMON_SEND_LEAVE_ROOM) {
 				// 返回大厅
 				this.roleRoomService.leaveRoom(roleInfo);
@@ -57,4 +65,11 @@ public class CommonProcessor implements IProcessor {
 	public void setRoleRoomService(RoleRoomService roleRoomService) {
 		this.roleRoomService = roleRoomService;
 	}
+
+	@Autowired
+	public void setRoleLogicService(RoleBusinessService roleLogicService) {
+		this.roleLogicService = roleLogicService;
+	}
+	
+	
 }

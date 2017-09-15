@@ -13,6 +13,14 @@ public class GameRoomRoleInfoRes extends RoomJoinResp {
 	private String header;
 	
 	@Override
+	public void bytes2Req(ByteBuffer buffer, ByteOrder order) {
+		super.bytes2Req(buffer, order);
+		this.gold = getInt(buffer, order);
+		this.vipLevel = getInt(buffer, order);
+		this.header = getString(buffer, order);
+	}
+	
+	@Override
 	public void resp2Bytes(ByteBuffer buffer, ByteOrder order) {
 		super.resp2Bytes(buffer, order);
 		setInt(buffer, order, gold);

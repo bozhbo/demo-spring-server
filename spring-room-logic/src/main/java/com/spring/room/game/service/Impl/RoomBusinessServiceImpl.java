@@ -3,6 +3,8 @@ package com.spring.room.game.service.Impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.spring.logic.business.service.RoomBusinessService;
 import com.spring.logic.message.request.room.RoomInitResp;
 import com.spring.logic.message.request.room.RoomJoinResp;
@@ -11,6 +13,7 @@ import com.spring.logic.room.info.PlayingRoomInfo;
 import com.spring.room.game.message.init.GameRoomInitResp;
 import com.spring.room.game.message.init.GameRoomRoleInfoRes;
 
+@Service
 public class RoomBusinessServiceImpl implements RoomBusinessService {
 
 	@Override

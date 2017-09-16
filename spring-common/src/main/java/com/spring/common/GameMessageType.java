@@ -2,8 +2,14 @@ package com.spring.common;
 
 public class GameMessageType {
 	
+	/**
+	 * 部署房间请求
+	 */
 	public static int WORLD_2_ROOM_DEPLOY_ROOM_REQ = 0xFC01;
 	
+	/**
+	 * 部署房间响应
+	 */
 	public static int WORLD_2_ROOM_DEPLOY_ROOM_RESP = 0xFC02;
 	
 	public static int WORLD_2_ROOM_REMOVE_ROOM_REQ = 0xFC03;
@@ -18,6 +24,9 @@ public class GameMessageType {
 	
 	public static int WORLD_2_ROOM_REMOVE_ROLE_RESP = 0xFC08;
 	
+	/**
+	 * 房间信息提交
+	 */
 	public static int ROOM_2_WORLD_ROOM_INFO = 0xFC10;
 
 	/**
@@ -66,7 +75,12 @@ public class GameMessageType {
 	public static int GAME_CLIENT_WORLD_COMMON_SEND_LEAVE_ROOM = 2;
 	
 	/**
-	 * 新加入成员响应
+	 * 大厅信息响应
+	 */
+	public static int GAME_CLIENT_WORLD_SCENE_INIT_RECEIVE = 0xA108;
+	
+	/**
+	 * 新成员加入响应
 	 */
 	public static int GAME_CLIENT_ROOM_JOIN = 0xA202;
 	
@@ -74,5 +88,10 @@ public class GameMessageType {
 	 * 房间当前信息
 	 */
 	public static int ROOM_CLIENT_ROOM_INIT = 0xA204;
+	
+	/**
+	 * 成员离开响应
+	 */
+	public static int GAME_CLIENT_ROOM_LEAVE = 0xA206;
 	
 }

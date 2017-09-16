@@ -2,12 +2,14 @@ package com.spring.world.room.service.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Service;
 
 import com.spring.logic.server.cache.RoomServerCache;
 import com.spring.logic.server.info.RoomServerInfo;
 import com.spring.logic.util.LogicUtil;
 import com.spring.world.room.service.RoomManageService;
 
+@Service
 public class RoomManageServiceImpl implements RoomManageService {
 	
 	private static final Log logger = LogFactory.getLog(RoomManageServiceImpl.class);

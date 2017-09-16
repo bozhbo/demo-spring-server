@@ -29,6 +29,7 @@ public class DeployRoomProcessor implements IProcessor {
 			roomService.closeRoom(req.getRoomId());
 		} else {
 			// 房间添加成功
+			logger.info("deploy room to server success " + req.getRoomId());
 		}
 	}
 

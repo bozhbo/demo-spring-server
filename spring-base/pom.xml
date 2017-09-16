@@ -34,9 +34,10 @@
 	
 	<modules>
 		<module>../spring-common</module>
+		<module>../spring-gate</module>
 		<module>../spring-mina</module>
 		<module>../spring-logic</module>
-		<module>../spring-gate</module>
+		<module>../spring-common-logic</module>
 		<module>../spring-room-logic</module>
 		<module>../spring-world-logic</module>
 		<module>../spring-room</module>

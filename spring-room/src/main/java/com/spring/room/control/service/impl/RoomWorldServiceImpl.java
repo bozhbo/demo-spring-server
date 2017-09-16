@@ -30,7 +30,7 @@ public class RoomWorldServiceImpl implements RoomWorldService {
 		resp.setResult(1);
 		resp.setRoomId(roomId);
 		
-		Message message = messageService.createMessage(GameMessageType.WORLD_2_ROOM_DEPLOY_ROOM_RESP, 0, "", resp);
+		Message message = messageService.createMessage(0, GameMessageType.WORLD_2_ROOM_DEPLOY_ROOM_RESP, 0, "", resp);
 		messageService.sendWorldMessage(message);
 		
 		logger.info("deploy room success " + roomId);
@@ -44,7 +44,7 @@ public class RoomWorldServiceImpl implements RoomWorldService {
 		resp.setResult(0);
 		resp.setRoomId(roomId);
 		
-		Message message = messageService.createMessage(GameMessageType.WORLD_2_ROOM_DEPLOY_ROOM_RESP, 0, "", resp);
+		Message message = messageService.createMessage(0, GameMessageType.WORLD_2_ROOM_DEPLOY_ROOM_RESP, 0, "", resp);
 		messageService.sendWorldMessage(message);
 		
 		logger.info("deploy room failed " + roomId);
@@ -69,7 +69,7 @@ public class RoomWorldServiceImpl implements RoomWorldService {
 		resp.setRoleId(roleId);
 		resp.setRoomId(roomId);
 		
-		Message message = messageService.createMessage(GameMessageType.WORLD_2_ROOM_DEPLOY_ROLE_RESP, 0, "", resp);
+		Message message = messageService.createMessage(0, GameMessageType.WORLD_2_ROOM_DEPLOY_ROLE_RESP, 0, "", resp);
 		messageService.sendWorldMessage(message);
 		
 		logger.info("deploy role success " + roomId + ", roleId = " + roleId);
@@ -84,7 +84,7 @@ public class RoomWorldServiceImpl implements RoomWorldService {
 		resp.setRoleId(roleId);
 		resp.setRoomId(roomId);
 		
-		Message message = messageService.createMessage(GameMessageType.WORLD_2_ROOM_DEPLOY_ROLE_RESP, 0, "", resp);
+		Message message = messageService.createMessage(0, GameMessageType.WORLD_2_ROOM_DEPLOY_ROLE_RESP, 0, "", resp);
 		messageService.sendWorldMessage(message);
 		
 		logger.info("deploy role failed " + roomId + ", roleId = " + roleId);
@@ -99,7 +99,7 @@ public class RoomWorldServiceImpl implements RoomWorldService {
 		resp.setRoleId(roleId);
 		resp.setRoomId(roomId);
 		
-		Message message = messageService.createMessage(GameMessageType.WORLD_2_ROOM_REMOVE_ROLE_RESP, 0, "", resp);
+		Message message = messageService.createMessage(0, GameMessageType.WORLD_2_ROOM_REMOVE_ROLE_RESP, 0, "", resp);
 		messageService.sendWorldMessage(message);
 		
 		return 1;
@@ -112,7 +112,7 @@ public class RoomWorldServiceImpl implements RoomWorldService {
 		resp.setRoleId(roleId);
 		resp.setRoomId(roomId);
 		
-		Message message = messageService.createMessage(GameMessageType.WORLD_2_ROOM_REMOVE_ROLE_RESP, 0, "", resp);
+		Message message = messageService.createMessage(0, GameMessageType.WORLD_2_ROOM_REMOVE_ROLE_RESP, 0, "", resp);
 		messageService.sendWorldMessage(message);
 		
 		return 1;
@@ -130,7 +130,7 @@ public class RoomWorldServiceImpl implements RoomWorldService {
 		sendRoomServerInfo.setRoleCount(roomCount);
 		sendRoomServerInfo.setRoomCount(roleCount);
 		
-		messageService.sendWorldMessage(messageService.createMessage(GameMessageType.ROOM_2_WORLD_ROOM_INFO, 0, LogicUtil.tojson(sendRoomServerInfo)));
+		messageService.sendWorldMessage(messageService.createMessage(0, GameMessageType.ROOM_2_WORLD_ROOM_INFO, 0, LogicUtil.tojson(sendRoomServerInfo)));
 	}
 
 	@Autowired

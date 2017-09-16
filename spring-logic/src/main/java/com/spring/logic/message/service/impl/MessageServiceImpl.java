@@ -26,9 +26,10 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public Message createMessage(int msgType, int sceneId, String userState) {
+	public Message createMessage(int roleId, int msgType, int sceneId, String userState) {
 		Message message = new Message();
 		RoomMessageHead head = new RoomMessageHead();
+		head.setRoleId(roleId);
 		head.setMsgType(msgType);
 		head.setSceneId(sceneId);
 		head.setUserState(userState);
@@ -48,9 +49,10 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public Message createMessage(int msgType, int sceneId, String userState, IRoomBody body) {
+	public Message createMessage(int roleId, int msgType, int sceneId, String userState, IRoomBody body) {
 		Message message = new Message();
 		RoomMessageHead head = new RoomMessageHead();
+		head.setRoleId(roleId);
 		head.setMsgType(msgType);
 		head.setSceneId(sceneId);
 		head.setUserState(userState);

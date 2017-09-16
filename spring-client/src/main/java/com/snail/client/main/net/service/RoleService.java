@@ -5,6 +5,7 @@ import java.util.UUID;
 import com.snail.client.main.control.ClientControl;
 import com.snail.client.main.fx.scene.param.RoomInitParam;
 import com.snail.client.main.fx.scene.param.RoomParam;
+import com.snail.client.main.fx.scene.param.SceneInitParam;
 import com.snail.client.main.fx.scene.param.SceneParam;
 import com.snail.client.main.net.msg.common.CommonResp;
 import com.snail.client.main.net.msg.login.LoginReq;
@@ -12,6 +13,7 @@ import com.snail.client.main.net.msg.login.LoginResp;
 import com.snail.mina.protocol.info.Message;
 import com.snail.mina.protocol.info.impl.RoomMessageHead;
 import com.spring.common.GameMessageType;
+import com.spring.logic.message.request.world.init.InitSceneResp;
 import com.spring.room.game.message.init.GameRoomInitResp;
 import com.spring.room.game.message.init.GameRoomRoleInfoRes;
 
@@ -73,6 +75,29 @@ public class RoleService {
 	public void roomInit(GameRoomInitResp resp) {
 		Platform.runLater(() -> {
 			ClientControl.sceneControl.forward("room", new RoomInitParam(resp));
+	    });
+	}
+	
+	public void back2Scene() {
+		ClientControl.netService.checkSession();
+		
+		RoomMessageHead head = new RoomMessageHead();
+		head.setMsgType(GameMessageType.GAME_CLIENT_WORLD_COMMON_SEND);
+		
+		CommonResp req = new CommonResp();
+		req.setOptionType(GameMessageType.GAME_CLIENT_WORLD_COMMON_SEND_LEAVE_ROOM);
+		req.setOptionStr("");
+		
+		Message message = new Message();
+		message.setiRoomHead(head);
+		message.setiRoomBody(req);
+		
+		ClientControl.netService.sendMessage(message);
+	}
+	
+	public void back2SceneEnd(InitSceneResp resp) {
+		Platform.runLater(() -> {
+			ClientControl.sceneControl.forward("scene", new SceneInitParam(resp));
 	    });
 	}
 }

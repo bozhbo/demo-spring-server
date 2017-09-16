@@ -8,11 +8,11 @@ public interface MessageService {
 
 	public Message createMessage(RoomMessageHead head);
 	
-	public Message createMessage(int msgType, int sceneId, String userState);
+	public Message createMessage(int roleId, int msgType, int sceneId, String userState);
 	
 	public Message createMessage(RoomMessageHead head, IRoomBody body);
 	
-	public Message createMessage(int msgType, int sceneId, String userState, IRoomBody body);
+	public Message createMessage(int roleId, int msgType, int sceneId, String userState, IRoomBody body);
 	
 	public boolean sendGateMessage(int gateId, Message message);
 	

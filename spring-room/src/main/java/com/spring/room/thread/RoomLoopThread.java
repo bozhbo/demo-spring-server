@@ -16,6 +16,7 @@ import com.spring.logic.room.event.IRoomEvent;
 import com.spring.logic.room.info.PlayingRoomInfo;
 import com.spring.room.control.service.RoomControlService;
 import com.spring.room.control.service.RoomLogicService;
+import com.spring.room.control.service.RoomWorldService;
 import com.spring.room.event.DeployRoleInfoEvent;
 import com.spring.room.event.DeployRoomEvent;
 import com.spring.room.event.RemoveRoleInfoEvent;
@@ -65,6 +66,8 @@ public class RoomLoopThread extends Thread {
 	
 	private RoomLogicService roomLogicService;
 	
+	private RoomWorldService roomWorldService;
+	
 	@Override
 	public void run() {
 		long sleepTime = SLEEP_TIME;
@@ -90,12 +93,16 @@ public class RoomLoopThread extends Thread {
 						if (playingRoomInfo != null) {
 							RoomRoleInfo roomRoleInfo = roomLogicService.createRoomRoleInfo(playingRoomInfo, ((DeployRoleInfoEvent)roomEvent).getReq());
 							roomLogicService.addRole(playingRoomInfo, roomRoleInfo);
+						} else {
+							roomWorldService.deployRoleInfoFailed(((DeployRoleInfoEvent)roomEvent).getReq().getRoomId(), ((DeployRoleInfoEvent)roomEvent).getReq().getRoleId());
 						}
 					} else if (roomEvent instanceof RemoveRoleInfoEvent) {
 						PlayingRoomInfo playingRoomInfo = map.get(((RemoveRoleInfoEvent)roomEvent).getReq().getRoomId());
 					
 						if (playingRoomInfo != null) {
 							roomLogicService.removeRole(playingRoomInfo, ((RemoveRoleInfoEvent)roomEvent).getReq().getRoleId());
+						} else {
+							roomWorldService.removeRoleInfoFailed(((RemoveRoleInfoEvent)roomEvent).getReq().getRoomId(), ((RemoveRoleInfoEvent)roomEvent).getReq().getRoleId());
 						}
 					}
 					
@@ -176,4 +183,11 @@ public class RoomLoopThread extends Thread {
 	public void setRoomControlService(RoomControlService roomControlService) {
 		this.roomControlService = roomControlService;
 	}
+
+	@Autowired
+	public void setRoomWorldService(RoomWorldService roomWorldService) {
+		this.roomWorldService = roomWorldService;
+	}
+	
+	
 }

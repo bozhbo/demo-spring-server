@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.snail.mina.protocol.info.IRoomBody;
+import com.spring.common.GameMessageType;
+import com.spring.common.logic.message.GameWorldDeployRoleReq;
 import com.spring.logic.business.service.RoomBusinessService;
 import com.spring.logic.message.request.room.RoomInitResp;
 import com.spring.logic.message.request.room.RoomJoinResp;
@@ -21,9 +24,9 @@ public class RoomBusinessServiceImpl implements RoomBusinessService {
 		GameRoomInitResp resp = new GameRoomInitResp();
 		resp.setRoomId(playingRoomInfo.getRoomId());
 		resp.setList(new ArrayList<>());
-		
+
 		List<RoomRoleInfo> list = playingRoomInfo.getList();
-		
+
 		for (RoomRoleInfo roomRoleInfo : list) {
 			GameRoomRoleInfoRes res = new GameRoomRoleInfoRes();
 			res.setGold(roomRoleInfo.getGold());
@@ -31,19 +34,27 @@ public class RoomBusinessServiceImpl implements RoomBusinessService {
 			res.setRoleId(roomRoleInfo.getRoleId());
 			res.setRoleName(roomRoleInfo.getRoleName());
 			res.setVipLevel(roomRoleInfo.getVipLevel());
-			
+
 			resp.getList().add(res);
 		}
-		
+
 		resp.setCount(resp.getList().size());
-		
+
 		return resp;
 	}
 
 	@Override
 	public RoomJoinResp getRoomJoinResp(RoomRoleInfo roomRoleInfo) {
 		// TODO Auto-generated method stub
-		return new RoomJoinResp() ;
+		return new RoomJoinResp();
 	}
 
+	@Override
+	public Class<? extends IRoomBody> getProcessClass(int msgType) {
+		if (msgType == GameMessageType.WORLD_2_ROOM_DEPLOY_ROLE_REQ) {
+			return GameWorldDeployRoleReq.class;
+		}
+		
+		return null;
+	}
 }

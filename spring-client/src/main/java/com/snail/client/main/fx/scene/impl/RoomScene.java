@@ -1,6 +1,10 @@
 package com.snail.client.main.fx.scene.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import com.snail.client.main.control.ClientControl;
 import com.snail.client.main.fx.scene.IScene;
@@ -15,15 +19,14 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 public class RoomScene implements IScene {
 
 	private Scene scene;
 	
-	private Text scenetitle;
+	private Map<Integer, String> map = new HashMap<>();
+	private int roomId;
 
 	public RoomScene() {
 		init();
@@ -37,21 +40,35 @@ public class RoomScene implements IScene {
 		grid.setPadding(new Insets(25, 25, 25, 25));
 		grid.setVisible(true);
 		
-		// userInfo.textProperty().bind(ClientControl.refreshTask.messageProperty());
-
-		scenetitle = new Text("");
-		scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 30));
-		grid.add(scenetitle, 0, 0, 1, 1);
+		Text room = new Text("RoomId: " + roomId + "");
+		grid.add(room, 0, 0, 1, 1);
+		
+		Set<Entry<Integer, String>> set = map.entrySet();
+		int row = 1;
+		
+		for (Entry<Integer, String> entry : set) {
+			Text name = new Text(entry.getKey() + "");
+			Text info = new Text(entry.getValue());
+			
+			grid.add(name, 0, row, 1, 1);
+			grid.add(info, 1, row, 1, 1);
+			
+			row++;
+		}
 		
 		Button btn1 = new Button("返回大厅");
-		btn1.setOnAction((event) -> ClientControl.sceneControl.forward("scene", null));
-		grid.add(btn1, 0, 1, 1, 1);
+		btn1.setOnAction((event) -> ClientControl.roleService.back2Scene());
+		grid.add(btn1, 0, 2, 1, 1);
 
 		Button btn = new Button("准备");
 		btn.setOnAction((event) -> ClientControl.roleService.fastStart());
-		grid.add(btn, 0, 2, 1, 1);
+		grid.add(btn, 0, 3, 1, 1);
 
-		scene = new Scene(grid, SceneControl.WIDTH, SceneControl.HEIGHT);
+		if (scene == null) {
+			scene = new Scene(grid, SceneControl.WIDTH, SceneControl.HEIGHT);
+		} else {
+			scene.setRoot(grid);
+		}
 	}
 
 	public Scene getScene() {
@@ -61,22 +78,24 @@ public class RoomScene implements IScene {
 	@Override
 	public void init(ISceneParam sceneParam) {
 		if (sceneParam instanceof RoomParam) {
+			// 别人加入
 			RoomParam roomParam = (RoomParam)sceneParam;
+			String info = ClientControl.tojson(roomParam.getResp());
 			
-			if (roomParam.getResp().getRoleId() == ClientControl.MY_ROLE_ID) {
-				// 自己
-			} else {
-				scenetitle.setText("New one:" + ClientControl.tojson(roomParam.getResp()));
-			}
+			map.put(roomParam.getResp().getRoleId(), info);
 		} else if (sceneParam instanceof RoomInitParam) {
+			// 自己加入
 			RoomInitParam roomInitParam = (RoomInitParam)sceneParam;
 			
-			int roomId = roomInitParam.getResp().getRoomId();
+			roomId = roomInitParam.getResp().getRoomId();
 			List<GameRoomRoleInfoRes> list = roomInitParam.getResp().getList();
 			
 			for (GameRoomRoleInfoRes gameRoomRoleInfoRes : list) {
-				
+				String info = ClientControl.tojson(gameRoomRoleInfoRes);
+				map.put(gameRoomRoleInfoRes.getRoleId(), info);
 			}
 		}
+		
+		init();
 	}
 }

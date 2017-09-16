@@ -28,7 +28,7 @@ public class DeployRoleProcessor implements IProcessor {
 		RoleInfo roleInfo = RoleCache.getRoleInfo(req.getRoleId());
 		
 		if (roleInfo == null) {
-			// TODO error msg
+			logger.error("role is not exist " + req.getRoleId());
 			return;
 		}
 		
@@ -40,6 +40,7 @@ public class DeployRoleProcessor implements IProcessor {
 			} else {
 				// 角色添加成功
 				roleInfo.setRoomId(req.getRoomId());
+				logger.info("deploy role to room success " + req.getRoleId());
 			}
 		}
 	}

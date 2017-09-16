@@ -9,9 +9,11 @@ import com.snail.mina.protocol.info.IRoomBody;
 import com.snail.mina.protocol.info.Message;
 import com.snail.mina.protocol.processor.IProcessor;
 import com.spring.common.GameMessageType;
+import com.spring.logic.business.service.RoleBusinessService;
 import com.spring.logic.message.request.server.RemoveRoleResp;
 import com.spring.logic.role.cache.RoleCache;
 import com.spring.logic.role.info.RoleInfo;
+import com.spring.logic.role.service.RoleRoomService;
 import com.spring.logic.room.service.RoomService;
 
 @Component
@@ -21,6 +23,8 @@ public class RemoveRoleProcessor implements IProcessor {
 
 	private RoomService roomService;
 
+	private RoleRoomService roleRoomService;
+
 	@Override
 	public void processor(Message message) {
 		RemoveRoleResp req = (RemoveRoleResp) message.getiRoomBody();
@@ -28,7 +32,7 @@ public class RemoveRoleProcessor implements IProcessor {
 		RoleInfo roleInfo = RoleCache.getRoleInfo(req.getRoleId());
 
 		if (roleInfo == null) {
-			// TODO error msg
+			logger.error("role is not exist " + req.getRoleId());
 			return;
 		}
 
@@ -40,9 +44,11 @@ public class RemoveRoleProcessor implements IProcessor {
 				// 角色移除成功
 				roomService.leaveRoom(req.getRoomId(), req.getRoleId());
 				roleInfo.setRoomId(0);
+				
+				logger.info("remove role from room success " + req.getRoleId());
 			}
 			
-			// TODO 刷新大厅数据
+			roleRoomService.refreshSceneInfo(roleInfo);
 		}
 	}
 
@@ -59,6 +65,10 @@ public class RemoveRoleProcessor implements IProcessor {
 	@Autowired
 	public void setRoomService(RoomService roomService) {
 		this.roomService = roomService;
+	}
+	@Autowired
+	public void setRoleRoomService(RoleRoomService roleRoomService) {
+		this.roleRoomService = roleRoomService;
 	}
 
 }

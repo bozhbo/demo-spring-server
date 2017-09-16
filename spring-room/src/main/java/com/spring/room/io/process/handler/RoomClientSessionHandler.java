@@ -38,6 +38,7 @@ public class RoomClientSessionHandler implements SessionStateHandler {
 		roomServerInfo.setPort(RoomServerConfig.ROOM_SERVER_PORT);
 		roomServerInfo.setRoleCount(0);
 		roomServerInfo.setRoomCount(0);
+		roomServerInfo.setRoomServerId(RoomServerConfig.ROOM_SERVER_ID);
 		roomServerInfo.setServerName(ServerName.ROOM_SERVER_NAME + "-" + RoomServerConfig.ROOM_SERVER_ID);
 		roomServerInfo.setSession(null);
 		

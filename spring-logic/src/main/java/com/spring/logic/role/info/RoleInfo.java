@@ -4,7 +4,7 @@ public class RoleInfo {
 
 	private int roleId;
 	private int gateId;
-	private volatile int roomId;
+	private int roomId;
 	private String roleName;
 	private int gold;
 	private int vipLevel;

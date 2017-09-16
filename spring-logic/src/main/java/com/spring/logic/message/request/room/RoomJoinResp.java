@@ -16,6 +16,12 @@ public class RoomJoinResp extends BaseRoomResp {
 		setInt(buffer, order, roleId);
 		setString(buffer, order, roleName);
 	}
+	
+	@Override
+	public void bytes2Req(ByteBuffer buffer, ByteOrder order) {
+		this.roleId = getInt(buffer, order);
+		this.roleName= getString(buffer, order);
+	}
 
 	public int getRoleId() {
 		return roleId;

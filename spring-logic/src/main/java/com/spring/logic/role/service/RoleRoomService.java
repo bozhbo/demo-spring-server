@@ -25,4 +25,11 @@ public interface RoleRoomService {
 	 * @param roleInfo
 	 */
 	public void leaveRoom(RoleInfo roleInfo);
+	
+	/**
+	 * 刷新大厅数据
+	 * 
+	 * @param roleInfo
+	 */
+	public void refreshSceneInfo(RoleInfo roleInfo);
 }

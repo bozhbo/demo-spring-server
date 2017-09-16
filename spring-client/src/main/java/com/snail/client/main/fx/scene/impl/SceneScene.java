@@ -4,6 +4,7 @@ import com.snail.client.main.control.ClientControl;
 import com.snail.client.main.fx.scene.IScene;
 import com.snail.client.main.fx.scene.ISceneParam;
 import com.snail.client.main.fx.scene.control.SceneControl;
+import com.snail.client.main.fx.scene.param.SceneInitParam;
 import com.snail.client.main.fx.scene.param.SceneParam;
 
 import javafx.geometry.Insets;
@@ -56,12 +57,16 @@ public class SceneScene implements IScene {
 
 	@Override
 	public void init(ISceneParam sceneParam) {
-		SceneParam sceneParam1 = (SceneParam)sceneParam;
-		
-		if (sceneParam1.getResp().getResult() != 1) {
+		if (sceneParam instanceof SceneParam) {
+			SceneParam sceneParam1 = (SceneParam)sceneParam;
 			
-		} else {
-			scenetitle.setText("Name:" + sceneParam1.getResp().getRoleName());
+			if (sceneParam1.getResp().getResult() != 1) {
+				
+			} else {
+				scenetitle.setText("Name:" + sceneParam1.getResp().getRoleName());
+			}
+		} else if (sceneParam instanceof SceneInitParam) {
+			SceneInitParam sceneInitParam = (SceneInitParam)sceneParam;
 		}
 	}
 }

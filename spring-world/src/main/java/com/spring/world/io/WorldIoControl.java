@@ -10,6 +10,7 @@ import com.spring.world.io.process.role.login.LoginProcessor;
 import com.spring.world.io.process.server.room.DeployRoleProcessor;
 import com.spring.world.io.process.server.room.DeployRoomProcessor;
 import com.spring.world.io.process.server.room.RemoveRoleProcessor;
+import com.spring.world.io.process.server.room.RoomInfoProcessor;
 
 public class WorldIoControl {
 
@@ -23,6 +24,8 @@ public class WorldIoControl {
 		RoomMessageConfig.addProcessor(GlobalBeanFactory.getBeanByName(DeployRoleProcessor.class));
 		RoomMessageConfig.addProcessor(GlobalBeanFactory.getBeanByName(DeployRoomProcessor.class));
 		RoomMessageConfig.addProcessor(GlobalBeanFactory.getBeanByName(RemoveRoleProcessor.class));
+		
+		RoomMessageConfig.addProcessor(GlobalBeanFactory.getBeanByName(RoomInfoProcessor.class));
 		
 		RoomMessageConfig.initProcessor();
 	}

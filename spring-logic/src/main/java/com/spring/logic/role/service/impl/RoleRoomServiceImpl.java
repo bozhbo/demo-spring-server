@@ -5,9 +5,11 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.spring.logic.business.service.RoleBusinessService;
+import com.snail.mina.protocol.info.Message;
+import com.spring.common.GameMessageType;
 import com.spring.logic.message.request.server.DeployRoleReq;
 import com.spring.logic.message.request.server.RemoveRoleReq;
+import com.spring.logic.message.request.world.init.InitSceneResp;
 import com.spring.logic.message.service.MessageService;
 import com.spring.logic.role.info.RoleInfo;
 import com.spring.logic.role.service.RoleRoomService;
@@ -23,8 +25,6 @@ public class RoleRoomServiceImpl implements RoleRoomService {
 	
 	private RoomService roomService;
 	
-	// private RoleBusinessService roleLogicService;
-	
 	private MessageService messageService;
 	
 	private RoomServerService roomServerService;
@@ -35,8 +35,6 @@ public class RoleRoomServiceImpl implements RoleRoomService {
 			// TODO deploy to room server
 			return;
 		}
-		
-		// RoomTypeEnum roomTypeEnum = this.roleLogicService.getRoomType(roleInfo);
 		
 		int roomId = this.roomService.joinRoom(roomTypeEnum, roleInfo.getRoleId());
 		
@@ -57,8 +55,6 @@ public class RoleRoomServiceImpl implements RoleRoomService {
 			this.roomService.deployRoomAndSet(roomId, roomServerId, (t) -> {roomServerService.deployRoomInfo(roomServerId, roomId, roomTypeEnum); return 1;});
 		}
 		
-		// DeployRoleReq deployRoleReq = this.roleLogicService.getDeployRoleMessage(roleInfo);
-		
 		if (deployRoleReq != null) {
 			int roomServerId = roomService.getRoomServerId(roomId);
 			
@@ -68,6 +64,8 @@ public class RoleRoomServiceImpl implements RoleRoomService {
 				return;
 			}
 			
+			deployRoleReq.setRoomId(roomId);
+			
 			this.roomServerService.deployRoleInfo(roomServerId, deployRoleReq);
 		} else {
 			messageService.createErrorMessage(740004, "");
@@ -76,15 +74,12 @@ public class RoleRoomServiceImpl implements RoleRoomService {
 	
 	@Override
 	public void leaveRoom(RoleInfo roleInfo) {
-		if (roleInfo.getRoomId() == 0) {
-			return;
-		}
-
 		RoomInfo roomInfo = this.roomService.queryRoom(roleInfo.getRoomId());
 		
 		if (roomInfo == null) {
 			roleInfo.setRoomId(0);
-			// TODO 刷新大厅数据
+			refreshSceneInfo(roleInfo);
+			return;
 		}
 		
 		RemoveRoleReq removeRoleReq = new RemoveRoleReq();
@@ -97,6 +92,16 @@ public class RoleRoomServiceImpl implements RoleRoomService {
 		this.roomServerService.removeRoleInfo(roomServerId, removeRoleReq);
 		
 		// 等待离开房间回复消息后再离开WorldServer
+	}
+	
+	@Override
+	public void refreshSceneInfo(RoleInfo roleInfo) {
+		InitSceneResp resp = new InitSceneResp();
+		resp.setOnline(10);
+		
+		// 刷新大厅数据
+		Message message = messageService.createMessage(roleInfo.getRoleId(), GameMessageType.GAME_CLIENT_WORLD_SCENE_INIT_RECEIVE, 0, "", resp);
+		messageService.sendGateMessage(roleInfo.getGateId(), message);
 	}
 
 	@Autowired
@@ -113,6 +118,8 @@ public class RoleRoomServiceImpl implements RoleRoomService {
 	public void setRoomServerService(RoomServerService roomServerService) {
 		this.roomServerService = roomServerService;
 	}
+
+	
 	
 	
 }

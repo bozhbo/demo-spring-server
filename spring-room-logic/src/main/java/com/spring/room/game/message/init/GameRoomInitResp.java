@@ -31,6 +31,8 @@ public class GameRoomInitResp extends RoomInitResp {
 	public void resp2Bytes(ByteBuffer buffer, ByteOrder order) {
 		super.resp2Bytes(buffer, order);
 		
+		setInt(buffer, order, this.count);
+		
 		for (int i = 0; i < count; i++) {
 			list.get(i).resp2Bytes(buffer, order);
 		}

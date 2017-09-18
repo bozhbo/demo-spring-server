@@ -1,5 +1,6 @@
 package com.spring.logic.role.info;
 
+import com.spring.logic.role.enums.RolePlayingState;
 import com.spring.logic.role.enums.RoleRoomStateEnum;
 
 public class RoomRoleInfo {
@@ -15,6 +16,10 @@ public class RoomRoleInfo {
 	private long lastStateTime;
 	
 	private RoleRoomStateEnum state;
+	
+	private long startTime;	// 可以开始操作时间
+	private int card; // 当前牌
+	private RolePlayingState rolePlayingState;
 	
 	public int getRoleId() {
 		return roleId;
@@ -68,6 +73,26 @@ public class RoomRoleInfo {
 	public long getLastStateTime() {
 		return lastStateTime;
 	}
-	
+	public long getStartTime() {
+		return startTime;
+	}
+	public void setStartTime(long startTime) {
+		this.startTime = startTime;
+	}
+	public void setLastStateTime(long lastStateTime) {
+		this.lastStateTime = lastStateTime;
+	}
+	public int getCard() {
+		return card;
+	}
+	public void setCard(int card) {
+		this.card = card;
+	}
+	public RolePlayingState getRolePlayingState() {
+		return rolePlayingState;
+	}
+	public void setRolePlayingState(RolePlayingState rolePlayingState) {
+		this.rolePlayingState = rolePlayingState;
+	}
 	
 }

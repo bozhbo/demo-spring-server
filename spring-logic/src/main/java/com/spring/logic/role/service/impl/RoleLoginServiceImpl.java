@@ -47,8 +47,7 @@ public class RoleLoginServiceImpl implements RoleLoginService {
 			Message message = this.messageService.createMessage(head, resp);
 			this.messageService.sendGateMessage(gateId, message);
 		} else {
-			Message message = this.messageService.createErrorMessage(errorCode, "");
-			this.messageService.sendGateMessage(gateId, message);
+			messageService.sendGateMessage(gateId, messageService.createErrorMessage(roleInfo.getRoleId(), errorCode, ""));
 		}
 	}
 

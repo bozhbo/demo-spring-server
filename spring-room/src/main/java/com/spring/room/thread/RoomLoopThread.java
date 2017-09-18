@@ -126,7 +126,7 @@ public class RoomLoopThread extends Thread {
 		Set<Entry<Integer, PlayingRoomInfo>> set = map.entrySet();
 		
 		for (Entry<Integer, PlayingRoomInfo> entry : set) {
-			this.roomControlService.loopRoomInfo(entry.getValue());
+			this.roomControlService.loopRoomInfo(entry.getValue(), start);
 		}
 		
 		long use = (System.currentTimeMillis() - start);

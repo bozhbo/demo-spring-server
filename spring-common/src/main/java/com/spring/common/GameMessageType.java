@@ -94,4 +94,59 @@ public class GameMessageType {
 	 */
 	public static int GAME_CLIENT_ROOM_LEAVE = 0xA206;
 	
+	/**
+	 * 房间内游戏通用请求
+	 */
+	public static int GAME_CLIENT_PLAY_SEND = 0xA207;
+	
+	/**
+	 * 房间内游戏通用请求二级消息(准备)
+	 */
+	public static int GAME_CLIENT_PLAY_SEND_READY = 1;
+	
+	/**
+	 * 房间内游戏通用请求二级消息(弃牌)
+	 */
+	public static int GAME_CLIENT_PLAY_SEND_GIVE_UP = 2;
+	
+	/**
+	 * 房间内游戏通用请求二级消息(跟注)
+	 */
+	public static int GAME_CLIENT_PLAY_SEND_FOLLOW = 3;
+	
+	/**
+	 * 房间内游戏通用请求二级消息(加注)
+	 */
+	public static int GAME_CLIENT_PLAY_SEND_ADD = 4;
+	
+	/**
+	 * 房间内游戏通用请求二级消息(看牌)
+	 */
+	public static int GAME_CLIENT_PLAY_SEND_LOOK = 5;
+	
+	/**
+	 * 房间内游戏通用请求二级消息(比牌)
+	 */
+	public static int GAME_CLIENT_PLAY_SEND_COMPARE = 6;
+	
+	/**
+	 * 房间内游戏通用响应
+	 */
+	public static int GAME_CLIENT_PLAY_RECEIVE = 0xA208;
+	
+	/**
+	 * 房间内游戏通用响应二级消息(准备)
+	 */
+	public static int GAME_CLIENT_PLAY_RECEIVE_READY = 1;
+	
+	/**
+	 * 房间内游戏通用响应二级消息(发牌)
+	 */
+	public static int GAME_CLIENT_PLAY_RECEIVE_GIVE_CARD = 2;
+	
+	/**
+	 * 房间内游戏通用响应二级消息(操作)
+	 */
+	public static int GAME_CLIENT_PLAY_RECEIVE_OPERATION = 3;
+	
 }

@@ -6,6 +6,8 @@ import com.snail.mina.protocol.info.impl.RoomMessageHead;
 
 public interface MessageService {
 
+	public RoomMessageHead createMessageHead(int roleId, int gateId, int msgType, int sceneId, String userState);
+	
 	public Message createMessage(RoomMessageHead head);
 	
 	public Message createMessage(int roleId, int msgType, int sceneId, String userState);
@@ -24,6 +26,8 @@ public interface MessageService {
 	
 	public boolean sendWorldMessage(Message message);
 	
-	public Message createErrorMessage(int errorCode, String addInfo);
+	public Message createErrorMessage(int roleId, int errorCode, String addInfo);
+	
+	public Message createErrorMessage(int errorCode, String addInfo, RoomMessageHead head);
 	
 }

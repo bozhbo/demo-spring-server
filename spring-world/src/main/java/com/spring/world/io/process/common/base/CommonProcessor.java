@@ -11,6 +11,7 @@ import com.snail.mina.protocol.info.impl.RoomMessageHead;
 import com.snail.mina.protocol.processor.IProcessor;
 import com.spring.common.GameMessageType;
 import com.spring.logic.business.service.RoleBusinessService;
+import com.spring.logic.message.request.common.base.CommonReq;
 import com.spring.logic.message.request.server.DeployRoleReq;
 import com.spring.logic.role.cache.RoleCache;
 import com.spring.logic.role.info.RoleInfo;

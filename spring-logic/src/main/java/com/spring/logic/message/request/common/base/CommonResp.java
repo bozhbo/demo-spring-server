@@ -1,4 +1,4 @@
-package com.spring.world.io.process.common.base;
+package com.spring.logic.message.request.common.base;
 
 import java.nio.ByteOrder;
 
@@ -10,6 +10,15 @@ public class CommonResp extends BaseRoomResp {
 
 	private int optionType;
 	private String optionStr;
+	
+	public CommonResp() {
+		
+	}
+	
+	public CommonResp(int optionType, String optionStr) {
+		this.optionType = optionType;
+		this.optionStr = optionStr;
+	}
 	
 	@Override
 	public void resp2Bytes(ByteBuffer buffer, ByteOrder order) {

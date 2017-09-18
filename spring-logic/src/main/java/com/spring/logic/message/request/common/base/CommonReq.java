@@ -1,4 +1,4 @@
-package com.spring.world.io.process.common.base;
+package com.spring.logic.message.request.common.base;
 
 import java.nio.ByteOrder;
 

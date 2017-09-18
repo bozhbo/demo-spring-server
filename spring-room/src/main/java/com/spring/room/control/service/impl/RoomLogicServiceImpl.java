@@ -14,6 +14,7 @@ import com.spring.logic.message.request.room.RoomJoinResp;
 import com.spring.logic.message.request.room.RoomLeaveResp;
 import com.spring.logic.message.request.server.DeployRoleReq;
 import com.spring.logic.message.service.MessageService;
+import com.spring.logic.role.cache.RoleRoomCache;
 import com.spring.logic.role.enums.RoleRoomStateEnum;
 import com.spring.logic.role.info.RoomRoleInfo;
 import com.spring.logic.room.enums.RoomTypeEnum;
@@ -41,6 +42,18 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 	@Override
 	public PlayingRoomInfo createPlayingRoomInfo(int roomId, RoomTypeEnum roomTypeEnum) {
 		PlayingRoomInfo playingRoomInfo = new PlayingRoomInfo(roomId, roomTypeEnum);
+		
+		if (roomTypeEnum == RoomTypeEnum.ROOM_TYPE_NEW) {
+			playingRoomInfo.setCurGoldUnit(200);
+		} else if (roomTypeEnum == RoomTypeEnum.ROOM_TYPE_LEVEL1) {
+			playingRoomInfo.setCurGoldUnit(500);
+		} else if (roomTypeEnum == RoomTypeEnum.ROOM_TYPE_LEVEL2) {
+			playingRoomInfo.setCurGoldUnit(1000);
+		} else if (roomTypeEnum == RoomTypeEnum.ROOM_TYPE_LEVEL3) {
+			playingRoomInfo.setCurGoldUnit(2000);
+		} else if (roomTypeEnum == RoomTypeEnum.ROOM_TYPE_LEVEL4) {
+			playingRoomInfo.setCurGoldUnit(3000);
+		}
 
 		return playingRoomInfo;
 	}
@@ -90,6 +103,8 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 		}
 
 		list.add(roomRoleInfo);
+		
+		RoleRoomCache.addRoomRoleInfo(roomRoleInfo);
 
 		// 业务回调
 		roomBusinessCallBack.roomRoleOnAdd(playingRoomInfo, roomRoleInfo);
@@ -114,6 +129,8 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 			// 删除角色回调
 			roomBusinessCallBack.roomRoleOnRemove(playingRoomInfo, roomRoleInfo);
 		}
+		
+		RoleRoomCache.removeRoomRoleInfo(roleId);
 
 		// 发送玩家离开房间信息
 		RoomLeaveResp resp = new RoomLeaveResp();

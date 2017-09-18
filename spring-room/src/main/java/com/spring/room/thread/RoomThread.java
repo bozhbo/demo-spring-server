@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
@@ -61,7 +62,7 @@ public class RoomThread extends Thread {
 	/**
 	 * 房间对应线程
 	 */
-	private Map<Integer, RoomLoopThread> roomMap = new HashMap<>();
+	private Map<Integer, RoomLoopThread> roomMap = new ConcurrentHashMap<>();
 
 	/**
 	 * 事件队列
@@ -289,6 +290,16 @@ public class RoomThread extends Thread {
 		}
 
 		return false;
+	}
+	
+	/**
+	 * 获取房间对应的线程对象
+	 * 
+	 * @param roomId	房间号
+	 * @return	RoomLoopThread
+	 */
+	public RoomLoopThread getRoomLoopThread(int roomId) {
+		return roomMap.get(roomId);
 	}
 
 	@Autowired

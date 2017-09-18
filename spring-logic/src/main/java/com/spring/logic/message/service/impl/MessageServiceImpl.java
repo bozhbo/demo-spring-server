@@ -16,6 +16,18 @@ import com.spring.logic.server.info.RoomServerInfo;
 
 @Service
 public class MessageServiceImpl implements MessageService {
+	
+	@Override
+	public RoomMessageHead createMessageHead(int roleId, int gateId, int msgType, int sceneId, String userState) {
+		RoomMessageHead head = new RoomMessageHead();
+		head.setRoleId(roleId);
+		head.setGateId(gateId);
+		head.setMsgType(msgType);
+		head.setSceneId(sceneId);
+		head.setUserState(userState);
+		
+		return head;
+	}
 
 	@Override
 	public Message createMessage(RoomMessageHead head) {
@@ -116,9 +128,20 @@ public class MessageServiceImpl implements MessageService {
 	}
 	
 	@Override
-	public Message createErrorMessage(int errorCode, String addInfo) {
+	public Message createErrorMessage(int roleId, int errorCode, String addInfo) {
 		Message message = new Message();
 		RoomMessageHead head = new RoomMessageHead();
+		head.setRoleId(roleId);
+		head.setMsgType(GameMessageType.GAME_CLIENT_ERROR_RECEIVE);
+		head.setUserState(errorCode + "$$$$" + addInfo);
+		
+		message.setiRoomHead(head);
+		
+		return message;
+	}
+	
+	public Message createErrorMessage(int errorCode, String addInfo, RoomMessageHead head) {
+		Message message = new Message();
 		head.setMsgType(GameMessageType.GAME_CLIENT_ERROR_RECEIVE);
 		head.setUserState(errorCode + "$$$$" + addInfo);
 		

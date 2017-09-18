@@ -39,7 +39,7 @@ public class RoleRoomServiceImpl implements RoleRoomService {
 		int roomId = this.roomService.joinRoom(roomTypeEnum, roleInfo.getRoleId());
 		
 		if (roomId == 0) {
-			messageService.createErrorMessage(740002, "");
+			messageService.sendGateMessage(roleInfo.getGateId(), messageService.createErrorMessage(roleInfo.getRoleId(), 740002, ""));
 			logger.warn("role join room failed for no room");
 			return;
 		}
@@ -48,7 +48,7 @@ public class RoleRoomServiceImpl implements RoleRoomService {
 			int roomServerId = this.roomServerService.GetFitRoomServerId();
 			
 			if (roomServerId == 0) {
-				messageService.createErrorMessage(740003, "");
+				messageService.sendGateMessage(roleInfo.getGateId(), messageService.createErrorMessage(roleInfo.getRoleId(), 740003, ""));
 				logger.warn("role join room failed for get room server error");
 			}
 			
@@ -59,7 +59,7 @@ public class RoleRoomServiceImpl implements RoleRoomService {
 			int roomServerId = roomService.getRoomServerId(roomId);
 			
 			if (roomServerId == 0) {
-				messageService.createErrorMessage(740003, "");
+				messageService.sendGateMessage(roleInfo.getGateId(), messageService.createErrorMessage(roleInfo.getRoleId(), 740003, ""));
 				logger.warn("role join room failed for no room server");
 				return;
 			}
@@ -68,7 +68,7 @@ public class RoleRoomServiceImpl implements RoleRoomService {
 			
 			this.roomServerService.deployRoleInfo(roomServerId, deployRoleReq);
 		} else {
-			messageService.createErrorMessage(740004, "");
+			messageService.sendGateMessage(roleInfo.getGateId(), messageService.createErrorMessage(roleInfo.getRoleId(), 740003, ""));
 		}
 	}
 	

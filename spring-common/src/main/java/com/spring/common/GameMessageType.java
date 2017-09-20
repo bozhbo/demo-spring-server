@@ -149,4 +149,34 @@ public class GameMessageType {
 	 */
 	public static int GAME_CLIENT_PLAY_RECEIVE_OPERATION = 3;
 	
+	/**
+	 * 房间内游戏通用响应二级消息(比牌)
+	 */
+	public static int GAME_CLIENT_PLAY_RECEIVE_COMPARE = 4;
+	
+	/**
+	 * 房间内游戏通用响应二级消息(显示)
+	 */
+	public static int GAME_CLIENT_PLAY_RECEIVE_SHOW_CARD = 5;
+	
+	/**
+	 * 房间内游戏通用响应二级消息(金币变化)
+	 */
+	public static int GAME_CLIENT_PLAY_RECEIVE_GOLD_CHANGE = 6;
+	
+	/**
+	 * 房间内游戏通用响应二级消息(看牌)
+	 */
+	public static int GAME_CLIENT_PLAY_RECEIVE_LOOK_CARD = 7;
+	
+	/**
+	 * 房间内游戏通用响应二级消息(加注)
+	 */
+	public static int GAME_CLIENT_PLAY_RECEIVE_ADD = 8;
+	
+	/**
+	 * 房间内游戏通用响应二级消息(结束)
+	 */
+	public static int GAME_CLIENT_PLAY_RECEIVE_GAME_END = 9;
+	
 }

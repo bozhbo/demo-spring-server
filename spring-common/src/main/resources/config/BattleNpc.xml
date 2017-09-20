@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="gb2312"?>
+<!-- edited with XMLSpy v2005 rel. 3 U (http://www.altova.com) by  () -->
+<!--同仇恨NPC的隐形向导-->
+<object>
+	<!-- 基本属性 -->
+	<properties>
+		<property name="AIBattleContinueKill" type="int" public="false" private="false" save="false" desc="引导连斩数"/>
+		<property name="Weapon" type="string" public="true" private="false" save="false" desc="武器"/>
+		<property name="Cloth" type="string" public="true" private="false" save="false" desc="衣服"/>
+		<property name="Resource" type="string" public="true" private="false" save="false" desc="资源号"/>
+		<property name="PublicOfficeCurrentLevel" type="int" public="true" private="false" save="false" desc="当前军阶0无1平民......"/>
+		<!--<property name="PurposeType" type="int" public="false" private="false" save="false" desc="用途类型"/>-->
+		<property name="Wing" type="string" public="true" private="false" save="false" desc="翅膀"/>
+		<property name="BattleWuxue" type="string" public="true" private="false" save="false" desc="出战武学"/>
+		<property name="SubWuxue" type="string" public="true" private="false" save="false" desc="副武学"/>
+		<property name="RobotAbility" type="int" public="false" private="false" save="false" desc="机器人能力包"/>
+		<property name="ConsumeType" type="int" public="true" private="true" save="true" desc="武学消耗类型"/>
+	</properties>
+	<!-- 表属性 -->
+	<records>
+		<record name="BattleChildNpcRec" cols="2" maxrows="9" save="false" visible="false" desc="附属NPC表">
+			<column type="object" name="NPC对象"/>
+			<column type="word" name="状态"/>
+		</record>
+	</records>
+	<includes>
+		<path name="struct\rule\PassiveSkill.xml" desc="被动技能"/>
+		<path name="struct\player\PassiveSkillProperty.xml" desc="被动技能等级属性"/>
+	</includes>
+</object>

@@ -22,17 +22,24 @@ public class PlayingRoomInfo {
 	private long readyTime;
 	private long sendCardTime;
 	private int curGoldUnit;
+	private int amountGold;
 	
 	private RoomRoleInfo roomRoleInfo;
 	
 	private List<RoomRoleInfo> list = new ArrayList<>();
 	private List<RoomRoleInfo> playingList = new ArrayList<>();
 	
+	private List<Integer> cardList = new ArrayList<>();
+	
 	public PlayingRoomInfo(int roomId, RoomTypeEnum roomType) {
 		this.roomId = roomId;
 		this.roomType = roomType;
 		
 		this.roomState = RoomPlayingEnum.ROOM_STATE_INIT;
+		
+		for (int i = 0; i < 52; i++) {
+			cardList.add(i + 1);
+		}
 	}
 
 	public int getRoomId() {
@@ -113,6 +120,22 @@ public class PlayingRoomInfo {
 
 	public void setCurGoldUnit(int curGoldUnit) {
 		this.curGoldUnit = curGoldUnit;
+	}
+
+	public int getAmountGold() {
+		return amountGold;
+	}
+
+	public void setAmountGold(int amountGold) {
+		this.amountGold = amountGold;
+	}
+
+	public List<Integer> getCardList() {
+		return cardList;
+	}
+
+	public void setCardList(List<Integer> cardList) {
+		this.cardList = cardList;
 	}
 
 	

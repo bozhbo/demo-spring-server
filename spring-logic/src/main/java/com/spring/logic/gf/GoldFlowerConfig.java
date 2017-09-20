@@ -109,7 +109,7 @@ public class GoldFlowerConfig {
 		}
 	}
 
-	private static boolean isBoom(int a, int b, int c) {
+	public static boolean isBoom(int a, int b, int c) {
 		PokerInfo p1 = new PokerInfo(a);
 		PokerInfo p2 = new PokerInfo(b);
 		PokerInfo p3 = new PokerInfo(c);
@@ -121,7 +121,7 @@ public class GoldFlowerConfig {
 		}
 	}
 
-	private static boolean isGreatGF(int a, int b, int c) {
+	public static boolean isGreatGF(int a, int b, int c) {
 		PokerInfo p1 = new PokerInfo(a);
 		PokerInfo p2 = new PokerInfo(b);
 		PokerInfo p3 = new PokerInfo(c);
@@ -163,7 +163,7 @@ public class GoldFlowerConfig {
 		return false;
 	}
 
-	private static boolean isGF(int a, int b, int c) {
+	public static boolean isGF(int a, int b, int c) {
 		PokerInfo p1 = new PokerInfo(a);
 		PokerInfo p2 = new PokerInfo(b);
 		PokerInfo p3 = new PokerInfo(c);
@@ -175,7 +175,7 @@ public class GoldFlowerConfig {
 		return false;
 	}
 
-	private static boolean isStraight(int a, int b, int c) {
+	public static boolean isStraight(int a, int b, int c) {
 		PokerInfo p1 = new PokerInfo(a);
 		PokerInfo p2 = new PokerInfo(b);
 		PokerInfo p3 = new PokerInfo(c);
@@ -215,7 +215,7 @@ public class GoldFlowerConfig {
 		return false;
 	}
 
-	private static boolean isPairs(int a, int b, int c) {
+	public static boolean isPairs(int a, int b, int c) {
 		PokerInfo p1 = new PokerInfo(a);
 		PokerInfo p2 = new PokerInfo(b);
 		PokerInfo p3 = new PokerInfo(c);
@@ -228,7 +228,7 @@ public class GoldFlowerConfig {
 		return false;
 	}
 
-	private static boolean isMin(int a, int b, int c) {
+	public static boolean isMin(int a, int b, int c) {
 		PokerInfo p1 = new PokerInfo(a);
 		PokerInfo p2 = new PokerInfo(b);
 		PokerInfo p3 = new PokerInfo(c);

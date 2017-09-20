@@ -23,6 +23,7 @@ import com.snail.mina.protocol.info.RoomFilterInfo;
 import com.snail.mina.protocol.server.RoomServer;
 import com.spring.common.ServerName;
 import com.spring.logic.bean.GlobalBeanFactory;
+import com.spring.logic.gf.GoldFlowerConfig;
 import com.spring.room.config.RoomServerConfig;
 import com.spring.room.io.process.RoomIoControl;
 import com.spring.room.io.process.handler.RoomClientSessionHandler;
@@ -46,6 +47,7 @@ public class RoomServerMain {
 		start(args);
 
 		RoomServerConfig.init();
+		GoldFlowerConfig.init();
 		
 		RoomIoControl roomIoControl = GlobalBeanFactory.getBeanByName("RoomIoControl", RoomIoControl.class);
 		roomIoControl.init();

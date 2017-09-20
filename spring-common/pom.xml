@@ -18,5 +18,12 @@
 			<groupId>dom4j</groupId>
 			<artifactId>dom4j</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-digester3</artifactId>
+			<version>3.2</version>
+			<!--<classifier>with-deps</classifier>-->
+		</dependency>
 	</dependencies>
 </project>

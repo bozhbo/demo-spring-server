@@ -1,5 +1,6 @@
 package com.spring.logic.role.info;
 
+import com.spring.logic.gf.info.GoldFlowerInfo;
 import com.spring.logic.role.enums.RolePlayingState;
 import com.spring.logic.role.enums.RoleRoomStateEnum;
 
@@ -18,7 +19,7 @@ public class RoomRoleInfo {
 	private RoleRoomStateEnum state;
 	
 	private long startTime;	// 可以开始操作时间
-	private int card; // 当前牌
+	private GoldFlowerInfo goldFlowerInfo; // 当前牌
 	private RolePlayingState rolePlayingState;
 	
 	public int getRoleId() {
@@ -45,6 +46,7 @@ public class RoomRoleInfo {
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
 	}
+	
 	public int getGold() {
 		return gold;
 	}
@@ -82,17 +84,17 @@ public class RoomRoleInfo {
 	public void setLastStateTime(long lastStateTime) {
 		this.lastStateTime = lastStateTime;
 	}
-	public int getCard() {
-		return card;
-	}
-	public void setCard(int card) {
-		this.card = card;
-	}
 	public RolePlayingState getRolePlayingState() {
 		return rolePlayingState;
 	}
 	public void setRolePlayingState(RolePlayingState rolePlayingState) {
 		this.rolePlayingState = rolePlayingState;
+	}
+	public GoldFlowerInfo getGoldFlowerInfo() {
+		return goldFlowerInfo;
+	}
+	public void setGoldFlowerInfo(GoldFlowerInfo goldFlowerInfo) {
+		this.goldFlowerInfo = goldFlowerInfo;
 	}
 	
 }

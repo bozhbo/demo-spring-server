@@ -76,6 +76,14 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
+	public boolean sendGateMessage(int gateId, RoomMessageHead head) {
+		Message message = new Message();
+		message.setiRoomHead(head);
+		
+		return sendGateMessage(gateId, message);
+	}
+	
+	@Override
 	public boolean sendGateMessage(int gateId, Message message) {
 		IoSession session = GateServerCache.getIoSession(gateId);
 		

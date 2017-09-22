@@ -11,6 +11,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.spring.common.GameMessageType;
+import com.spring.logic.role.cache.RoleRoomCache;
 import com.spring.logic.role.info.RoomRoleInfo;
 import com.spring.logic.room.event.IRoomEvent;
 import com.spring.logic.room.info.PlayingRoomInfo;
@@ -21,6 +23,7 @@ import com.spring.room.event.DeployRoleInfoEvent;
 import com.spring.room.event.DeployRoomEvent;
 import com.spring.room.event.RemoveRoleInfoEvent;
 import com.spring.room.event.RemoveRoomEvent;
+import com.spring.room.event.RoleOperateEvent;
 
 /**
  * 房间循环线程
@@ -80,7 +83,11 @@ public class RoomLoopThread extends Thread {
 				if (roomEvent != null) {
 					if (roomEvent instanceof DeployRoomEvent) {
 						PlayingRoomInfo playingRoomInfo = roomLogicService.createPlayingRoomInfo(((DeployRoomEvent)roomEvent).getRoomId(), ((DeployRoomEvent)roomEvent).getRoomType());
-						map.put(playingRoomInfo.getRoomId(), playingRoomInfo);
+						PlayingRoomInfo oldPlayingRoomInfo = map.putIfAbsent(((DeployRoomEvent)roomEvent).getRoomId(), playingRoomInfo);
+						
+						if (oldPlayingRoomInfo != null) {
+							logger.error("room add failed for room exist");
+						}
 					} else if (roomEvent instanceof RemoveRoomEvent) {
 						PlayingRoomInfo playingRoomInfo = map.get(((RemoveRoomEvent)roomEvent).getRoomId());
 					
@@ -92,7 +99,12 @@ public class RoomLoopThread extends Thread {
 						
 						if (playingRoomInfo != null) {
 							RoomRoleInfo roomRoleInfo = roomLogicService.createRoomRoleInfo(playingRoomInfo, ((DeployRoleInfoEvent)roomEvent).getReq());
-							roomLogicService.addRole(playingRoomInfo, roomRoleInfo);
+							
+							if (RoleRoomCache.addRoomRoleInfo(roomRoleInfo)) {
+								roomLogicService.addRole(playingRoomInfo, roomRoleInfo);
+							} else {
+								logger.error("room add failed for room exist");
+							}
 						} else {
 							roomWorldService.deployRoleInfoFailed(((DeployRoleInfoEvent)roomEvent).getReq().getRoomId(), ((DeployRoleInfoEvent)roomEvent).getReq().getRoleId());
 						}
@@ -100,10 +112,17 @@ public class RoomLoopThread extends Thread {
 						PlayingRoomInfo playingRoomInfo = map.get(((RemoveRoleInfoEvent)roomEvent).getReq().getRoomId());
 					
 						if (playingRoomInfo != null) {
-							roomLogicService.removeRole(playingRoomInfo, ((RemoveRoleInfoEvent)roomEvent).getReq().getRoleId());
+							if (RoleRoomCache.removeRoomRoleInfo(((RemoveRoleInfoEvent)roomEvent).getReq().getRoleId())) {
+								roomLogicService.removeRole(playingRoomInfo, ((RemoveRoleInfoEvent)roomEvent).getReq().getRoleId());
+							} else {
+								// 已经移除
+								roomWorldService.removeRoleInfoFailed(((RemoveRoleInfoEvent)roomEvent).getReq().getRoomId(), ((RemoveRoleInfoEvent)roomEvent).getReq().getRoleId());
+							}
 						} else {
 							roomWorldService.removeRoleInfoFailed(((RemoveRoleInfoEvent)roomEvent).getReq().getRoomId(), ((RemoveRoleInfoEvent)roomEvent).getReq().getRoleId());
 						}
+					} else if (roomEvent instanceof RoleOperateEvent) {
+						operate((RoleOperateEvent)roomEvent);
 					}
 					
 					long start = System.currentTimeMillis();
@@ -136,6 +155,28 @@ public class RoomLoopThread extends Thread {
 			return 10l;
 		} else {
 			return SLEEP_TIME - use;
+		}
+	}
+	
+	private void operate(RoleOperateEvent roleOperateEvent) {
+		PlayingRoomInfo playingRoomInfo = map.get(roleOperateEvent.getRoomId());
+		
+		if (playingRoomInfo == null) {
+			return;
+		}
+		
+		if (roleOperateEvent.getMsgType() == GameMessageType.GAME_CLIENT_PLAY_SEND_READY) {
+			roomControlService.ready(playingRoomInfo, roleOperateEvent.getRoomRoleInfo());
+		} else if (roleOperateEvent.getMsgType() == GameMessageType.GAME_CLIENT_PLAY_SEND_GIVE_UP) {
+			roomControlService.giveUp(playingRoomInfo, roleOperateEvent.getRoomRoleInfo());
+		} else if (roleOperateEvent.getMsgType() == GameMessageType.GAME_CLIENT_PLAY_SEND_FOLLOW) {
+			roomControlService.follow(playingRoomInfo, roleOperateEvent.getRoomRoleInfo());
+		} else if (roleOperateEvent.getMsgType() == GameMessageType.GAME_CLIENT_PLAY_SEND_ADD) {
+			roomControlService.add(playingRoomInfo, roleOperateEvent.getRoomRoleInfo(), roleOperateEvent.getOptionStr());
+		} else if (roleOperateEvent.getMsgType() == GameMessageType.GAME_CLIENT_PLAY_SEND_LOOK) {
+			roomControlService.look(playingRoomInfo, roleOperateEvent.getRoomRoleInfo());
+		} else if (roleOperateEvent.getMsgType() == GameMessageType.GAME_CLIENT_PLAY_SEND_COMPARE) {
+			roomControlService.compare(playingRoomInfo, roleOperateEvent.getRoomRoleInfo(), roleOperateEvent.getOptionStr());
 		}
 	}
 	

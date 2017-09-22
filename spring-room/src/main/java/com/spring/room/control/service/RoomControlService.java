@@ -61,4 +61,12 @@ public interface RoomControlService {
 	 * @param roleId
 	 */
 	public void compare(PlayingRoomInfo playingRoomInfo, RoomRoleInfo roomRoleInfo, String str);
+	
+	/**
+	 * 掉线
+	 * 
+	 * @param playingRoomInfo
+	 * @param roomRoleInfo
+	 */
+	public void offline(PlayingRoomInfo playingRoomInfo, RoomRoleInfo roomRoleInfo);
 }

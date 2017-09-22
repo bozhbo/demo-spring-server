@@ -135,48 +135,70 @@ public class GameMessageType {
 	public static int GAME_CLIENT_PLAY_RECEIVE = 0xA208;
 	
 	/**
-	 * 房间内游戏通用响应二级消息(准备)
+	 * 房间内游戏通用响应二级消息(房间通知准备)
 	 */
 	public static int GAME_CLIENT_PLAY_RECEIVE_READY = 1;
 	
 	/**
-	 * 房间内游戏通用响应二级消息(发牌)
+	 * 房间内游戏通用响应二级消息(房间通知发牌)
 	 */
 	public static int GAME_CLIENT_PLAY_RECEIVE_GIVE_CARD = 2;
 	
 	/**
-	 * 房间内游戏通用响应二级消息(操作)
+	 * 房间内游戏通用响应二级消息(房间通知操作)
 	 */
 	public static int GAME_CLIENT_PLAY_RECEIVE_OPERATION = 3;
 	
 	/**
-	 * 房间内游戏通用响应二级消息(比牌)
+	 * 房间内游戏通用响应二级消息(房间通知显示牌)
 	 */
-	public static int GAME_CLIENT_PLAY_RECEIVE_COMPARE = 4;
+	public static int GAME_CLIENT_PLAY_RECEIVE_SHOW_CARD = 4;
 	
 	/**
-	 * 房间内游戏通用响应二级消息(显示)
+	 * 房间内游戏通用响应二级消息(房间通知回合变化)
 	 */
-	public static int GAME_CLIENT_PLAY_RECEIVE_SHOW_CARD = 5;
+	public static int GAME_CLIENT_PLAY_RECEIVE_ROUND = 5;
 	
 	/**
-	 * 房间内游戏通用响应二级消息(金币变化)
-	 */
-	public static int GAME_CLIENT_PLAY_RECEIVE_GOLD_CHANGE = 6;
-	
-	/**
-	 * 房间内游戏通用响应二级消息(看牌)
-	 */
-	public static int GAME_CLIENT_PLAY_RECEIVE_LOOK_CARD = 7;
-	
-	/**
-	 * 房间内游戏通用响应二级消息(加注)
-	 */
-	public static int GAME_CLIENT_PLAY_RECEIVE_ADD = 8;
-	
-	/**
-	 * 房间内游戏通用响应二级消息(结束)
+	 * 房间内游戏通用响应二级消息(房间通知结束)
 	 */
 	public static int GAME_CLIENT_PLAY_RECEIVE_GAME_END = 9;
+	
+	/**
+	 * 房间内游戏通用响应二级消息(玩家准备)
+	 */
+	public static int GAME_CLIENT_PLAY_RECEIVE_ROLE_READY = 13;
+	
+	/**
+	 * 房间内游戏通用响应二级消息(玩家比牌)
+	 */
+	public static int GAME_CLIENT_PLAY_RECEIVE_COMPARE = 14;
+	
+	/**
+	 * 房间内游戏通用响应二级消息(玩家看牌)
+	 */
+	public static int GAME_CLIENT_PLAY_RECEIVE_LOOK_CARD = 15;
+	
+	/**
+	 * 房间内游戏通用响应二级消息(玩家加注)
+	 */
+	public static int GAME_CLIENT_PLAY_RECEIVE_ADD = 16;
+	
+	/**
+	 * 房间内游戏通用响应二级消息(玩家跟注)
+	 */
+	public static int GAME_CLIENT_PLAY_RECEIVE_FOLLOW = 17;
+	
+	/**
+	 * 房间内游戏通用响应二级消息(玩家弃牌)
+	 */
+	public static int GAME_CLIENT_PLAY_RECEIVE_GIVE_UP = 18;
+	
+	/**
+	 * 房间内游戏通用响应二级消息(玩家胜利)
+	 */
+	public static int GAME_CLIENT_PLAY_RECEIVE_WIN = 19;
+	
+	
 	
 }

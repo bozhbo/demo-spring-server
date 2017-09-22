@@ -1,7 +1,6 @@
 package com.spring.room.thread;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +15,9 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.spring.logic.bean.GlobalBeanFactory;
+import com.spring.logic.message.request.server.RemoveRoleReq;
+import com.spring.logic.role.cache.RoleRoomCache;
+import com.spring.logic.role.info.RoomRoleInfo;
 import com.spring.logic.room.RoomConfig;
 import com.spring.logic.room.event.IRoomEvent;
 import com.spring.logic.room.info.PlayingRoomInfo;
@@ -151,6 +153,14 @@ public class RoomThread extends Thread {
 	private boolean addRoomInfo(List<RoomLoopThread> list, IRoomEvent roomEvent) {
 		RoomLoopThread minRoomLoopThread = null;
 		int minValue = THREAD_MAX_ROOM_COUNT;
+		int roomId = ((DeployRoomEvent) roomEvent).getRoomId();
+		
+		minRoomLoopThread = roomMap.get(roomId);
+		
+		if (minRoomLoopThread != null && !minRoomLoopThread.isStop()) {
+			logger.warn("room is in playing " + roomId);
+			return minRoomLoopThread.addRoomEvent(roomEvent);
+		}
 
 		Set<RoomLoopThread> stopSet = new HashSet<>();
 
@@ -162,10 +172,10 @@ public class RoomThread extends Thread {
 
 			if (roomLoopThread.getRoomSize() < (THREAD_MAX_ROOM_COUNT / 2)) {
 				if (roomLoopThread.addRoomEvent(roomEvent)) {
-					roomMap.put(((DeployRoomEvent) roomEvent).getRoomId(), roomLoopThread);
+					roomMap.put(roomId, roomLoopThread);
 					return true;
 				} else {
-					return false;
+					continue;
 				}
 			} else {
 				if (minValue > roomLoopThread.getRoomSize()) {
@@ -196,11 +206,12 @@ public class RoomThread extends Thread {
 		}
 
 		if (minValue == THREAD_MAX_ROOM_COUNT) {
+			logger.error("can not get room too add role");
 			return false;
 		}
 
 		if (minRoomLoopThread.addRoomEvent(roomEvent)) {
-			roomMap.put(((DeployRoomEvent) roomEvent).getRoomId(), minRoomLoopThread);
+			roomMap.put(roomId, minRoomLoopThread);
 			return true;
 		} else {
 			return false;
@@ -217,6 +228,7 @@ public class RoomThread extends Thread {
 		RoomLoopThread roomLoopThread = roomMap.get(((RemoveRoomEvent) roomEvent).getRoomId());
 		
 		if (roomLoopThread == null) {
+			logger.error("can not get room too remove room");
 			return false;
 		}
 		
@@ -236,6 +248,26 @@ public class RoomThread extends Thread {
 	 * @return	true-成功 false-失败
 	 */
 	private boolean addRoleInfo(List<RoomLoopThread> list, IRoomEvent roomEvent) {
+		DeployRoleInfoEvent deployRoleInfoEvent = (DeployRoleInfoEvent)roomEvent;
+		
+		int roomId = deployRoleInfoEvent.getReq().getRoomId();
+		int roleId = deployRoleInfoEvent.getReq().getRoleId();
+		
+		RoomRoleInfo roomRoleInfo = RoleRoomCache.getRoomRoleInfo(roleId);
+		
+		if (roomRoleInfo != null) {
+			// 存在未移除角色
+			RemoveRoleReq req = new RemoveRoleReq();
+			req.setRoleId(roleId);
+			req.setRoomId(roomId);
+			
+			RemoveRoleInfoEvent removeRoleInfoEvent = new RemoveRoleInfoEvent(req);
+			removeRoleInfo(removeRoleInfoEvent);
+			
+			logger.error("role add failed for exist in room");
+			return false;
+		}
+		
 		int index = (int)(System.currentTimeMillis() % list.size());
 		
 		RoomLoopThread roomLoopThread = list.get(index);
@@ -252,6 +284,8 @@ public class RoomThread extends Thread {
 			}
 		}
 		
+		logger.error("role add failed for no room find");
+		
 		return false;
 	}
 	
@@ -265,6 +299,7 @@ public class RoomThread extends Thread {
 		RoomLoopThread roomLoopThread = roomMap.get(((RemoveRoleInfoEvent) roomEvent).getReq().getRoomId());
 		
 		if (roomLoopThread == null) {
+			logger.error("can not get room too remove role");
 			return false;
 		}
 		

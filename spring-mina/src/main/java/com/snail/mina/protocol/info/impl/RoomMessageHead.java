@@ -13,7 +13,7 @@ import com.snail.mina.protocol.util.FlashHandleStr;
  * @author zhoubo
  * @since 2014-11-19
  */
-public class RoomMessageHead extends BaseMessageHead {
+public class RoomMessageHead extends BaseMessageHead implements Cloneable {
 	
 	/**
 	 * 消息版本号
@@ -130,6 +130,9 @@ public class RoomMessageHead extends BaseMessageHead {
 		this.userState = userState;
 	}
 
-	
+	@Override  
+    public RoomMessageHead clone() throws CloneNotSupportedException {  
+        return (RoomMessageHead)super.clone();  
+    }
 	
 }

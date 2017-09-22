@@ -15,4 +15,6 @@ public interface RoomLogicService {
 	
 	public void removeRole(PlayingRoomInfo playingRoomInfo, int roleId);
 	
+	public String getRespRoomInfo(PlayingRoomInfo playingRoomInfo);
+	
 }

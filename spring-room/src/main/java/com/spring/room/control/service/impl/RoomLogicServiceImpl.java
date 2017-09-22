@@ -1,6 +1,9 @@
 package com.spring.room.control.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,11 +18,14 @@ import com.spring.logic.message.request.room.RoomLeaveResp;
 import com.spring.logic.message.request.server.DeployRoleReq;
 import com.spring.logic.message.service.MessageService;
 import com.spring.logic.role.cache.RoleRoomCache;
-import com.spring.logic.role.enums.RoleRoomStateEnum;
+import com.spring.logic.role.enums.RoleCardState;
+import com.spring.logic.role.enums.RoleRoomState;
 import com.spring.logic.role.info.RoomRoleInfo;
 import com.spring.logic.room.enums.RoomTypeEnum;
 import com.spring.logic.room.info.PlayingRoomInfo;
 import com.spring.logic.server.service.ServerMessageService;
+import com.spring.logic.util.LogicUtil;
+import com.spring.logic.util.LogicValue;
 import com.spring.room.control.service.RoomLogicService;
 import com.spring.room.control.service.RoomMessageService;
 import com.spring.room.control.service.RoomWorldService;
@@ -63,7 +69,7 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 		RoomRoleInfo roomRoleInfo = new RoomRoleInfo();
 		roomRoleInfo.setRoleId(req.getRoleId());
 		roomRoleInfo.setRoomId(req.getRoomId());
-		roomRoleInfo.setState(RoleRoomStateEnum.INIT);
+		roomRoleInfo.setRoleRoomState(RoleRoomState.INIT);
 
 		// 恢复角色数据
 		int result = roomBusinessCallBack.roomRoleOnRecover(roomRoleInfo, req);
@@ -104,8 +110,6 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 
 		list.add(roomRoleInfo);
 		
-		RoleRoomCache.addRoomRoleInfo(roomRoleInfo);
-
 		// 业务回调
 		roomBusinessCallBack.roomRoleOnAdd(playingRoomInfo, roomRoleInfo);
 
@@ -130,8 +134,6 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 			roomBusinessCallBack.roomRoleOnRemove(playingRoomInfo, roomRoleInfo);
 		}
 		
-		RoleRoomCache.removeRoomRoleInfo(roleId);
-
 		// 发送玩家离开房间信息
 		RoomLeaveResp resp = new RoomLeaveResp();
 		resp.setRoleId(roleId);
@@ -144,6 +146,67 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 
 		// 发送World移除用户
 		roomWorldService.removeRoleInfoSuccessed(playingRoomInfo.getRoomId(), roleId);
+	}
+	
+	@Override
+	public String getRespRoomInfo(PlayingRoomInfo playingRoomInfo) {
+		List<RoomRoleInfo> list = playingRoomInfo.getList();
+		Map<String, Object> roomMap = new HashMap<>();
+		
+		roomMap.put(LogicValue.KEY_ROOM_ID, playingRoomInfo.getRoomId());
+		roomMap.put(LogicValue.KEY_ROOM_GOLD, playingRoomInfo.getAmountGold());
+		roomMap.put(LogicValue.KEY_ROOM_UNIT_GOLD, playingRoomInfo.getCurGoldUnit());
+		roomMap.put(LogicValue.KEY_ROOM_ROUND, playingRoomInfo.getRoomRound());
+		
+		List<Map<String, Object>> roleList = new ArrayList<>();
+		
+		for (RoomRoleInfo roomRoleInfo : list) {
+			Map<String, Object> map = new HashMap<>();
+			map.put(LogicValue.KEY_ROLE_GOLD, roomRoleInfo.getGold());
+			map.put(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId());
+			map.put(LogicValue.KEY_ROLE_NAME, roomRoleInfo.getRoleName());
+			map.put(LogicValue.KEY_ROLE_CARD_STATE, roomRoleInfo.getRoleCardState());
+			map.put(LogicValue.KEY_ROLE_PLAY_STATE, roomRoleInfo.getRoleRoomState());
+			map.put(LogicValue.KEY_ROLE_VIP, roomRoleInfo.getVipLevel());
+			map.put(LogicValue.KEY_ROLE_HEAD, roomRoleInfo.getHeader());
+			map.put(LogicValue.KEY_ROLE_ONLINE, roomRoleInfo.getOnline());
+			
+			roleList.add(map);
+		}
+		
+		roomMap.put(LogicValue.KEY_ROOM_ROLE, roleList);
+		
+		return LogicUtil.tojson(roomMap);
+	}
+	
+	public static void main(String[] args) {
+		LogicUtil.initJson();
+		PlayingRoomInfo playingRoomInfo = new PlayingRoomInfo(1, RoomTypeEnum.ROOM_TYPE_NEW);
+		
+		playingRoomInfo.setRoomRound(1);
+		playingRoomInfo.setAmountGold(1000);
+		playingRoomInfo.setCurGoldUnit(100);
+		playingRoomInfo.setRoomRound(2);
+		
+		for (int i = 0; i < 2; i++) {
+			RoomRoleInfo roomRoleInfo = new RoomRoleInfo();
+			roomRoleInfo.setGold(100 * (i + 1));
+			roomRoleInfo.setHeader("xxmm" + i);
+			roomRoleInfo.setOnline(1);
+			roomRoleInfo.setRoleCardState(RoleCardState.OPEN);
+			roomRoleInfo.setRoleRoomState(RoleRoomState.PLAYING);
+			roomRoleInfo.setRoleId(i + 1);
+			roomRoleInfo.setRoleName("role" + i + 1);
+			roomRoleInfo.setRoomId(1);
+			roomRoleInfo.setVipLevel(9);
+			
+			playingRoomInfo.getList().add(roomRoleInfo);
+		}
+		
+		RoomLogicServiceImpl service = new RoomLogicServiceImpl();
+		String str = service.getRespRoomInfo(playingRoomInfo);
+		
+		System.out.println(str);
 	}
 
 	@Autowired
@@ -175,5 +238,7 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 	public void setRoomBusinessCallBack(RoomBusinessCallBack roomBusinessCallBack) {
 		this.roomBusinessCallBack = roomBusinessCallBack;
 	}
+
+	
 
 }

@@ -1,8 +1,8 @@
 package com.spring.logic.role.info;
 
 import com.spring.logic.gf.info.GoldFlowerInfo;
-import com.spring.logic.role.enums.RolePlayingState;
-import com.spring.logic.role.enums.RoleRoomStateEnum;
+import com.spring.logic.role.enums.RoleCardState;
+import com.spring.logic.role.enums.RoleRoomState;
 
 public class RoomRoleInfo {
 
@@ -12,15 +12,16 @@ public class RoomRoleInfo {
 	private String roleName;
 	private int gold;
 	private int vipLevel;
+	private int online;
 	private String header;
 	
 	private long lastStateTime;
 	
-	private RoleRoomStateEnum state;
+	private RoleRoomState roleRoomState;
 	
 	private long startTime;	// 可以开始操作时间
 	private GoldFlowerInfo goldFlowerInfo; // 当前牌
-	private RolePlayingState rolePlayingState;
+	private RoleCardState roleCardState;
 	
 	public int getRoleId() {
 		return roleId;
@@ -65,11 +66,11 @@ public class RoomRoleInfo {
 	public void setHeader(String header) {
 		this.header = header;
 	}
-	public RoleRoomStateEnum getState() {
-		return state;
+	public RoleRoomState getRoleRoomState() {
+		return roleRoomState;
 	}
-	public void setState(RoleRoomStateEnum state) {
-		this.state = state;
+	public void setRoleRoomState(RoleRoomState roleRoomState) {
+		this.roleRoomState = roleRoomState;
 		this.lastStateTime = System.currentTimeMillis();
 	}
 	public long getLastStateTime() {
@@ -84,17 +85,23 @@ public class RoomRoleInfo {
 	public void setLastStateTime(long lastStateTime) {
 		this.lastStateTime = lastStateTime;
 	}
-	public RolePlayingState getRolePlayingState() {
-		return rolePlayingState;
-	}
-	public void setRolePlayingState(RolePlayingState rolePlayingState) {
-		this.rolePlayingState = rolePlayingState;
-	}
 	public GoldFlowerInfo getGoldFlowerInfo() {
 		return goldFlowerInfo;
 	}
 	public void setGoldFlowerInfo(GoldFlowerInfo goldFlowerInfo) {
 		this.goldFlowerInfo = goldFlowerInfo;
+	}
+	public int getOnline() {
+		return online;
+	}
+	public void setOnline(int online) {
+		this.online = online;
+	}
+	public RoleCardState getRoleCardState() {
+		return roleCardState;
+	}
+	public void setRoleCardState(RoleCardState roleCardState) {
+		this.roleCardState = roleCardState;
 	}
 	
 }

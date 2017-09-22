@@ -9,15 +9,15 @@ public class RoleRoomCache {
 
 	private static Map<Integer, RoomRoleInfo> map = new ConcurrentHashMap<>();
 	
-	public static void addRoomRoleInfo(RoomRoleInfo roomRoleInfo) {
-		map.put(roomRoleInfo.getRoleId(), roomRoleInfo);
+	public static boolean addRoomRoleInfo(RoomRoleInfo roomRoleInfo) {
+		return map.putIfAbsent(roomRoleInfo.getRoleId(), roomRoleInfo) == null;
 	}
 	
 	public static RoomRoleInfo getRoomRoleInfo(int roleId) {
 		return map.get(roleId);
 	}
 	
-	public static void removeRoomRoleInfo(int roleId) {
-		map.remove(roleId);
+	public static boolean removeRoomRoleInfo(int roleId) {
+		return map.remove(roleId) != null;
 	}
 }

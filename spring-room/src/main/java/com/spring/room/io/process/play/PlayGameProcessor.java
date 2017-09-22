@@ -21,6 +21,7 @@ import com.spring.logic.role.service.RoleRoomService;
 import com.spring.logic.room.enums.RoomTypeEnum;
 import com.spring.logic.util.LogicUtil;
 import com.spring.room.config.RoomServerConfig;
+import com.spring.room.event.RoleOperateEvent;
 import com.spring.room.thread.RoomLoopThread;
 
 public class PlayGameProcessor implements IProcessor {
@@ -29,7 +30,6 @@ public class PlayGameProcessor implements IProcessor {
 	
 	private MessageService messageService;
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public void processor(Message message) {
 		RoomMessageHead head = (RoomMessageHead)message.getiRoomHead();
@@ -44,8 +44,7 @@ public class PlayGameProcessor implements IProcessor {
 			return;
 		}
 		
-		Map<String, Object> map = LogicUtil.fromJson(req.getOptionStr(), Map.class);
-		int roomId = (Integer)map.get("roomId");
+		int roomId = head.getSceneId();
 		
 		RoomLoopThread roomLoopThread = RoomServerConfig.getRoomThread().getRoomLoopThread(roomId);
 		
@@ -55,20 +54,8 @@ public class PlayGameProcessor implements IProcessor {
 			
 			logger.warn("room thread not exist" + roomId);
 			return;
-		}
-		
-		if (req.getOptionType() == GameMessageType.GAME_CLIENT_PLAY_SEND_READY) {
-			
-		} else if (req.getOptionType() == GameMessageType.GAME_CLIENT_PLAY_SEND_GIVE_UP) {
-			
-		} else if (req.getOptionType() == GameMessageType.GAME_CLIENT_PLAY_SEND_FOLLOW) {
-			
-		} else if (req.getOptionType() == GameMessageType.GAME_CLIENT_PLAY_SEND_ADD) {
-			
-		} else if (req.getOptionType() == GameMessageType.GAME_CLIENT_PLAY_SEND_LOOK) {
-			
-		} else if (req.getOptionType() == GameMessageType.GAME_CLIENT_PLAY_SEND_COMPARE) {
-			
+		} else {
+			roomLoopThread.addRoomEvent(new RoleOperateEvent(roomId, req.getOptionType(), req.getOptionStr(), roomRoleInfo));
 		}
 	}
 

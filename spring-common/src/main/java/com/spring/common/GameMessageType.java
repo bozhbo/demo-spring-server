@@ -165,6 +165,16 @@ public class GameMessageType {
 	public static int GAME_CLIENT_PLAY_RECEIVE_GAME_END = 9;
 	
 	/**
+	 * 房间内游戏通用响应二级消息(房间初始化)
+	 */
+	public static int GAME_CLIENT_PLAY_RECEIVE_ROOM_INIT = 10;
+	
+	/**
+	 * 房间内游戏通用响应二级消息(玩家加入)
+	 */
+	public static int GAME_CLIENT_PLAY_RECEIVE_ROLE_JOIN = 12;
+	
+	/**
 	 * 房间内游戏通用响应二级消息(玩家准备)
 	 */
 	public static int GAME_CLIENT_PLAY_RECEIVE_ROLE_READY = 13;

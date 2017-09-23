@@ -460,7 +460,7 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 		for (RoomRoleInfo tempRoomRoleInfo : roleList) {
 			if (tempRoomRoleInfo.getRoleRoomState() == RoleRoomState.LOST || tempRoomRoleInfo == lastRoomRoleInfo) {
 				RoomMessageHead myRoomMessageHead = messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(),
-						RoomOperateJsonRes.instance().addIntValue(LogicValue.KEY_SUB_MSG, GameMessageType.GAME_CLIENT_PLAY_RECEIVE_LOOK_CARD).addIntValue(LogicValue.KEY_ROLE, tempRoomRoleInfo.getRoleId())
+						RoomOperateJsonRes.instance().addIntValue(LogicValue.KEY_SUB_MSG, GameMessageType.GAME_CLIENT_PLAY_RECEIVE_SHOW_CARD).addIntValue(LogicValue.KEY_ROLE, tempRoomRoleInfo.getRoleId())
 								.addStringValue(LogicValue.KEY_ROLE_CARD, tempRoomRoleInfo.getGoldFlowerInfo().getKey()).toString());
 				send2AllRoles(playingRoomInfo, myRoomMessageHead);
 			}

@@ -8,8 +8,8 @@ import com.snail.mina.protocol.info.impl.BaseRoomReq;
 
 public class CommonReq extends BaseRoomReq {
 	
-	private int optionType;
-	private String optionStr;
+	private int optionType;	// 普通请求二级消息
+	private String optionStr;// 普通请求附带参数
 
 	@Override
 	public void bytes2Req(ByteBuffer buffer, ByteOrder order) {

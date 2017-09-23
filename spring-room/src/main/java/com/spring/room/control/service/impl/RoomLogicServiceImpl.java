@@ -9,12 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.snail.mina.protocol.info.Message;
+import com.snail.mina.protocol.info.impl.RoomMessageHead;
 import com.spring.common.GameMessageType;
 import com.spring.logic.business.service.RoomBusinessCallBack;
 import com.spring.logic.business.service.RoomBusinessService;
 import com.spring.logic.message.request.room.RoomInitResp;
 import com.spring.logic.message.request.room.RoomJoinResp;
 import com.spring.logic.message.request.room.RoomLeaveResp;
+import com.spring.logic.message.request.room.RoomOperateJsonRes;
 import com.spring.logic.message.request.server.DeployRoleReq;
 import com.spring.logic.message.service.MessageService;
 import com.spring.logic.role.cache.RoleRoomCache;
@@ -91,13 +93,14 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 		}
 
 		// 发送房间当前数据
-		RoomInitResp roomInitResp = roomBusinessService.getRoomInitResp(playingRoomInfo);
-		Message initMessage = messageService.createMessage(roomRoleInfo.getRoleId(),
-				GameMessageType.ROOM_CLIENT_ROOM_INIT, playingRoomInfo.getRoomId(), "", roomInitResp);
-
-		messageService.sendGateMessage(roomRoleInfo.getGateId(), initMessage);
-
+		RoomMessageHead roomMessageHead = messageService.createMessageHead(roomRoleInfo.getRoleId(), 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(),
+				getRespRoomInfo(playingRoomInfo));
+		messageService.sendGateMessage(roomRoleInfo.getGateId(), roomMessageHead);
+		
 		// 发送玩家加入房间信息
+		roomMessageHead = messageService.createMessageHead(roomRoleInfo.getRoleId(), 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(),
+				getRespRoomInfo(playingRoomInfo));
+		messageService.sendGateMessage(roomRoleInfo.getGateId(), roomMessageHead);
 		RoomJoinResp roomJoinResp = roomBusinessService.getRoomJoinResp(roomRoleInfo);
 
 		List<RoomRoleInfo> list = playingRoomInfo.getList();
@@ -153,6 +156,7 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 		List<RoomRoleInfo> list = playingRoomInfo.getList();
 		Map<String, Object> roomMap = new HashMap<>();
 		
+		roomMap.put(LogicValue.KEY_SUB_MSG, GameMessageType.GAME_CLIENT_PLAY_RECEIVE_ROOM_INIT);
 		roomMap.put(LogicValue.KEY_ROOM_ID, playingRoomInfo.getRoomId());
 		roomMap.put(LogicValue.KEY_ROOM_GOLD, playingRoomInfo.getAmountGold());
 		roomMap.put(LogicValue.KEY_ROOM_UNIT_GOLD, playingRoomInfo.getCurGoldUnit());
@@ -177,6 +181,22 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 		roomMap.put(LogicValue.KEY_ROOM_ROLE, roleList);
 		
 		return LogicUtil.tojson(roomMap);
+	}
+	
+	public String getRespRoleInfo(RoomRoleInfo roomRoleInfo) {
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put(LogicValue.KEY_SUB_MSG, GameMessageType.GAME_CLIENT_PLAY_RECEIVE_ROLE_JOIN);
+		map.put(LogicValue.KEY_ROLE_GOLD, roomRoleInfo.getGold());
+		map.put(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId());
+		map.put(LogicValue.KEY_ROLE_NAME, roomRoleInfo.getRoleName());
+		map.put(LogicValue.KEY_ROLE_CARD_STATE, roomRoleInfo.getRoleCardState());
+		map.put(LogicValue.KEY_ROLE_PLAY_STATE, roomRoleInfo.getRoleRoomState());
+		map.put(LogicValue.KEY_ROLE_VIP, roomRoleInfo.getVipLevel());
+		map.put(LogicValue.KEY_ROLE_HEAD, roomRoleInfo.getHeader());
+		map.put(LogicValue.KEY_ROLE_ONLINE, roomRoleInfo.getOnline());
+		
+		return LogicUtil.tojson(map);
 	}
 	
 	public static void main(String[] args) {

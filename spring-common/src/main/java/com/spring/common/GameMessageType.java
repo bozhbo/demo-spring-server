@@ -28,6 +28,11 @@ public class GameMessageType {
 	 * 房间信息提交
 	 */
 	public static int ROOM_2_WORLD_ROOM_INFO = 0xFC10;
+	
+	/**
+	 * 每局结算
+	 */
+	public static int ROOM_2_WORLD_ROOM_SUMMARY = 0xFC12;
 
 	/**
 	 * 登录请求
@@ -48,6 +53,11 @@ public class GameMessageType {
 	 * 角色初始化响应
 	 */
 	public static int GAME_CLIENT_INIT_RECEIVE = 0xA006;
+	
+	/**
+	 * 角色断线
+	 */
+	public static int GAME_CLIENT_DISCONNECT_REQ = 0xA010;
 	
 	/**
 	 * 错误信息

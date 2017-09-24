@@ -12,6 +12,12 @@ public class CommonResp extends BaseRoomResp {
 	private String optionStr;
 	
 	@Override
+	public void bytes2Req(ByteBuffer buffer, ByteOrder order) {
+		this.optionType = getInt(buffer, order);
+		this.optionStr = getString(buffer, order);
+	}
+	
+	@Override
 	public void resp2Bytes(ByteBuffer buffer, ByteOrder order) {
 		setInt(buffer, order, optionType);
 		setString(buffer, order, optionStr);

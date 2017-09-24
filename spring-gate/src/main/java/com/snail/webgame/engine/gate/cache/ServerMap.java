@@ -1,6 +1,8 @@
 package com.snail.webgame.engine.gate.cache;
 
 import java.util.Hashtable;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.mina.common.IoSession;
 
@@ -24,6 +26,10 @@ public class ServerMap {
 
 	public static void removeSession(String serverName) {
 		map.remove(serverName);
+	}
+	
+	public static Set<Map.Entry<String, IoSession>> getAllServer() {
+		return map.entrySet();
 	}
 
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.snail.mina.protocol.info.Message;
 import com.snail.mina.protocol.info.impl.RoomMessageHead;
 import com.spring.common.GameMessageType;
+import com.spring.logic.message.request.server.DisconnectRoleReq;
 import com.spring.logic.message.request.world.login.LoginResp;
 import com.spring.logic.message.service.MessageService;
 import com.spring.logic.role.cache.RoleCache;
@@ -48,6 +49,25 @@ public class RoleLoginServiceImpl implements RoleLoginService {
 			this.messageService.sendGateMessage(gateId, message);
 		} else {
 			messageService.sendGateMessage(gateId, messageService.createErrorMessage(roleInfo.getRoleId(), errorCode, ""));
+		}
+	}
+	
+	@Override
+	public void roleLogout(int roleId) {
+		RoleInfo roleInfo = RoleCache.getRoleInfo(roleId);
+		
+		if (roleInfo == null) {
+			return;
+		}
+		
+		synchronized (roleInfo) {
+			if (roleInfo.getRoomId() > 0) {
+				DisconnectRoleReq req = new DisconnectRoleReq();
+				req.setRoomId(roleInfo.getRoomId());
+				req.setRoleId(req.getRoleId());
+				
+				
+			}
 		}
 	}
 

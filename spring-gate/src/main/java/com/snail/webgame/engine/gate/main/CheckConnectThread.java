@@ -71,9 +71,7 @@ public class CheckConnectThread extends Thread {
 	public void checkConnect(String serverName) {
 		IoSession session = ServerMap.getSession(serverName);
 		if (session == null || !session.isConnected()) {
-			if (serverName.equalsIgnoreCase(ServerName.GAME_SERVER_NAME)) {
-				GlobalServer.GAME_IS_REGISTER = false;
-			}
+			GlobalServer.GAME_IS_REGISTER = false;
 			
 			session = Connect.connectServer(serverName, handlerAdapter);
 			

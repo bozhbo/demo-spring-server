@@ -16,11 +16,19 @@ public interface MessageService {
 	
 	public Message createMessage(int roleId, int msgType, int sceneId, String userState, IRoomBody body);
 	
+	public Message createCommonMessage(RoomMessageHead head, int subMsg, String value);
+	
+	public Message createCommonMessage(int roleId, int msgType, int sceneId, String userState, int subMsg, String value);
+	
+	public Message createCommonByteMessage(int roleId, int msgType, int sceneId, String userState, int subMsg, byte[] value);
+	
 	public boolean sendGateMessage(int gateId, RoomMessageHead head);
 	
 	public boolean sendGateMessage(int gateId, Message message);
 	
 	public boolean sendGateMessage(int gateId, int msgType, IRoomBody body);
+	
+	public boolean sendGateMessage(int gateId, RoomMessageHead head, IRoomBody body);
 	
 	public boolean sendRoomMessage(int roomServerId, Message message);
 	

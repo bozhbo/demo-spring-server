@@ -15,16 +15,18 @@ import com.spring.world.io.process.server.room.RoomInfoProcessor;
 public class WorldIoControl {
 
 	public void init() {
+		// 服务器注册
 		RoomMessageConfig.addProcessor(new ActiveProcessor());
 		RoomMessageConfig.addProcessor(new RegisterProcessor(RegisterReq.class));
 		
+		// 玩家逻辑
 		RoomMessageConfig.addProcessor(GlobalBeanFactory.getBeanByName(CommonProcessor.class));
 		RoomMessageConfig.addProcessor(GlobalBeanFactory.getBeanByName(LoginProcessor.class));
 		
+		// 服务器业务交互
 		RoomMessageConfig.addProcessor(GlobalBeanFactory.getBeanByName(DeployRoleProcessor.class));
 		RoomMessageConfig.addProcessor(GlobalBeanFactory.getBeanByName(DeployRoomProcessor.class));
 		RoomMessageConfig.addProcessor(GlobalBeanFactory.getBeanByName(RemoveRoleProcessor.class));
-		
 		RoomMessageConfig.addProcessor(GlobalBeanFactory.getBeanByName(RoomInfoProcessor.class));
 		
 		RoomMessageConfig.initProcessor();

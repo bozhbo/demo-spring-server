@@ -60,6 +60,8 @@ public class Connect {
 				log.info("Connect " + connectConfig.getServerName() + " success!IP:" + connectConfig.getServerIP()
 						+ ",Port:" + connectConfig.getServerPort());
 			}
+			
+			session.setAttribute("ServerName", serverName);
 
 			return session;
 		} catch (Exception e) {

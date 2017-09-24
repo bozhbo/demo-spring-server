@@ -9,6 +9,8 @@ import com.snail.mina.protocol.info.Message;
 import com.snail.mina.protocol.info.impl.RoomMessageHead;
 import com.spring.common.GameMessageType;
 import com.spring.common.ServerName;
+import com.spring.logic.message.request.common.base.CommonByteResp;
+import com.spring.logic.message.request.common.base.CommonResp;
 import com.spring.logic.message.service.MessageService;
 import com.spring.logic.server.cache.GateServerCache;
 import com.spring.logic.server.cache.RoomServerCache;
@@ -74,6 +76,46 @@ public class MessageServiceImpl implements MessageService {
 		
 		return message;
 	}
+	
+	@Override
+	public Message createCommonMessage(RoomMessageHead head, int subMsg, String value) {
+		Message message = new Message();
+		
+		message.setiRoomHead(head);
+		message.setiRoomBody(new CommonResp(subMsg, value));
+		
+		return message;
+	}
+	
+	@Override
+	public Message createCommonMessage(int roleId, int msgType, int sceneId, String userState, int subMsg, String value) {
+		Message message = new Message();
+		RoomMessageHead head = new RoomMessageHead();
+		head.setRoleId(roleId);
+		head.setMsgType(msgType);
+		head.setSceneId(sceneId);
+		head.setUserState(userState);
+		
+		message.setiRoomHead(head);
+		message.setiRoomBody(new CommonResp(subMsg, value));
+		
+		return message;
+	}
+	
+	@Override
+	public Message createCommonByteMessage(int roleId, int msgType, int sceneId, String userState, int subMsg, byte[] value) {
+		Message message = new Message();
+		RoomMessageHead head = new RoomMessageHead();
+		head.setRoleId(roleId);
+		head.setMsgType(msgType);
+		head.setSceneId(sceneId);
+		head.setUserState(userState);
+		
+		message.setiRoomHead(head);
+		message.setiRoomBody(new CommonByteResp(subMsg, value));
+		
+		return message;
+	}
 
 	@Override
 	public boolean sendGateMessage(int gateId, RoomMessageHead head) {
@@ -100,6 +142,16 @@ public class MessageServiceImpl implements MessageService {
 		Message message = new Message();
 		RoomMessageHead head = new RoomMessageHead();
 		head.setMsgType(msgType);
+		
+		message.setiRoomHead(head);
+		message.setiRoomBody(body);
+		
+		return sendGateMessage(gateId, message);
+	}
+	
+	@Override
+	public boolean sendGateMessage(int gateId, RoomMessageHead head, IRoomBody body) {
+		Message message = new Message();
 		
 		message.setiRoomHead(head);
 		message.setiRoomBody(body);

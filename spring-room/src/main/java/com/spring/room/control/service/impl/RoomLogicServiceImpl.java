@@ -13,6 +13,7 @@ import com.snail.mina.protocol.info.impl.RoomMessageHead;
 import com.spring.common.GameMessageType;
 import com.spring.logic.business.service.RoomBusinessCallBack;
 import com.spring.logic.business.service.RoomBusinessService;
+import com.spring.logic.message.request.common.base.CommonResp;
 import com.spring.logic.message.request.room.RoomInitResp;
 import com.spring.logic.message.request.room.RoomJoinResp;
 import com.spring.logic.message.request.room.RoomLeaveResp;
@@ -36,12 +37,8 @@ import com.spring.room.control.service.RoomWorldService;
 public class RoomLogicServiceImpl implements RoomLogicService {
 
 	private RoomMessageService roomMessageService;
-
-	private ServerMessageService serverMessageService;
-
+	
 	private RoomBusinessCallBack roomBusinessCallBack;
-
-	private RoomBusinessService roomBusinessService;
 
 	private MessageService messageService;
 
@@ -93,25 +90,14 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 		}
 
 		// 发送房间当前数据
-		RoomMessageHead roomMessageHead = messageService.createMessageHead(roomRoleInfo.getRoleId(), 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(),
-				getRespRoomInfo(playingRoomInfo));
-		messageService.sendGateMessage(roomRoleInfo.getGateId(), roomMessageHead);
+		Message message = messageService.createCommonMessage(roomRoleInfo.getRoleId(), GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(), "", GameMessageType.GAME_CLIENT_PLAY_RECEIVE_ROOM_INIT, getRespRoomInfo(playingRoomInfo));
+		messageService.sendGateMessage(roomRoleInfo.getGateId(), message);
 		
 		// 发送玩家加入房间信息
-		roomMessageHead = messageService.createMessageHead(roomRoleInfo.getRoleId(), 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(),
-				getRespRoomInfo(playingRoomInfo));
-		messageService.sendGateMessage(roomRoleInfo.getGateId(), roomMessageHead);
-		RoomJoinResp roomJoinResp = roomBusinessService.getRoomJoinResp(roomRoleInfo);
+		roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(), ""), new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_ROLE_JOIN, getRespRoomInfo(playingRoomInfo)));
 
-		List<RoomRoleInfo> list = playingRoomInfo.getList();
-
-		for (RoomRoleInfo roomRoleInfo2 : list) {
-			Message joinMessage = messageService.createMessage(roomRoleInfo2.getRoleId(),
-					GameMessageType.GAME_CLIENT_ROOM_JOIN, playingRoomInfo.getRoomId(), "", roomJoinResp);
-			messageService.sendGateMessage(roomRoleInfo2.getGateId(), joinMessage);
-		}
-
-		list.add(roomRoleInfo);
+		// 加入房间
+		playingRoomInfo.getList().add(roomRoleInfo);
 		
 		// 业务回调
 		roomBusinessCallBack.roomRoleOnAdd(playingRoomInfo, roomRoleInfo);
@@ -156,7 +142,6 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 		List<RoomRoleInfo> list = playingRoomInfo.getList();
 		Map<String, Object> roomMap = new HashMap<>();
 		
-		roomMap.put(LogicValue.KEY_SUB_MSG, GameMessageType.GAME_CLIENT_PLAY_RECEIVE_ROOM_INIT);
 		roomMap.put(LogicValue.KEY_ROOM_ID, playingRoomInfo.getRoomId());
 		roomMap.put(LogicValue.KEY_ROOM_GOLD, playingRoomInfo.getAmountGold());
 		roomMap.put(LogicValue.KEY_ROOM_UNIT_GOLD, playingRoomInfo.getCurGoldUnit());
@@ -235,16 +220,6 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 	}
 
 	@Autowired
-	public void setServerMessageService(ServerMessageService serverMessageService) {
-		this.serverMessageService = serverMessageService;
-	}
-
-	@Autowired
-	public void setRoomBusinessService(RoomBusinessService roomBusinessService) {
-		this.roomBusinessService = roomBusinessService;
-	}
-
-	@Autowired
 	public void setMessageService(MessageService messageService) {
 		this.messageService = messageService;
 	}
@@ -258,7 +233,5 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 	public void setRoomBusinessCallBack(RoomBusinessCallBack roomBusinessCallBack) {
 		this.roomBusinessCallBack = roomBusinessCallBack;
 	}
-
-	
 
 }

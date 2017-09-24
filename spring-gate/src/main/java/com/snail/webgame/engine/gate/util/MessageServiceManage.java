@@ -4,6 +4,9 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.mina.common.ByteBuffer;
 import org.apache.mina.common.IoSession;
@@ -56,19 +59,15 @@ public class MessageServiceManage {
 	 */
 	private static final byte INDEX_MESSAGE_ID = 24;
 
-
-
 	/**
 	 * 处理结果
 	 */
 	private static final byte BODY_INDEX_FIELD_0 = 28;
 	/**
-	 * 字符串类型账号（short长度+str） 
-	 * A006整形
+	 * 字符串类型账号（short长度+str） A006整形
 	 */
-	private static final byte BODY_INDEX_FIELD_1 = 32;		
-	
-	
+	private static final byte BODY_INDEX_FIELD_1 = 32;
+
 	public ByteBuffer getNewMsgHeader(int MsgType, int roleId) {
 
 		ByteBuffer buffer = ByteBuffer.allocate(28, false);
@@ -79,14 +78,13 @@ public class MessageServiceManage {
 
 		buffer.putInt(roleId);// UserID0
 
-		buffer.putInt(WebGameConfig.getInstance().getLocalConfig()
-				.getServerId());// UserID1
+		buffer.putInt(WebGameConfig.getInstance().getLocalConfig().getServerId());// UserID1
 
 		buffer.putInt(0);// UserID2
 		buffer.putInt(0);// UserID3
 
 		buffer.putInt(MsgType);
-		buffer.putShort((short)0);
+		buffer.putShort((short) 0);
 
 		return buffer;
 	}
@@ -107,31 +105,31 @@ public class MessageServiceManage {
 
 		return new String(a, Charset.forName("UTF-8"));
 	}
+
 	/**
 	 * 获取验证串字段{@link Command.RECONNECT_REQ}
+	 * 
 	 * @param message
 	 */
-	public String getAcccode(byte[] message)
-	{
-		//验证串长度
+	public String getAcccode(byte[] message) {
+		// 验证串长度
 		byte acccodelen[] = new byte[2];
 		System.arraycopy(message, BODY_INDEX_FIELD_0, acccodelen, 0, 2);
 		int ul = Util.byteArrayToInt(acccodelen);
-		//验证串
+		// 验证串
 		byte acccode[] = new byte[ul];
 		System.arraycopy(message, BODY_INDEX_FIELD_0 + 2, acccode, 0, ul);
-		
+
 		return new String(acccode, Charset.forName("UTF-8"));
 	}
+
 	public void sendActiveServerMessage(IoSession session, int flag) {
 
 		int groupServerId = WebGameConfig.getInstance().getGameServerId();
-		int gateServerId = WebGameConfig.getInstance().getLocalConfig()
-				.getServerId();
+		int gateServerId = WebGameConfig.getInstance().getLocalConfig().getServerId();
 		ByteBuffer buffer = getNewMsgHeader(Command.GAME_SERVER_ACTIVE_REQ, 0);
 
-		buffer.put(Util.encodeStringB(ServerName.GATE_SERVER_NAME + "-"
-				+ gateServerId));
+		buffer.put(Util.encodeStringB(ServerName.GATE_SERVER_NAME + "-" + gateServerId));
 
 		buffer.putInt(flag);
 
@@ -163,36 +161,29 @@ public class MessageServiceManage {
 
 		int sceneId = getSceneId(message);
 
-		if(result == 1 && roleId > 0)
-		{
+		if (result == 1 && roleId > 0) {
 			if (userSess != null && userSess.isConnected()) {
 
 				userSess.setAttribute("identity", roleId);
 
-				//如果玩家正常游戏中直接杀掉进程或者崩端
-				//则需要在玩家再次登录成功后清除如下缓存
-				//1、DisconnectSessionMap 避免超时后会向其它服发送3号断开连接
-				//2、SequenceMap 删除崩端前的信息,重新登录重新验证
-				//3、IdentityMap 删除崩端前的信息,重新登录重新验证
-				synchronized(ContentValue.lock)
-				{
+				// 如果玩家正常游戏中直接杀掉进程或者崩端
+				// 则需要在玩家再次登录成功后清除如下缓存
+				// 1、DisconnectSessionMap 避免超时后会向其它服发送3号断开连接
+				// 2、SequenceMap 删除崩端前的信息,重新登录重新验证
+				// 3、IdentityMap 删除崩端前的信息,重新登录重新验证
+				synchronized (ContentValue.lock) {
 					Iterator<Integer> it = DisconnectSessionMap.getMap().keySet().iterator();
 					int mapSize = DisconnectSessionMap.getMap().size();
-					if(mapSize > 50)
-					{
-						if(log.isErrorEnabled())
-						{
-							log.error("[DisconnectSessionMap size]="+mapSize);
+					if (mapSize > 50) {
+						if (log.isErrorEnabled()) {
+							log.error("[DisconnectSessionMap size]=" + mapSize);
 						}
 					}
-					while(it.hasNext())
-					{
+					while (it.hasNext()) {
 						int seq = it.next();
-						if(roleId == DisconnectSessionMap.getMap().get(seq).getRoleId())
-						{
+						if (roleId == DisconnectSessionMap.getMap().get(seq).getRoleId()) {
 							it.remove();
-							if(seq != sequenceId)
-							{
+							if (seq != sequenceId) {
 								SequenceMap.removeSession(seq);
 							}
 							IdentityMap.removeSession(roleId);
@@ -200,54 +191,51 @@ public class MessageServiceManage {
 						}
 					}
 				}
-				
+
 				// 这个帐号被其他用户登录踢出那个用户下线
 				if (IdentityMap.isExistRole(roleId)) {
 					// （如果存在 说明游戏服务器上没有发送迫使下线的信息）
-					IoSession oldSession = IdentityMap.getSession(roleId);				
+					IoSession oldSession = IdentityMap.getSession(roleId);
 					if (oldSession != null && oldSession.isConnected()) {
 
 						if (oldSession.getAttribute("identity") != null) {
 							oldSession.removeAttribute("identity");
-							sendDisconnectMsg(oldSession,  "",roleId, Command.USER_DISCONNECT_REQ,ErrorCode.USER_LOGIN_ERROR_2,DisconnectPhase.DISCONNECT,true);
+							sendDisconnectMsg(oldSession, "", roleId, Command.USER_DISCONNECT_REQ, ErrorCode.USER_LOGIN_ERROR_2, DisconnectPhase.DISCONNECT, true);
 						}
-						if(oldSession.getAttribute("SequenceId") != null)
-						{
-							int oldSequenceId = (Integer)oldSession.getAttribute("SequenceId");
+						if (oldSession.getAttribute("SequenceId") != null) {
+							int oldSequenceId = (Integer) oldSession.getAttribute("SequenceId");
 							SequenceMap.removeSession(oldSequenceId);
 							oldSession.removeAttribute("SequenceId");
 						}
-						
+
 						log.warn("MessageServiceManage : close for replace account");
 						oldSession.close();
 					}
-					
+
 					// 替换掉这个session
 					IdentityMap.addSession(roleId, userSess);
 				} else {
 					IdentityMap.addSession(roleId, userSess);
 
 					setRoleId((byte[]) message, roleId);
-					//setSceneId((byte[]) message, sceneId);
-					//setGateServerId((byte[]) message, WebGameConfig.getInstance().getLocalConfig().getGateServerId());
+					// setSceneId((byte[]) message, sceneId);
+					// setGateServerId((byte[]) message,
+					// WebGameConfig.getInstance().getLocalConfig().getGateServerId());
 
-					
 					// 广播此用户登录信息
 					reportUserLogin(message);
 				}
-			} else{
+			} else {
 
 				// 用户已经登录成功但是断开,必须向游戏服务器发送注销请求
-				IoSession tradeSess = ServerMap
-						.getSession(ServerName.GAME_SERVER_NAME);
+				IoSession tradeSess = ServerMap.getSession(ServerName.GAME_SERVER_NAME);
 				if (tradeSess != null && tradeSess.isConnected()) {
-					sendDisconnectMsg(tradeSess,  "",roleId, Command.USER_DISCONNECT_REQ,1,DisconnectPhase.DISCONNECT,false);
+					sendDisconnectMsg(tradeSess, "", roleId, Command.USER_DISCONNECT_REQ, 1, DisconnectPhase.DISCONNECT, false);
 				}
 
-				IoSession sceneSession = ServerMap
-						.getSession(ServerName.GAME_SCENE_SERVER + "-" + sceneId);
+				IoSession sceneSession = ServerMap.getSession(ServerName.GAME_SCENE_SERVER + "-" + sceneId);
 				if (sceneSession != null && sceneSession.isConnected()) {
-					sendDisconnectMsg(sceneSession,  "",roleId, Command.USER_DISCONNECT_REQ,1,DisconnectPhase.DISCONNECT,false);
+					sendDisconnectMsg(sceneSession, "", roleId, Command.USER_DISCONNECT_REQ, 1, DisconnectPhase.DISCONNECT, false);
 				}
 			}
 		}
@@ -272,6 +260,7 @@ public class MessageServiceManage {
 		return b;
 
 	}
+
 	/**
 	 * 向其他服务器广播用户登录信息
 	 * 
@@ -283,36 +272,43 @@ public class MessageServiceManage {
 			chatSess.write(message);
 		}
 	}
+
 	/**
 	 * 通知其它服务器玩家断开
+	 * 
 	 * @param serverList
-	 * @param account 账号
+	 * @param account
+	 *            账号
 	 * @param roleId
-	 * @param disconnectPhase {@link DisconnectPhase}1-暂时断开 2-暂时断开后在规定时间内重连上 3-暂时断开后超过规定时间 4-直接断开
+	 * @param disconnectPhase
+	 *            {@link DisconnectPhase}1-暂时断开 2-暂时断开后在规定时间内重连上 3-暂时断开后超过规定时间
+	 *            4-直接断开
 	 */
-	public void reportUserDisconnect(List<String> serverList, String account,int roleId,DisconnectPhase disconnectPhase) 
-	{
-		for (String serverName : serverList) 
-		{
+	public void reportUserDisconnect(List<String> serverList, String account, int roleId, DisconnectPhase disconnectPhase) {
+		for (String serverName : serverList) {
 			IoSession serverSession = ServerMap.getSession(serverName);
-			if (serverSession != null && serverSession.isConnected()) 
-			{
-				sendDisconnectMsg(serverSession, account,roleId,Command.USER_DISCONNECT_REQ, 1, disconnectPhase, false);
+			if (serverSession != null && serverSession.isConnected()) {
+				sendDisconnectMsg(serverSession, account, roleId, Command.USER_DISCONNECT_REQ, 1, disconnectPhase, false);
 			}
 		}
 	}
 
 	/**
 	 * 向指定session发送连接断开消息
+	 * 
 	 * @param session(客户端连接、服务器连接)
-	 * @param account 账号
+	 * @param account
+	 *            账号
 	 * @param roleId
 	 * @param msgType
-	 * @param result 断开原因
-	 * @param disconnectPhase {@link DisconnectPhase} 1-暂时断开 2-暂时断开后在规定时间内重连上 3-暂时断开后超过规定时间 4-直接断开
+	 * @param result
+	 *            断开原因
+	 * @param disconnectPhase
+	 *            {@link DisconnectPhase} 1-暂时断开 2-暂时断开后在规定时间内重连上 3-暂时断开后超过规定时间
+	 *            4-直接断开
 	 * @param wait
 	 */
-	public void sendDisconnectMsg(IoSession session, String account,int roleId, int msgType,int result,DisconnectPhase disconnectPhase,boolean wait) {
+	public void sendDisconnectMsg(IoSession session, String account, int roleId, int msgType, int result, DisconnectPhase disconnectPhase, boolean wait) {
 		ByteBuffer buffer = getNewMsgHeader(msgType, roleId);
 
 		buffer.putInt(result);
@@ -325,22 +321,19 @@ public class MessageServiceManage {
 		buffer.flip();
 		byte[] b = new byte[buffer.limit()];
 		buffer.get(b);
-		if(wait)
-		{
-			//尽可能确保发送成功
+		if (wait) {
+			// 尽可能确保发送成功
 			long s = System.currentTimeMillis();
 			session.write(b).join(1000);
 			long e = System.currentTimeMillis();
-			if(log.isErrorEnabled())
-			{
-				log.error("[sendDisconnectMsg] time:"+(e-s)+",roleId:"+roleId+",msgType:"+msgType+",result:"+result);
+			if (log.isErrorEnabled()) {
+				log.error("[sendDisconnectMsg] time:" + (e - s) + ",roleId:" + roleId + ",msgType:" + msgType + ",result:" + result);
 			}
-		}
-		else
-		{
+		} else {
 			session.write(b);
 		}
 	}
+
 	/**
 	 * 设置接入服务器ID
 	 * 
@@ -355,7 +348,7 @@ public class MessageServiceManage {
 			b[INDEX_GATE_ID + 3] = m[3];
 		}
 	}
-	
+
 	public int getGateServerId(byte[] b) {
 		if (b.length >= HEAD_TOTAL_BYTES) {
 
@@ -532,13 +525,13 @@ public class MessageServiceManage {
 		}
 
 	}
-	
+
 	public String getUserStat(byte[] message) {
 		byte s[] = new byte[2];
 		System.arraycopy(message, BODY_INDEX_FIELD_0, s, 0, 2);
-		
+
 		short len = Util.byteArrayToShort(s);
-		
+
 		if (len == 0) {
 			return null;
 		} else {
@@ -552,6 +545,7 @@ public class MessageServiceManage {
 
 	/**
 	 * 获得消息处理结果字段值
+	 * 
 	 * @param message
 	 * @return
 	 */
@@ -559,15 +553,15 @@ public class MessageServiceManage {
 		byte c[] = new byte[4];
 		byte s[] = new byte[2];
 		System.arraycopy(message, BODY_INDEX_FIELD_0, s, 0, 2);
-		
+
 		short len = Util.byteArrayToShort(s);
-		
+
 		System.arraycopy(message, BODY_INDEX_FIELD_0 + 2 + len, c, 0, 4);
 		int result = Util.byteArrayToInt(c);
 
 		c = null;
 		s = null;
-		
+
 		return result;
 	}
 

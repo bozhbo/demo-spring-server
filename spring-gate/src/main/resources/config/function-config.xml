@@ -3,10 +3,6 @@
 	<!-- 对于游戏客户端发送的不同消息转发向不同服务器 -->
 	<message-transmit>
 		<message>
-			<serverName>SceneServer</serverName>
-		</message>
-
-		<message>
 			<serverName>GameServer</serverName>
 			<msgType>0xA001</msgType>
 			<msgType>0xA002</msgType>
@@ -35,11 +31,11 @@
 
 		<message>
 			<serverName>RoomServer</serverName>
-			<msgType>0xD006</msgType>
-			<msgType>0xD008</msgType>
-			<msgType>0xD010</msgType>
-			<msgType>0xD012</msgType>
-			<msgType>0xD014</msgType>
+			<msgType>0xA201</msgType>
+			<msgType>0xA203</msgType>
+			<msgType>0xA205</msgType>
+			<msgType>0xA207</msgType>
+			<msgType>0xA209</msgType>
 		</message>
 
 	</message-transmit>

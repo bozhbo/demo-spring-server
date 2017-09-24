@@ -5,8 +5,10 @@ import org.apache.mina.common.IoSession;
 
 import com.snail.client.main.control.ClientControl;
 import com.snail.client.main.net.msg.login.LoginResp;
+import com.snail.mina.protocol.config.RoomMessageConfig;
 import com.snail.mina.protocol.info.Message;
 import com.snail.mina.protocol.info.impl.RoomMessageHead;
+import com.snail.mina.protocol.processor.IProcessor;
 import com.spring.common.GameMessageType;
 import com.spring.logic.message.request.world.init.InitSceneResp;
 import com.spring.room.game.message.init.GameRoomInitResp;
@@ -38,6 +40,9 @@ public class GameClientHandler extends IoHandlerAdapter {
 		} else if (msgType == GameMessageType.GAME_CLIENT_WORLD_SCENE_INIT_RECEIVE) {
 			// 大厅初始化
 			ClientControl.roleService.back2SceneEnd((InitSceneResp)msg.getiRoomBody());
+		} else if (msgType == GameMessageType.GAME_CLIENT_PLAY_RECEIVE) {
+			IProcessor processor = RoomMessageConfig.processorMap.get(msgType);
+			processor.processor(msg);
 		}
 	}
 }

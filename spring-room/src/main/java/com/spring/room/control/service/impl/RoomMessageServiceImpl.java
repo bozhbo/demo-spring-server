@@ -1,32 +1,61 @@
 package com.spring.room.control.service.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import com.snail.mina.protocol.info.Message;
+import com.snail.mina.protocol.info.IRoomBody;
 import com.snail.mina.protocol.info.impl.RoomMessageHead;
-import com.spring.common.GameMessageType;
-import com.spring.logic.role.info.RoleInfo;
+import com.spring.logic.message.service.MessageService;
+import com.spring.logic.role.info.RoomRoleInfo;
+import com.spring.logic.room.info.PlayingRoomInfo;
 import com.spring.room.control.service.RoomMessageService;
-import com.spring.room.io.process.join.JoinRoomResp;
 
 @Service
 public class RoomMessageServiceImpl implements RoomMessageService {
+	
+	private MessageService messageService;
 
 	@Override
-	public Message createJoinRoomMsg(int roomId, int roleId, RoleInfo roleInfo) {
-		Message message = new Message();
-		RoomMessageHead head = new RoomMessageHead();
-		head.setRoleId(roleId);
-		head.setMsgType(GameMessageType.GAME_CLIENT_ROOM_JOIN);
-		
-		JoinRoomResp resp = new JoinRoomResp();
-		resp.setGold(roleInfo.getGold());
-		resp.setHeader(roleInfo.getHeader());
-		resp.setRoleId(roleInfo.getRoleId());
-		resp.setRoleName(roleInfo.getRoleName());
-		resp.setRoomId(roomId);
-		resp.setVipLevel(roleInfo.getVipLevel());
-		
-		return message;
+	public void send2AllRoles(PlayingRoomInfo playingRoomInfo, RoomMessageHead roomMessageHead, IRoomBody roomBody) {
+		List<RoomRoleInfo> roleList = playingRoomInfo.getList();
+
+		for (RoomRoleInfo roomRoleInfo : roleList) {
+			try {
+				RoomMessageHead sendRoomMessageHead = roomMessageHead.clone();
+				sendRoomMessageHead.setRoleId(roomRoleInfo.getRoleId());
+
+				messageService.sendGateMessage(roomRoleInfo.getGateId(), sendRoomMessageHead, roomBody);
+			} catch (CloneNotSupportedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
+
+	@Override
+	public void send2AllRolesExcept(PlayingRoomInfo playingRoomInfo, RoomRoleInfo exceptRoomRoleInfo,
+			RoomMessageHead roomMessageHead, IRoomBody roomBody) {
+		List<RoomRoleInfo> roleList = playingRoomInfo.getList();
+
+		for (RoomRoleInfo roomRoleInfo : roleList) {
+			if (roomRoleInfo == exceptRoomRoleInfo) {
+				continue;
+			}
+			
+			try {
+				RoomMessageHead sendRoomMessageHead = roomMessageHead.clone();
+				sendRoomMessageHead.setRoleId(roomRoleInfo.getRoleId());
+
+				messageService.sendGateMessage(roomRoleInfo.getGateId(), sendRoomMessageHead, roomBody);
+			} catch (CloneNotSupportedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void setMessageService(MessageService messageService) {
+		this.messageService = messageService;
+	}
+	
+	
 }

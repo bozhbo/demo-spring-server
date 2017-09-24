@@ -81,6 +81,10 @@ public abstract class AbstractRoomBody implements IRoomBody {
 		}
 	}
 	
+	protected void setBytes(ByteBuffer buffer, ByteOrder order, byte[] bs) {
+		buffer.order(order).put(bs);
+	}
+	
 	public void setMsgType(int msgType) {
 		this.msgtype = msgType;
 	}

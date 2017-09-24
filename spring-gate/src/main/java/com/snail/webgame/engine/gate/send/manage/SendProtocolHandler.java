@@ -44,7 +44,6 @@ public class SendProtocolHandler extends IoHandlerAdapter {
 	 }
 
 	 public void sessionClosed(IoSession session) throws Exception {
-		 
 		 InetSocketAddress address = (InetSocketAddress) session.getRemoteAddress();
 			String ip = address.getAddress().getHostAddress();
 			String port = String.valueOf(address.getPort());

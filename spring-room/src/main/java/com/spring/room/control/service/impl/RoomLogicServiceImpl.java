@@ -94,7 +94,7 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 		messageService.sendGateMessage(roomRoleInfo.getGateId(), message);
 		
 		// 发送玩家加入房间信息
-		roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(), ""), new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_ROLE_JOIN, getRespRoomInfo(playingRoomInfo)));
+		roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(), ""), new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_ROLE_JOIN, getRespRoleInfo(roomRoleInfo)));
 
 		// 加入房间
 		playingRoomInfo.getList().add(roomRoleInfo);
@@ -171,9 +171,8 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 	public String getRespRoleInfo(RoomRoleInfo roomRoleInfo) {
 		Map<String, Object> map = new HashMap<>();
 		
-		map.put(LogicValue.KEY_SUB_MSG, GameMessageType.GAME_CLIENT_PLAY_RECEIVE_ROLE_JOIN);
-		map.put(LogicValue.KEY_ROLE_GOLD, roomRoleInfo.getGold());
 		map.put(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId());
+		map.put(LogicValue.KEY_ROLE_GOLD, roomRoleInfo.getGold());
 		map.put(LogicValue.KEY_ROLE_NAME, roomRoleInfo.getRoleName());
 		map.put(LogicValue.KEY_ROLE_CARD_STATE, roomRoleInfo.getRoleCardState());
 		map.put(LogicValue.KEY_ROLE_PLAY_STATE, roomRoleInfo.getRoleRoomState());

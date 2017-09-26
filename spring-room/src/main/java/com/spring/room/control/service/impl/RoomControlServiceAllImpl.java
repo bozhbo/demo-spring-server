@@ -54,7 +54,7 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 				playingRoomInfo.setLastUpdateTime(curTime);
 			} else {
 				if (curTime - playingRoomInfo.getLastUpdateTime() > 60000) {
-					// TODO close room
+					// 房间暂不关闭
 				}
 			}
 

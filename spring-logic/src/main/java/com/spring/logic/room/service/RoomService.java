@@ -1,5 +1,6 @@
 package com.spring.logic.room.service;
 
+import java.util.List;
 import java.util.function.Function;
 
 import com.spring.logic.room.enums.RoomTypeEnum;
@@ -27,5 +28,7 @@ public interface RoomService {
 	public int getRoomServerId(int roomId);
 	
 	public void closeRoom(int roomId);
+	
+	public List<Integer> getAllRoles(int roomId);
 
 }

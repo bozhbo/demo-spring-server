@@ -10,7 +10,6 @@ import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -24,9 +23,9 @@ import com.snail.mina.protocol.info.RoomFilterInfo;
 import com.snail.mina.protocol.server.RoomServer;
 import com.spring.logic.bean.GlobalBeanFactory;
 import com.spring.world.config.WorldConfig;
-import com.spring.world.dao.RoleDao;
 import com.spring.world.io.WorldIoControl;
 import com.spring.world.io.process.handler.GameServerSessionHandler;
+import com.spring.world.room.service.RoomManageService;
 import com.spring.world.room.service.impl.TestDaoServiceImpl;
 import com.spring.world.state.WorldStateControl;
 import com.zaxxer.hikari.HikariDataSource;
@@ -82,7 +81,7 @@ public class WorldServerMain {
 	
 	@Bean("GameServerSessionHandler")
 	public GameServerSessionHandler getGameServerSessionHandler() {
-		GameServerSessionHandler gameServerSessionHandler = new GameServerSessionHandler();
+		GameServerSessionHandler gameServerSessionHandler = new GameServerSessionHandler(GlobalBeanFactory.getBeanByName("RoomManageService", RoomManageService.class));
 		return gameServerSessionHandler;
 	}
 	

@@ -1,5 +1,6 @@
 package com.spring.logic.room.service.impl;
 
+import java.util.List;
 import java.util.function.Function;
 
 import org.apache.commons.logging.Log;
@@ -88,8 +89,15 @@ public class RoomServiceImpl implements RoomService {
 		cacheService.closeRoom(roomId);
 	}
 	
+	@Override
+	public List<Integer> getAllRoles(int roomId) {
+		return cacheService.getAllRoles(roomId);
+	}
+	
 	@Autowired
 	public void setCacheService(CacheService cacheService) {
 		this.cacheService = cacheService;
 	}
+
+	
 }

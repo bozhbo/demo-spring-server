@@ -1,5 +1,6 @@
 package com.spring.logic.room.service.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -167,6 +168,26 @@ public class CacheServiceImpl implements CacheService {
 			}
 		}
 	}
+	
+	@Override
+	public List<Integer> getAllRoles(int roomId) {
+		List<Integer> list = null;
+		RoomInfo roomInfo = RoomCahce.getAllRoomMap().get(roomId);
+		
+		if (roomInfo == null) {
+			return list;
+		}
+		
+		Map<Integer, RoomInfo> map = RoomCahce.getPlayingRoomMap().get(roomInfo.getRoomType());
+		
+		synchronized (map) {
+			synchronized (roomInfo) {
+				list = new ArrayList<>(roomInfo.getList());
+			}
+		}
+		
+		return list;
+	}
 
 	@Override
 	public void printAllRooms() {
@@ -182,6 +203,5 @@ public class CacheServiceImpl implements CacheService {
 		
 		logger.info("end print room info");
 	}
-
 	
 }

@@ -16,6 +16,7 @@ import com.spring.logic.role.service.RoleRoomService;
 import com.spring.logic.room.enums.RoomTypeEnum;
 import com.spring.logic.room.info.RoomInfo;
 import com.spring.logic.room.service.RoomService;
+import com.spring.logic.server.cache.RoomManageServerCache;
 import com.spring.logic.server.service.RoomServerService;
 
 @Service
@@ -30,13 +31,14 @@ public class RoleRoomServiceImpl implements RoleRoomService {
 	private RoomServerService roomServerService;
 
 	@Override
-	public void autoJoin(RoleInfo roleInfo, RoomTypeEnum roomTypeEnum, DeployRoleReq deployRoleReq) {
+	public void joinRoom(RoleInfo roleInfo, RoomTypeEnum roomTypeEnum, DeployRoleReq deployRoleReq) {
 		if (roleInfo.getRoomId() > 0) {
-			// TODO deploy to room server
+			// 出现已经存在roomId(1.第一次发送后客户端继续点击 2.第一次发送未成功 3.room部署结果未返回)
+			deployRole(roleInfo.getRoomId(), roleInfo, deployRoleReq);
 			return;
 		}
 		
-		int roomId = this.roomService.joinRoom(roomTypeEnum, roleInfo.getRoleId());
+		int roomId = roomService.joinRoom(roomTypeEnum, roleInfo.getRoleId());
 		
 		if (roomId == 0) {
 			messageService.sendGateMessage(roleInfo.getGateId(), messageService.createErrorMessage(roleInfo.getRoleId(), 740002, ""));
@@ -44,32 +46,48 @@ public class RoleRoomServiceImpl implements RoleRoomService {
 			return;
 		}
 		
-		if (this.roomService.needDeployRoom(roomId)) {
+		if (roomService.needDeployRoom(roomId)) {
 			int roomServerId = this.roomServerService.GetFitRoomServerId();
 			
 			if (roomServerId == 0) {
-				messageService.sendGateMessage(roleInfo.getGateId(), messageService.createErrorMessage(roleInfo.getRoleId(), 740003, ""));
 				logger.warn("role join room failed for get room server error");
-			}
-			
-			this.roomService.deployRoomAndSet(roomId, roomServerId, (t) -> {roomServerService.deployRoomInfo(roomServerId, roomId, roomTypeEnum); return 1;});
-		}
-		
-		if (deployRoleReq != null) {
-			int roomServerId = roomService.getRoomServerId(roomId);
-			
-			if (roomServerId == 0) {
+				
+				roomService.leaveRoom(roomId, roleInfo.getRoleId());
 				messageService.sendGateMessage(roleInfo.getGateId(), messageService.createErrorMessage(roleInfo.getRoleId(), 740003, ""));
-				logger.warn("role join room failed for no room server");
+				
 				return;
 			}
 			
-			deployRoleReq.setRoomId(roomId);
-			
-			this.roomServerService.deployRoleInfo(roomServerId, deployRoleReq);
+			roomService.deployRoomAndSet(roomId, roomServerId, (t) -> {roomServerService.deployRoomInfo(roomServerId, roomId, roomTypeEnum); return 1;});
+		
+			// 加入管理缓存
+			RoomManageServerCache.addRoomId(roomServerId, roomId);
+		}
+		
+		if (deployRoleReq != null) {
+			if (!deployRole(roomId, roleInfo, deployRoleReq)) {
+				roomService.leaveRoom(roomId, roleInfo.getRoleId());
+			} else {
+				// 预先设置房间号
+				roleInfo.setRoomId(roomId);
+			}
 		} else {
 			messageService.sendGateMessage(roleInfo.getGateId(), messageService.createErrorMessage(roleInfo.getRoleId(), 740003, ""));
 		}
+	}
+	
+	private boolean deployRole(int roomId, RoleInfo roleInfo, DeployRoleReq deployRoleReq) {
+		int roomServerId = roomService.getRoomServerId(roomId);
+		
+		if (roomServerId == 0) {
+			messageService.sendGateMessage(roleInfo.getGateId(), messageService.createErrorMessage(roleInfo.getRoleId(), 740003, ""));
+			logger.warn("role join room failed for no room server");
+			return false;
+		}
+		
+		deployRoleReq.setRoomId(roomId);
+		
+		return roomServerService.deployRoleInfo(roomServerId, deployRoleReq);
 	}
 	
 	@Override
@@ -89,9 +107,9 @@ public class RoleRoomServiceImpl implements RoleRoomService {
 		int roomServerId = roomService.getRoomServerId(roleInfo.getRoomId());
 		
 		// 离开RoomServer
-		this.roomServerService.removeRoleInfo(roomServerId, removeRoleReq);
+		roomServerService.removeRoleInfo(roomServerId, removeRoleReq);
 		
-		// 等待离开房间回复消息后再离开WorldServer
+		roleInfo.setRoomId(0);
 	}
 	
 	@Override

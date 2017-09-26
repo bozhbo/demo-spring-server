@@ -10,11 +10,19 @@ import com.snail.mina.protocol.info.IRoomHead;
 import com.snail.mina.protocol.info.Message;
 import com.snail.mina.protocol.info.impl.RoomMessageHead;
 import com.spring.logic.server.cache.GateServerCache;
+import com.spring.logic.server.cache.RoomManageServerCache;
 import com.spring.logic.server.cache.RoomServerCache;
 import com.spring.logic.server.info.RoomServerInfo;
 import com.spring.logic.util.LogicUtil;
+import com.spring.world.room.service.RoomManageService;
 
 public class GameServerSessionHandler implements SessionStateHandler {
+	
+	private RoomManageService roomManageService;
+	
+	public GameServerSessionHandler(RoomManageService roomManageService) {
+		this.roomManageService = roomManageService;
+	}
 
 	@Override
 	public void sessionClose(IoSession session) {
@@ -27,6 +35,8 @@ public class GameServerSessionHandler implements SessionStateHandler {
 			if (roomServerInfo != null) {
 				roomServerInfo.setSession(null);
 			}
+			
+			roomManageService.roomServerClose(roomServerId);
 		}
 	}
 

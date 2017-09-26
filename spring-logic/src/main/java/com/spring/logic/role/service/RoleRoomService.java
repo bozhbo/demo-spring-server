@@ -17,7 +17,7 @@ public interface RoleRoomService {
 	 * 
 	 * @param roleInfo
 	 */
-	public void autoJoin(RoleInfo roleInfo, RoomTypeEnum roomTypeEnum, DeployRoleReq deployRoleReq);
+	public void joinRoom(RoleInfo roleInfo, RoomTypeEnum roomTypeEnum, DeployRoleReq deployRoleReq);
 	
 	/**
 	 * 离开房间

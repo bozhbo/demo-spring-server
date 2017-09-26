@@ -9,9 +9,12 @@ import com.snail.mina.protocol.info.Message;
 import com.snail.mina.protocol.info.impl.RoomMessageHead;
 import com.snail.mina.protocol.processor.IProcessor;
 import com.spring.common.GameMessageType;
+import com.spring.logic.message.request.server.DisconnectRoleReq;
 import com.spring.logic.message.request.world.connect.DisconnectReq;
 import com.spring.logic.message.request.world.login.LoginReq;
 import com.spring.logic.message.request.world.login.LoginResp;
+import com.spring.logic.role.cache.RoleCache;
+import com.spring.logic.role.info.RoleInfo;
 import com.spring.logic.role.service.RoleLoginService;
 import com.spring.world.io.process.role.login.LoginProcessor;
 
@@ -30,8 +33,16 @@ public class DisconnectProcessor implements IProcessor {
 	@Override
 	public void processor(Message message) {
 		DisconnectReq req = (DisconnectReq) message.getiRoomBody();
-
-		this.roleLoginService.roleLogout(req.getRoleId());
+		
+		RoleInfo roleInfo = RoleCache.getRoleInfo(req.getRoleId());
+		
+		if (roleInfo == null) {
+			return;
+		}
+		
+		synchronized (roleInfo) {
+			this.roleLoginService.roleLogout(roleInfo);
+		}
 
 		logger.info("role logout " + req.getAccount() + ", roleId = " + req.getRoleId());
 	}

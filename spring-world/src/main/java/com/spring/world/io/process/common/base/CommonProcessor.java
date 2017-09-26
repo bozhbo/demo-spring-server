@@ -44,7 +44,7 @@ public class CommonProcessor implements IProcessor {
 				RoomTypeEnum roomTypeEnum = this.roleLogicService.getRoomType(roleInfo);
 				DeployRoleReq deployRoleReq = this.roleLogicService.getDeployRoleMessage(roleInfo);
 				
-				this.roleRoomService.autoJoin(roleInfo, roomTypeEnum, deployRoleReq);
+				this.roleRoomService.joinRoom(roleInfo, roomTypeEnum, deployRoleReq);
 			} else if (req.getOptionType() == GameMessageType.GAME_CLIENT_WORLD_COMMON_SEND_LEAVE_ROOM) {
 				// 返回大厅
 				this.roleRoomService.leaveRoom(roleInfo);

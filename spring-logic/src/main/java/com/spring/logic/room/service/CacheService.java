@@ -1,5 +1,7 @@
 package com.spring.logic.room.service;
 
+import java.util.List;
+
 import com.spring.logic.room.enums.RoomTypeEnum;
 import com.spring.logic.room.info.RoomInfo;
 
@@ -20,7 +22,7 @@ public interface CacheService {
 	
 	public void closeRoom(int roomId);
 	
+	public List<Integer> getAllRoles(int roomId);
+	
 	public void printAllRooms();
-	
-	
 }

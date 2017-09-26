@@ -53,22 +53,8 @@ public class RoleLoginServiceImpl implements RoleLoginService {
 	}
 	
 	@Override
-	public void roleLogout(int roleId) {
-		RoleInfo roleInfo = RoleCache.getRoleInfo(roleId);
+	public void roleLogout(RoleInfo roleInfo) {
 		
-		if (roleInfo == null) {
-			return;
-		}
-		
-		synchronized (roleInfo) {
-			if (roleInfo.getRoomId() > 0) {
-				DisconnectRoleReq req = new DisconnectRoleReq();
-				req.setRoomId(roleInfo.getRoomId());
-				req.setRoleId(req.getRoleId());
-				
-				
-			}
-		}
 	}
 
 	@Autowired

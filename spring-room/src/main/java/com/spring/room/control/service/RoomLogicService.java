@@ -17,4 +17,6 @@ public interface RoomLogicService {
 	
 	public String getRespRoomInfo(PlayingRoomInfo playingRoomInfo);
 	
+	public void sendRoomSyncMessage(PlayingRoomInfo playingRoomInfo, RoomRoleInfo roomRoleInfo);
+	
 }

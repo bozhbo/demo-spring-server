@@ -84,14 +84,21 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 
 	@Override
 	public void addRole(PlayingRoomInfo playingRoomInfo, RoomRoleInfo roomRoleInfo) {
+		for (RoomRoleInfo roomRoleInfo2 : playingRoomInfo.getList()) {
+			if (roomRoleInfo2.getRoleId() == roomRoleInfo.getRoleId()) {
+				// 已经加入过
+				sendRoomSyncMessage(playingRoomInfo, roomRoleInfo);
+				return;
+			}
+		}
+		
 		if (playingRoomInfo.getList().size() >= 5) {
 			roomWorldService.deployRoleInfoFailed(playingRoomInfo.getRoomId(), roomRoleInfo.getRoleId());
 			return;
 		}
 
 		// 发送房间当前数据
-		Message message = messageService.createCommonMessage(roomRoleInfo.getRoleId(), GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(), "", GameMessageType.GAME_CLIENT_PLAY_RECEIVE_ROOM_INIT, getRespRoomInfo(playingRoomInfo));
-		messageService.sendGateMessage(roomRoleInfo.getGateId(), message);
+		sendRoomSyncMessage(playingRoomInfo, roomRoleInfo);
 		
 		// 发送玩家加入房间信息
 		roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(), ""), new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_ROLE_JOIN, getRespRoleInfo(roomRoleInfo)));
@@ -166,6 +173,13 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 		roomMap.put(LogicValue.KEY_ROOM_ROLE, roleList);
 		
 		return LogicUtil.tojson(roomMap);
+	}
+	
+	@Override
+	public void sendRoomSyncMessage(PlayingRoomInfo playingRoomInfo, RoomRoleInfo roomRoleInfo) {
+		// 发送房间当前数据
+		Message message = messageService.createCommonMessage(roomRoleInfo.getRoleId(), GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(), "", GameMessageType.GAME_CLIENT_PLAY_RECEIVE_ROOM_INIT, getRespRoomInfo(playingRoomInfo));
+		messageService.sendGateMessage(roomRoleInfo.getGateId(), message);
 	}
 	
 	public String getRespRoleInfo(RoomRoleInfo roomRoleInfo) {

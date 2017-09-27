@@ -103,7 +103,22 @@ public class RoomLoopThread extends Thread {
 							if (RoleRoomCache.addRoomRoleInfo(roomRoleInfo)) {
 								roomLogicService.addRole(playingRoomInfo, roomRoleInfo);
 							} else {
-								logger.error("room add failed for room exist");
+								roomRoleInfo = RoleRoomCache.getRoomRoleInfo(roomRoleInfo.getRoleId());
+								
+								if (roomRoleInfo.getRoomId() == playingRoomInfo.getRoomId()) {
+									// 已经加入过此房间，刷新房间最新信息
+									roomLogicService.sendRoomSyncMessage(playingRoomInfo, roomRoleInfo);
+								} else {
+									// 当前房间不是想要加入的房间,退出房间
+									PlayingRoomInfo roleCurPlayingRoomInfo = map.get(roomRoleInfo.getRoomId());
+									
+									if (roleCurPlayingRoomInfo != null) {
+										roomLogicService.removeRole(roleCurPlayingRoomInfo, roomRoleInfo.getRoleId());
+									} else {
+										roomWorldService.deployRoleInfoFailed(((DeployRoleInfoEvent)roomEvent).getReq().getRoomId(), ((DeployRoleInfoEvent)roomEvent).getReq().getRoleId());
+										logger.error("room add failed for room exist");
+									}
+								}
 							}
 						} else {
 							roomWorldService.deployRoleInfoFailed(((DeployRoleInfoEvent)roomEvent).getReq().getRoomId(), ((DeployRoleInfoEvent)roomEvent).getReq().getRoleId());

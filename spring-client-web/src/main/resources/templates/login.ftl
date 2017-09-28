@@ -8,6 +8,13 @@
 <script src="js/jquery-2.2.3.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 
+<!-- dwr JS include -->
+<script type='text/javascript' src='dwr/engine.js'></script>
+<script type='text/javascript' src='dwr/util.js'></script>
+<script type='text/javascript' src='dwr/interface/Login.js'></script>
+
+<script src="js/login.js"></script>
+
 </head>
 <body>
 	<nav class="navbar navbar-default navbar-static-top">
@@ -35,12 +42,13 @@
 	<div id="mainPage" class="container">
 		<div id="accessInfo">
 			<div class="panel panel-info">
-				<form id="loginForm" action="login" method="post">
-					<input id="account" name="account" type="text" class="form-control" placeholder="账号" aria-describedby="basic-addon1"/><br/>
-					<input id="account" name="account" type="password" class="form-control" placeholder="密码" aria-describedby="basic-addon1"/><br/>
-			    	
+			  <div class="panel-heading"><p>登录信息</p>
+			  </div>
+			  <div id="accessInfoTable" class="panel-body">
+			  		<input id="account" name="account" type="text" class="form-control" placeholder="账号" aria-describedby="basic-addon1"/><br/>
+					<input id="account" name="account" type="text" class="form-control" placeholder="密码" aria-describedby="basic-addon1"/><br/>
 			    	<a class="btn btn-primary" onclick="login()">登录</a>
-			    </form>
+			  </div>
 			</div>
 		</div>
 		

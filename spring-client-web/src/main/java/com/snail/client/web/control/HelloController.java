@@ -1,19 +1,28 @@
 package com.snail.client.web.control;
 
+import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
+import javax.servlet.http.HttpServletRequest;
 
-@RestController
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
 public class HelloController {
 	
+	@RequestMapping("/login")
+	public String login(Model model, HttpServletRequest request) {
+		return "login";
+	}
+	
 	@RequestMapping("/hello")
-	public ModelAndView hello(Map<String, Object> model) {
-		model.put("name", "[Angel -- 守护天使]");
+	public String hello(Model model, HttpServletRequest request) {
+		Map<String, String> map = new HashMap<>();
+		map.put("name", "bob");
 		
-		ModelAndView mv = new ModelAndView("hello_main");
-		return mv;
+		model.addAttribute("person", map);
+		return "hello_main";
 	}
 }

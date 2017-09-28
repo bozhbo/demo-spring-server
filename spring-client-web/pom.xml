@@ -24,7 +24,14 @@
 			<artifactId>spring-boot-starter-freemarker</artifactId>
 		</dependency>
 
-<!-- 
+		<!-- DWR -->
+		<dependency>
+			<groupId>org.directwebremoting</groupId>
+			<artifactId>dwr</artifactId>
+			<version>3.0.1-RELEASE</version>
+		</dependency>
+		<!-- DWR -->
+
 		<dependency>
 			<groupId>com.spring.mina</groupId>
 			<artifactId>spring-mina</artifactId>
@@ -47,7 +54,7 @@
 			<artifactId>spring-room-logic</artifactId>
 			<version>0.0.1</version>
 		</dependency>
- -->
+
 	</dependencies>
 
 	<build>
@@ -68,6 +75,8 @@
 					</archive>
 					<excludes>
 						<exclude>config/*</exclude>
+						<exclude>static/**</exclude>
+						<exclude>templates/*</exclude>
 						<exclude>*</exclude>
 					</excludes>
 				</configuration>

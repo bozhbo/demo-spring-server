@@ -1,0 +1,13 @@
+<!DOCTYPE dwr PUBLIC
+    "-//GetAhead Limited//DTD Direct Web Remoting 3.0//EN"
+    "http://getahead.org/dwr/dwr30.dtd">
+
+<dwr>
+	<allow>
+		<create creator="new" javascript="Login">
+			<param name="class" value="com.snail.client.web.dwr.LoginDwr" />
+		</create>
+
+		<convert converter="bean" match="com.snail.client.web.dwr.bean.*" />
+	</allow>
+</dwr>

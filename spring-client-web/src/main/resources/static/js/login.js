@@ -1,6 +1,10 @@
 
 function login() {
-	Login.login(handlerLogin);
+	var account = $("#account").val();
+	var password = $("#pass").val();
+	
+	$("#loginForm").submit();
+	
 }
 
 function handlerLogin(result) {

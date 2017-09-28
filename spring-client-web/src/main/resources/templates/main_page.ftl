@@ -13,10 +13,14 @@
 <script type='text/javascript' src='dwr/util.js'></script>
 <script type='text/javascript' src='dwr/interface/Login.js'></script>
 
-<script src="js/login.js"></script>
+<!-- webSocket-->
+<script src="js/sockjs.min.js"></script>
+<script src="js/stomp.js"></script>
+
+<script src="js/mainPage.js"></script>
 
 </head>
-<body>
+<body onload="init()">
 	<nav class="navbar navbar-default navbar-static-top">
 		<div class="container">
 			<div class="navbar-header">
@@ -42,13 +46,11 @@
 	<div id="mainPage" class="container">
 		<div id="accessInfo">
 			<div class="panel panel-info">
-			  <div class="panel-heading"><p>登录信息</p>
+			  <div class="panel-heading"><p>角色信息:${role.name}</p>
 			  </div>
 			  <div id="accessInfoTable" class="panel-body">
-			  	<form id="loginForm" name="loginForm" method="post" action="login">
-			  		<input id="account" name="account" type="text" class="form-control" placeholder="账号" aria-describedby="basic-addon1"/><br/>
-					<input id="pass" name="pass" type="text" class="form-control" placeholder="密码" aria-describedby="basic-addon1"/><br/>
-			    	<a class="btn btn-primary" onclick="login()">登录</a>
+			  	<form id="backForm" name="backForm" method="post" action="init">
+			    	<a class="btn btn-primary" onclick="backLogin()">返回登录</a>
 			    </form>
 			  </div>
 			</div>

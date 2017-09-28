@@ -1,16 +1,14 @@
 package com.snail.client.web.main;
 
-import java.util.concurrent.TimeUnit;
-
-import org.directwebremoting.impl.StartupUtil;
 import org.directwebremoting.servlet.DwrServlet;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.snail.client.web.control.ClientControl;
 
@@ -18,6 +16,7 @@ import com.snail.client.web.control.ClientControl;
 
 @Configuration
 @EnableAutoConfiguration
+@EnableAsync
 @ComponentScan("com.snail")
 public class ClientMain {
 	public static void main(String[] args) {

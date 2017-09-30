@@ -1,12 +1,12 @@
 package com.snail.client.web.process.room.init;
 
 import com.snail.client.web.control.ClientControl;
-import com.snail.client.web.msg.common.CommonResp;
 import com.snail.mina.protocol.info.IRoomBody;
 import com.snail.mina.protocol.info.Message;
 import com.snail.mina.protocol.info.impl.RoomMessageHead;
 import com.snail.mina.protocol.processor.IProcessor;
 import com.spring.common.GameMessageType;
+import com.spring.logic.message.request.common.base.CommonResp;
 
 public class RoomCommonProcessor implements IProcessor {
 

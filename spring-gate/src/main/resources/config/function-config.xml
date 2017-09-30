@@ -5,17 +5,25 @@
 		<message>
 			<serverName>GameServer</serverName>
 			<msgType>0xA001</msgType>
-			<msgType>0xA002</msgType>
 			<msgType>0xA003</msgType>
-			<msgType>0xA004</msgType>
 			<msgType>0xA005</msgType>
-			<msgType>0xA006</msgType>
 			<msgType>0xA007</msgType>
-			<msgType>0xA008</msgType>
 			<msgType>0xA009</msgType>
-			<msgType>0xA010</msgType>
 			<msgType>0xA011</msgType>
-			<msgType>0xA012</msgType>
+			<msgType>0xA013</msgType>
+			<msgType>0xA015</msgType>
+			<msgType>0xA017</msgType>
+			<msgType>0xA019</msgType>
+			<msgType>0xA021</msgType>
+			<msgType>0xA023</msgType>
+			<msgType>0xA025</msgType>
+			<msgType>0xA027</msgType>
+			<msgType>0xA029</msgType>
+			<msgType>0xA031</msgType>
+			<msgType>0xA033</msgType>
+			<msgType>0xA035</msgType>
+			<msgType>0xA037</msgType>
+			<msgType>0xA039</msgType>
 			
 			<msgType>0xA101</msgType>
 			<msgType>0xA103</msgType>

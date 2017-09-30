@@ -45,7 +45,7 @@ public class RobotThread extends Thread {
 				state = 1;
 				
 				for (int i = 0; i < roles; i++) {
-					if (ClientControl.netService.isConnected(serverName + (i + 1))) {
+					if (!ClientControl.netService.isConnected(serverName + (i + 1))) {
 						state = 0;
 					}
 				}

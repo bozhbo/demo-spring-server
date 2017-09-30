@@ -5,19 +5,18 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.snail.client.web.msg.common.CommonResp;
 import com.snail.client.web.robot.RobotRoleInfo;
 import com.snail.mina.protocol.client.RoomClient;
 import com.snail.mina.protocol.info.Message;
 import com.snail.mina.protocol.info.impl.RoomMessageHead;
 import com.spring.common.GameMessageType;
+import com.spring.logic.message.request.common.base.CommonResp;
 import com.spring.logic.message.request.world.init.InitResp;
 import com.spring.logic.message.request.world.init.InitSceneResp;
 import com.spring.logic.message.request.world.login.LoginReq;
 import com.spring.logic.message.request.world.login.LoginResp;
 import com.spring.logic.util.LogicUtil;
 import com.spring.logic.util.LogicValue;
-import com.spring.room.game.message.init.GameRoomRoleInfoRes;
 
 public class RoleService {
 	

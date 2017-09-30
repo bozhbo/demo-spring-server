@@ -24,7 +24,7 @@ import com.spring.common.ServerName;
  */
 public class CheckConnectThread extends Thread {
 	private MessageServiceManage messagemgt = new MessageServiceManage();
-	private static final Logger log = LoggerFactory.getLogger("logs");
+	private static Logger logger = LoggerFactory.getLogger("logs");
 	private IoHandlerAdapter handlerAdapter;
 	private IServerState serverState;
 
@@ -55,13 +55,13 @@ public class CheckConnectThread extends Thread {
 				try {
 					Thread.sleep(10000);
 				} catch (InterruptedException e) {
-					log.error("", e);
+					logger.error("", e);
 				}
 			} else {
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-					log.error("", e);
+					logger.error("", e);
 				}
 			}
 

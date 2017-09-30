@@ -27,6 +27,17 @@ public class LoginReq extends BaseRoomReq {
 		this.packageName = getString(buffer, order);
 
 	}
+	
+	@Override
+	public void resp2Bytes(ByteBuffer buffer, ByteOrder order) {
+		setInt(buffer, order, IP);
+		setString(buffer, order, account);
+		setString(buffer, order, md5Pass);
+		setString(buffer, order, validate);
+		setInt(buffer, order, clientType);
+		setString(buffer, order, mac);
+		setString(buffer, order, packageName);
+	}
 
 	public int getIP() {
 		return IP;

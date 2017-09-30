@@ -1,14 +1,26 @@
 package com.snail.webgame.engine.gate.main;
 
+import org.springframework.boot.Banner.Mode;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.annotation.Configuration;
+
 import com.snail.webgame.engine.gate.receive.manage.ConnectProtocolHandler;
 import com.snail.webgame.engine.gate.receive.manage.Listener;
 import com.snail.webgame.engine.gate.send.manage.SendProtocolHandler;
 import com.snail.webgame.engine.gate.thread.CloseSessionThread;
 import com.snail.webgame.engine.gate.util.MessageServiceManage;
 
+@Configuration
 public class ServerMain {
 
 	public static void main(String args[]) {
+		SpringApplication springApplication = new SpringApplication(ServerMain.class);
+
+		springApplication.setBannerMode(Mode.LOG);
+		springApplication.setLogStartupInfo(true);
+		
+		springApplication.run(args);
+		
 		MessageServiceManage msgmgt = new MessageServiceManage();
 		
 		// TODO License is ignore

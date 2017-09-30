@@ -1,10 +1,10 @@
 package com.snail.client.web.process.login;
 
-import com.snail.client.web.msg.login.LoginResp;
 import com.snail.mina.protocol.info.IRoomBody;
 import com.snail.mina.protocol.info.Message;
 import com.snail.mina.protocol.processor.IProcessor;
 import com.spring.common.GameMessageType;
+import com.spring.logic.message.request.world.login.LoginResp;
 
 public class LoginProcessor implements IProcessor {
 

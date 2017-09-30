@@ -8,9 +8,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.snail.client.web.control.ClientControl;
+import com.snail.client.web.robot.GFRobot;
 import com.spring.logic.util.LogicUtil;
 
 //import com.spring.logic.bean.GlobalBeanFactory;
@@ -26,6 +26,9 @@ public class ClientMain {
 		LogicUtil.initJson();
 		
 		ClientControl.init();
+		
+		GFRobot robot = new GFRobot();
+		robot.start();
 	}
 	
 	@Bean  

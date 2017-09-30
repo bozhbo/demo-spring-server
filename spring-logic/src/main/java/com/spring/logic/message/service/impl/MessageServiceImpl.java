@@ -138,9 +138,10 @@ public class MessageServiceImpl implements MessageService {
 	}
 	
 	@Override
-	public boolean sendGateMessage(int gateId, int msgType, IRoomBody body) {
+	public boolean sendGateMessage(int gateId, int roleId, int msgType, IRoomBody body) {
 		Message message = new Message();
 		RoomMessageHead head = new RoomMessageHead();
+		head.setRoleId(roleId);
 		head.setMsgType(msgType);
 		
 		message.setiRoomHead(head);

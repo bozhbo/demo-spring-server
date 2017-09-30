@@ -40,6 +40,7 @@ public class ClientThread implements Runnable {
 	private Logger logger = LoggerFactory.getLogger("room");
 
 	private volatile boolean cancel = false;
+	private volatile boolean isConnected = false;
 	private String serverIp;
 	private String serverInnerIp;
 	private int serverPort;
@@ -107,6 +108,8 @@ public class ClientThread implements Runnable {
 				session = RoomMessageConfig.serverMap.get(this.remoteServerName);
 
 				if (session != null && session.isConnected()) {
+					isConnected = true;
+					
 					if (this.heartbeat && (System.currentTimeMillis() - begTime) > 5000) {
 						// 心跳维持
 						Message message = new Message();
@@ -119,6 +122,8 @@ public class ClientThread implements Runnable {
 						begTime = System.currentTimeMillis();
 					}
 				} else {
+					isConnected = false;
+					
 					session = connect();
 
 					if (session != null && session.isConnected()) {
@@ -264,5 +269,9 @@ public class ClientThread implements Runnable {
 
 	public int getConnectTimes() {
 		return connectTimes;
+	}
+	
+	public boolean isConnected() {
+		return isConnected;
 	}
 }

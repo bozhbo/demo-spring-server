@@ -47,12 +47,12 @@ public class GameMessageType {
 	/**
 	 * 角色初始化请求
 	 */
-	public static int GAME_CLIENT_INIT_SEND = 0xA005;
+	public static int GAME_CLIENT_INIT_SEND = 0xA025;
 	
 	/**
 	 * 角色初始化响应
 	 */
-	public static int GAME_CLIENT_INIT_RECEIVE = 0xA006;
+	public static int GAME_CLIENT_INIT_RECEIVE = 0xA026;
 	
 	/**
 	 * 角色断线

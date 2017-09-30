@@ -1,10 +1,10 @@
 package com.snail.client.web.process.init;
 
-import com.snail.client.web.msg.login.LoginResp;
 import com.snail.mina.protocol.info.IRoomBody;
 import com.snail.mina.protocol.info.Message;
 import com.snail.mina.protocol.processor.IProcessor;
 import com.spring.common.GameMessageType;
+import com.spring.logic.message.request.world.init.InitResp;
 
 public class InitRoleProcessor implements IProcessor {
 
@@ -16,13 +16,12 @@ public class InitRoleProcessor implements IProcessor {
 
 	@Override
 	public Class<? extends IRoomBody> getRoomBodyClass() {
-		// TODO Auto-generated method stub
-		return LoginResp.class;
+		return InitResp.class;
 	}
 
 	@Override
 	public int getMsgType() {
-		return GameMessageType.GAME_CLIENT_LOGIN_RECEIVE;
+		return GameMessageType.GAME_CLIENT_INIT_RECEIVE;
 	}
 
 }

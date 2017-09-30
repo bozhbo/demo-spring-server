@@ -31,8 +31,6 @@ public class LoginProcessor implements IProcessor {
 				req.getValidate(), head, resp, (r) -> {
 					return 1;
 				});
-
-		logger.info("role login " + req.getAccount());
 	}
 
 	@Override

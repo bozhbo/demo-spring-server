@@ -2,22 +2,26 @@ package com.spring.logic.role.service.impl;
 
 import java.util.function.Function;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.snail.mina.protocol.info.Message;
 import com.snail.mina.protocol.info.impl.RoomMessageHead;
 import com.spring.common.GameMessageType;
-import com.spring.logic.message.request.server.DisconnectRoleReq;
 import com.spring.logic.message.request.world.init.InitResp;
 import com.spring.logic.message.request.world.login.LoginResp;
 import com.spring.logic.message.service.MessageService;
 import com.spring.logic.role.cache.RoleCache;
 import com.spring.logic.role.info.RoleInfo;
 import com.spring.logic.role.service.RoleLoginService;
+import com.spring.logic.util.LogicUtil;
 
 @Service
 public class RoleLoginServiceImpl implements RoleLoginService {
+	
+	private static final Log logger = LogFactory.getLog(RoleLoginServiceImpl.class);
 	
 	private MessageService messageService;
 
@@ -28,15 +32,15 @@ public class RoleLoginServiceImpl implements RoleLoginService {
 		if (roleInfo == null) {
 			// TODO load from DB
 			roleInfo = new RoleInfo();
-			roleInfo.setRoleId(account.hashCode());
+			roleInfo.setRoleId(LogicUtil.getSequenceId());
 			RoleCache.addRoleInfo(roleInfo);
 		}
 		
 		roleInfo.setGold(50000000);
 		roleInfo.setGateId(gateId);
 		
-		head.setRoleId(account.hashCode());
 		head.setMsgType(GameMessageType.GAME_CLIENT_LOGIN_RECEIVE);
+		head.setRoleId(roleInfo.getRoleId());
 		
 		resp.setResult(1);
 		resp.setAccount(account);
@@ -52,6 +56,8 @@ public class RoleLoginServiceImpl implements RoleLoginService {
 		} else {
 			messageService.sendGateMessage(gateId, messageService.createErrorMessage(roleInfo.getRoleId(), errorCode, ""));
 		}
+		
+		logger.info("role login end " + head.getRoleId());
 	}
 	
 	@Override
@@ -69,7 +75,7 @@ public class RoleLoginServiceImpl implements RoleLoginService {
 		resp.setRoomId(roleInfo.getRoomId());
 		resp.setVipLevel(roleInfo.getVipLevel());
 		
-		messageService.sendGateMessage(roleInfo.getGateId(), GameMessageType.GAME_CLIENT_INIT_RECEIVE, resp);
+		messageService.sendGateMessage(roleInfo.getGateId(), roleInfo.getRoleId(), GameMessageType.GAME_CLIENT_INIT_RECEIVE, resp);
 	}
 
 	@Autowired

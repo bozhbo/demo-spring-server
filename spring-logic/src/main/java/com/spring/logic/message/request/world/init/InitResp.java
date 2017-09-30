@@ -14,6 +14,16 @@ public class InitResp extends BaseRoomResp {
 	private int vipLevel;
 	private String head;
 	private int gold;
+	
+	@Override
+	public void bytes2Req(ByteBuffer buffer, ByteOrder order) {
+		this.roleId = getInt(buffer, order);
+		this.roomId = getInt(buffer, order);
+		this.roleName = getString(buffer, order);
+		this.vipLevel = getInt(buffer, order);
+		this.head = getString(buffer, order);
+		this.gold = getInt(buffer, order);
+	}
 
 	@Override
 	public void resp2Bytes(ByteBuffer buffer, ByteOrder order) {
@@ -26,16 +36,6 @@ public class InitResp extends BaseRoomResp {
 		
 	}
 	
-	@Override
-	public void bytes2Req(ByteBuffer buffer, ByteOrder order) {
-		this.roleId = getInt(buffer, order);
-		this.roomId = getInt(buffer, order);
-		this.roleName = getString(buffer, order);
-		this.vipLevel = getInt(buffer, order);
-		this.head = getString(buffer, order);
-		this.gold = getInt(buffer, order);
-	}
-
 	public int getRoleId() {
 		return roleId;
 	}

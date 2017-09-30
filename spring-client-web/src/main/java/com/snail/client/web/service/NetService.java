@@ -8,10 +8,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.snail.client.web.handle.GameClientHandler;
-import com.snail.client.web.process.init.InitSceneProcessor;
+import com.snail.client.web.process.init.InitRoleProcessor;
 import com.snail.client.web.process.login.LoginProcessor;
 import com.snail.client.web.process.room.init.RoomCommonProcessor;
-import com.snail.client.web.process.room.init.RoomInitProcessor;
 import com.snail.client.web.process.room.init.RoomJoinProcessor;
 import com.snail.mina.protocol.client.RoomClient;
 import com.snail.mina.protocol.code.RequestDecode;
@@ -29,9 +28,7 @@ public class NetService {
 	
 	public void init() {
 		RoomMessageConfig.addProcessor(new LoginProcessor());
-		RoomMessageConfig.addProcessor(new RoomJoinProcessor());
-		RoomMessageConfig.addProcessor(new RoomInitProcessor());
-		RoomMessageConfig.addProcessor(new InitSceneProcessor());
+		RoomMessageConfig.addProcessor(new InitRoleProcessor());
 		RoomMessageConfig.addProcessor(new RoomCommonProcessor());
 		
 		RoomMessageConfig.initProcessor();

@@ -26,7 +26,7 @@ public interface MessageService {
 	
 	public boolean sendGateMessage(int gateId, Message message);
 	
-	public boolean sendGateMessage(int gateId, int msgType, IRoomBody body);
+	public boolean sendGateMessage(int gateId, int roleId, int msgType, IRoomBody body);
 	
 	public boolean sendGateMessage(int gateId, RoomMessageHead head, IRoomBody body);
 	

@@ -208,6 +208,10 @@ public class ConnectProtocolHandler extends IoHandlerAdapter {
 							DisconnectPhase.DISCONNECT, false);
 					return;
 				}
+				else {
+					// DEBUG
+					log.info("role " + (Integer)session.getAttribute("identity") + ", msg = " + Integer.toHexString(msgType));
+				}
 
 			}
 

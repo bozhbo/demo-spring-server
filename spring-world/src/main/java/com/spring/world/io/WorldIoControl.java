@@ -6,6 +6,7 @@ import com.snail.mina.protocol.processor.register.RegisterReq;
 import com.spring.logic.bean.GlobalBeanFactory;
 import com.spring.world.io.process.active.ActiveProcessor;
 import com.spring.world.io.process.common.base.CommonProcessor;
+import com.spring.world.io.process.role.init.RoleInitProcessor;
 import com.spring.world.io.process.role.login.LoginProcessor;
 import com.spring.world.io.process.server.room.DeployRoleProcessor;
 import com.spring.world.io.process.server.room.DeployRoomProcessor;
@@ -22,6 +23,7 @@ public class WorldIoControl {
 		// 玩家逻辑
 		RoomMessageConfig.addProcessor(GlobalBeanFactory.getBeanByName(CommonProcessor.class));
 		RoomMessageConfig.addProcessor(GlobalBeanFactory.getBeanByName(LoginProcessor.class));
+		RoomMessageConfig.addProcessor(GlobalBeanFactory.getBeanByName(RoleInitProcessor.class));
 		
 		// 服务器业务交互
 		RoomMessageConfig.addProcessor(GlobalBeanFactory.getBeanByName(DeployRoleProcessor.class));

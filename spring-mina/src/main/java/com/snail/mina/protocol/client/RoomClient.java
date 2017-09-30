@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.mina.common.IoHandler;
 import org.apache.mina.common.IoSession;
@@ -29,6 +30,8 @@ public class RoomClient {
 	 * 全局客户端连接线程 保存所有由此类创建的Socket连接，用于关闭连接使用
 	 */
 	private static Map<String, ClientThread> clientMap = new ConcurrentHashMap<String, ClientThread>();
+	
+	private static AtomicInteger ai = new AtomicInteger(1);
 	
 	/**
 	 * 发起Socket连接到远程服务器
@@ -80,7 +83,7 @@ public class RoomClient {
 		clientMap.put(remoteServerName, clientThread);
 
 		// 启动连接线程
-		Thread t = new Thread(clientThread);
+		Thread t = new Thread(clientThread, "RoomClientActiveThread-" + ai.getAndIncrement());
 		t.setName("ClientThread-" + remoteServerName);
 		t.start();
 	}
@@ -115,7 +118,7 @@ public class RoomClient {
 		clientMap.put(remoteServerName, clientThread);
 
 		// 启动连接线程
-		new Thread(clientThread).start();
+		new Thread(clientThread, "RoomClientActiveThread-" + ai.getAndIncrement()).start();
 	}
 	
 	public static synchronized void connect(String serverIp, int serverPort, String serverInnerIP, String serverName, String remoteServerName, IoHandler ioHandler, List<RoomFilterInfo> list, boolean heartbeat, boolean register)
@@ -152,7 +155,7 @@ public class RoomClient {
 		clientMap.put(remoteServerName, clientThread);
 
 		// 启动连接线程
-		new Thread(clientThread).start();
+		new Thread(clientThread, "RoomClientActiveThread-" + ai.getAndIncrement()).start();
 	}
 
 	/**
@@ -209,6 +212,10 @@ public class RoomClient {
 	}
 	
 	public static boolean isConnected(String serverName) {
-		return clientMap.containsKey(serverName);
+		if (clientMap.containsKey(serverName)) {
+			return clientMap.get(serverName).isConnected();
+		}
+		
+		return false;
 	}
 }

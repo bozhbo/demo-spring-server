@@ -13,6 +13,15 @@ public class LoginResp extends BaseRoomResp {
 	private String account;// 玩家登陆帐号
 	private String roleName;// 角色名称
 	private int gateServerId;// gate服务器Id
+	
+	@Override
+	public void bytes2Req(ByteBuffer buffer, ByteOrder order) {
+		this.result = getInt(buffer, order);
+		this.roleId = getInt(buffer, order);
+		this.account = getString(buffer, order);
+		this.roleName = getString(buffer, order);
+		this.gateServerId = getInt(buffer, order);
+	}
 
 	@Override
 	public void resp2Bytes(ByteBuffer buffer, ByteOrder order) {

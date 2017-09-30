@@ -9,6 +9,7 @@ import com.snail.mina.protocol.info.Message;
 import com.snail.mina.protocol.info.impl.RoomMessageHead;
 import com.spring.common.GameMessageType;
 import com.spring.logic.message.request.server.DisconnectRoleReq;
+import com.spring.logic.message.request.world.init.InitResp;
 import com.spring.logic.message.request.world.login.LoginResp;
 import com.spring.logic.message.service.MessageService;
 import com.spring.logic.role.cache.RoleCache;
@@ -31,6 +32,7 @@ public class RoleLoginServiceImpl implements RoleLoginService {
 			RoleCache.addRoleInfo(roleInfo);
 		}
 		
+		roleInfo.setGold(50000000);
 		roleInfo.setGateId(gateId);
 		
 		head.setRoleId(account.hashCode());
@@ -55,6 +57,19 @@ public class RoleLoginServiceImpl implements RoleLoginService {
 	@Override
 	public void roleLogout(RoleInfo roleInfo) {
 		
+	}
+	
+	@Override
+	public void roleInit(RoleInfo roleInfo) {
+		InitResp resp = new InitResp();
+		resp.setGold(roleInfo.getGold());
+		resp.setHead(roleInfo.getHeader());
+		resp.setRoleId(roleInfo.getRoleId());
+		resp.setRoleName(roleInfo.getRoleName());
+		resp.setRoomId(roleInfo.getRoomId());
+		resp.setVipLevel(roleInfo.getVipLevel());
+		
+		messageService.sendGateMessage(roleInfo.getGateId(), GameMessageType.GAME_CLIENT_INIT_RECEIVE, resp);
 	}
 
 	@Autowired

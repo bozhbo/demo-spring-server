@@ -11,4 +11,6 @@ public interface RoleLoginService {
 	public void roleLogin(int gateId, int roleId, String account, String password, String validate, RoomMessageHead head, LoginResp resp, Function<LoginResp, Integer> function);
 	
 	public void roleLogout(RoleInfo roleInfo);
+	
+	public void roleInit(RoleInfo roleInfo);
 }

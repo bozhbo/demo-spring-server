@@ -1,5 +1,6 @@
 package com.snail.client.web.process.room.init;
 
+import com.snail.client.web.control.ClientControl;
 import com.snail.client.web.msg.common.CommonResp;
 import com.snail.mina.protocol.info.IRoomBody;
 import com.snail.mina.protocol.info.Message;
@@ -15,7 +16,7 @@ public class RoomCommonProcessor implements IProcessor {
 		CommonResp resp = (CommonResp)message.getiRoomBody();
 		
 		if (resp.getOptionType() == GameMessageType.GAME_CLIENT_PLAY_RECEIVE_READY) {
-			
+			ClientControl.roleService.roomReady(head.getRoleId(), resp);
 		} else if (resp.getOptionType() == GameMessageType.GAME_CLIENT_PLAY_RECEIVE_GIVE_CARD) {
 			
 		} else if (resp.getOptionType() == GameMessageType.GAME_CLIENT_PLAY_RECEIVE_OPERATION) {
@@ -28,8 +29,10 @@ public class RoomCommonProcessor implements IProcessor {
 			
 		} else if (resp.getOptionType() == GameMessageType.GAME_CLIENT_PLAY_RECEIVE_ROOM_INIT) {
 			// 加入房间初始化
+			ClientControl.roleService.roomInit(head.getRoleId(), resp);
 		} else if (resp.getOptionType() == GameMessageType.GAME_CLIENT_PLAY_RECEIVE_ROLE_JOIN) {
 			// 其他玩家加入
+			ClientControl.roleService.joinRoomEnd(head.getRoleId(), resp);
 		} else if (resp.getOptionType() == GameMessageType.GAME_CLIENT_PLAY_RECEIVE_ROLE_READY) {
 			
 		} else if (resp.getOptionType() == GameMessageType.GAME_CLIENT_PLAY_RECEIVE_COMPARE) {

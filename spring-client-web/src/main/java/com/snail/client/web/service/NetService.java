@@ -3,6 +3,9 @@ package com.snail.client.web.service;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.snail.client.web.handle.GameClientHandler;
 import com.snail.client.web.process.init.InitSceneProcessor;
@@ -22,7 +25,7 @@ import com.snail.mina.protocol.info.RoomFilterInfo;
 public class NetService {
 	
 	private byte[] b = new byte[0];
-	private String serverName = "GameServer";
+	private Map<String, AtomicBoolean> map = new ConcurrentHashMap<>();
 	
 	public void init() {
 		RoomMessageConfig.addProcessor(new LoginProcessor());
@@ -33,19 +36,30 @@ public class NetService {
 		
 		RoomMessageConfig.initProcessor();
 	}
-
-	public void checkSession() {
-		if (!RoomClient.isConnected(serverName)) {
-			connectGame("127.0.0.1", 8088);
-		}
+	
+	public boolean isConnected(String serName) {
+		return RoomClient.isConnected(serName);
 	}
 	
-	public boolean sendMessage(Message message) {
+	public boolean sendMessage(String serverName, Message message) {
 		return RoomClient.sendMessage(serverName, message);
 	}
 	
-	public void connectGame(String ip, int port) {
+	public void connectGame(String ip, int port, String serverName) {
 		synchronized (b) {
+			AtomicBoolean newValue = new AtomicBoolean(false);
+			AtomicBoolean oldValue = map.putIfAbsent(serverName, newValue);
+			
+			if (oldValue != null) {
+				if (oldValue.get()) {
+					return;
+				} else {
+					if (!oldValue.compareAndSet(false, true)) {
+						return;
+					}
+				}
+			}
+			
 			RoomClient.shutdown(serverName);
 			
 			List<RoomFilterInfo> list = new ArrayList<>();
@@ -56,6 +70,7 @@ public class NetService {
 			try {
 				RoomClient.connect(ip, port, "client", serverName, new GameClientHandler(), list, true, false);
 			} catch (Exception e) {
+				map.get(serverName).set(false);
 				e.printStackTrace();
 			}
 		}

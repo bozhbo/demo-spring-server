@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.snail.client.web.control.ClientControl;
+import com.spring.logic.util.LogicUtil;
 
 //import com.spring.logic.bean.GlobalBeanFactory;
 
@@ -22,9 +23,9 @@ public class ClientMain {
 	public static void main(String[] args) {
 		SpringApplication.run(ClientMain.class, args);
 		
-		ClientControl.init();
+		LogicUtil.initJson();
 		
-		ClientControl.netService.checkSession();
+		ClientControl.init();
 	}
 	
 	@Bean  

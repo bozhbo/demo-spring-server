@@ -11,6 +11,15 @@ public class CommonResp extends BaseRoomResp {
 	private int optionType;
 	private String optionStr;
 	
+	public CommonResp() {
+		
+	}
+	
+	public CommonResp(int optionType, String optionStr) {
+		this.optionType = optionType;
+		this.optionStr = optionStr;
+	}
+	
 	@Override
 	public void bytes2Req(ByteBuffer buffer, ByteOrder order) {
 		this.optionType = getInt(buffer, order);

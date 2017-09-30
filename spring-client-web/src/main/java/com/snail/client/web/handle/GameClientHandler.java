@@ -4,6 +4,7 @@ import org.apache.mina.common.IoHandlerAdapter;
 import org.apache.mina.common.IoSession;
 
 import com.snail.client.web.control.ClientControl;
+import com.snail.client.web.robot.RobotRoleInfo;
 import com.snail.mina.protocol.config.RoomMessageConfig;
 import com.snail.mina.protocol.info.Message;
 import com.snail.mina.protocol.info.impl.RoomMessageHead;
@@ -26,6 +27,7 @@ public class GameClientHandler extends IoHandlerAdapter {
 	public void messageReceived(IoSession session, Object message) throws Exception {
 		Message msg = (Message)message;
 		int msgType = msg.getiRoomHead().getMsgType();
+		int roleId = ((RoomMessageHead)msg.getiRoomHead()).getRoleId();
 		
 		if (msgType == GameMessageType.GAME_CLIENT_LOGIN_RECEIVE) {
 			RoomMessageHead head = (RoomMessageHead)msg.getiRoomHead();
@@ -33,10 +35,10 @@ public class GameClientHandler extends IoHandlerAdapter {
 			ClientControl.roleService.loginEnd((LoginResp)msg.getiRoomBody());
 		} else if (msgType == GameMessageType.GAME_CLIENT_ROOM_JOIN) {
 			// 加入新玩家
-			ClientControl.roleService.joinRoomEnd((GameRoomRoleInfoRes)msg.getiRoomBody());
+			// ClientControl.roleService.joinRoomEnd((GameRoomRoleInfoRes)msg.getiRoomBody());
 		} else if (msgType == GameMessageType.ROOM_CLIENT_ROOM_INIT) {
 			// 房间初始化
-			ClientControl.roleService.roomInit((GameRoomInitResp)msg.getiRoomBody());
+			// ClientControl.roleService.roomInit(roleId, (GameRoomInitResp)msg.getiRoomBody());
 		} else if (msgType == GameMessageType.GAME_CLIENT_WORLD_SCENE_INIT_RECEIVE) {
 			// 大厅初始化
 			ClientControl.roleService.back2SceneEnd((InitSceneResp)msg.getiRoomBody());

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,17 +26,21 @@ import com.spring.logic.role.cache.RoleRoomCache;
 import com.spring.logic.role.enums.RoleCardState;
 import com.spring.logic.role.enums.RoleRoomState;
 import com.spring.logic.role.info.RoomRoleInfo;
+import com.spring.logic.room.RoomConfig;
 import com.spring.logic.room.enums.RoomTypeEnum;
 import com.spring.logic.room.info.PlayingRoomInfo;
 import com.spring.logic.server.service.ServerMessageService;
 import com.spring.logic.util.LogicUtil;
 import com.spring.logic.util.LogicValue;
+import com.spring.room.config.RoomServerConfig;
 import com.spring.room.control.service.RoomLogicService;
 import com.spring.room.control.service.RoomMessageService;
 import com.spring.room.control.service.RoomWorldService;
 
 @Service
 public class RoomLogicServiceImpl implements RoomLogicService {
+	
+	private static final Log logger = LogFactory.getLog(RoomLogicServiceImpl.class);
 
 	private RoomMessageService roomMessageService;
 	
@@ -75,6 +81,8 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 
 		if (result != 1) {
 			// 通知World添加用户失败
+			logger.error("recover role failed " + playingRoomInfo.getRoomId() + " roleId = " + req.getRoleId());
+			
 			roomWorldService.deployRoleInfoFailed(req.getRoomId(), req.getRoleId());
 			return null;
 		}
@@ -93,18 +101,20 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 		}
 		
 		if (playingRoomInfo.getList().size() >= 5) {
+			logger.error("room is full " + playingRoomInfo.getRoomId());
+			
 			roomWorldService.deployRoleInfoFailed(playingRoomInfo.getRoomId(), roomRoleInfo.getRoleId());
 			return;
 		}
-
-		// 发送房间当前数据
-		sendRoomSyncMessage(playingRoomInfo, roomRoleInfo);
 		
 		// 发送玩家加入房间信息
-		roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(), ""), new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_ROLE_JOIN, getRespRoleInfo(roomRoleInfo)));
+		roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, 0, ""), new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_ROLE_JOIN, getRespRoleInfo(roomRoleInfo)));
 
 		// 加入房间
 		playingRoomInfo.getList().add(roomRoleInfo);
+		
+		// 发送房间当前数据
+		sendRoomSyncMessage(playingRoomInfo, roomRoleInfo);
 		
 		// 业务回调
 		roomBusinessCallBack.roomRoleOnAdd(playingRoomInfo, roomRoleInfo);
@@ -132,11 +142,12 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 		
 		// 发送玩家离开房间信息
 		RoomLeaveResp resp = new RoomLeaveResp();
+		resp.setRoomId(playingRoomInfo.getRoomId());
 		resp.setRoleId(roleId);
 
 		for (RoomRoleInfo roomRoleInfo2 : list) {
 			Message message = messageService.createMessage(roomRoleInfo2.getRoleId(),
-					GameMessageType.GAME_CLIENT_ROOM_LEAVE, playingRoomInfo.getRoomId(), "", resp);
+					GameMessageType.GAME_CLIENT_ROOM_LEAVE, 0, "", resp);
 			messageService.sendGateMessage(roomRoleInfo2.getGateId(), message);
 		}
 
@@ -153,11 +164,13 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 		roomMap.put(LogicValue.KEY_ROOM_GOLD, playingRoomInfo.getAmountGold());
 		roomMap.put(LogicValue.KEY_ROOM_UNIT_GOLD, playingRoomInfo.getCurGoldUnit());
 		roomMap.put(LogicValue.KEY_ROOM_ROUND, playingRoomInfo.getRoomRound());
+		roomMap.put(LogicValue.KEY_ROOM_SERVER_ID, RoomServerConfig.ROOM_SERVER_ID);
 		
 		List<Map<String, Object>> roleList = new ArrayList<>();
 		
 		for (RoomRoleInfo roomRoleInfo : list) {
 			Map<String, Object> map = new HashMap<>();
+			map.put(LogicValue.KEY_ROOM_ID, playingRoomInfo.getRoomId());
 			map.put(LogicValue.KEY_ROLE_GOLD, roomRoleInfo.getGold());
 			map.put(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId());
 			map.put(LogicValue.KEY_ROLE_NAME, roomRoleInfo.getRoleName());
@@ -178,13 +191,14 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 	@Override
 	public void sendRoomSyncMessage(PlayingRoomInfo playingRoomInfo, RoomRoleInfo roomRoleInfo) {
 		// 发送房间当前数据
-		Message message = messageService.createCommonMessage(roomRoleInfo.getRoleId(), GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(), "", GameMessageType.GAME_CLIENT_PLAY_RECEIVE_ROOM_INIT, getRespRoomInfo(playingRoomInfo));
+		Message message = messageService.createCommonMessage(roomRoleInfo.getRoleId(), GameMessageType.GAME_CLIENT_PLAY_RECEIVE, RoomServerConfig.ROOM_SERVER_ID, "", GameMessageType.GAME_CLIENT_PLAY_RECEIVE_ROOM_INIT, getRespRoomInfo(playingRoomInfo));
 		messageService.sendGateMessage(roomRoleInfo.getGateId(), message);
 	}
 	
 	public String getRespRoleInfo(RoomRoleInfo roomRoleInfo) {
 		Map<String, Object> map = new HashMap<>();
 		
+		map.put(LogicValue.KEY_ROOM_ID, roomRoleInfo.getRoomId());
 		map.put(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId());
 		map.put(LogicValue.KEY_ROLE_GOLD, roomRoleInfo.getGold());
 		map.put(LogicValue.KEY_ROLE_NAME, roomRoleInfo.getRoleName());

@@ -2,6 +2,7 @@ package com.spring.room.control.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.snail.mina.protocol.info.IRoomBody;
@@ -53,6 +54,7 @@ public class RoomMessageServiceImpl implements RoomMessageService {
 		}
 	}
 
+	@Autowired
 	public void setMessageService(MessageService messageService) {
 		this.messageService = messageService;
 	}

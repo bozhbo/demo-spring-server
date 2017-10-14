@@ -93,13 +93,23 @@ public class RoomCahce {
 	public static boolean needCreateRoom(RoomTypeEnum roomTypeEnum) {
 		int rooms = getPlayingRoomsByType(roomTypeEnum);
 		
-		if (rooms <= 10) {
+//		if (rooms <= 10) {
+//			return true;
+//		}
+		
+		// TODO 测试
+		if (rooms <= 2) {
 			return true;
 		}
 		
 		int roles = playingRoleMap.get(roomTypeEnum).get();
 		
-		if (rooms * 1.0 / roles < ROOM_ROLE_RATE) {
+//		if (rooms * 1.0 / roles < ROOM_ROLE_RATE) {
+//			return true;
+//		}
+		
+		// TODO 测试
+		if (rooms * 1.0 / roles <  0.2) {
 			return true;
 		}
 		

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.snail.client.main.net.handler.GameClientHandler;
-import com.snail.client.main.net.process.init.InitSceneProcessor;
 import com.snail.client.main.net.process.login.LoginProcessor;
 import com.snail.client.main.net.process.room.init.RoomCommonProcessor;
 import com.snail.client.main.net.process.room.init.RoomInitProcessor;
@@ -28,7 +27,6 @@ public class NetService {
 		RoomMessageConfig.addProcessor(new LoginProcessor());
 		RoomMessageConfig.addProcessor(new RoomJoinProcessor());
 		RoomMessageConfig.addProcessor(new RoomInitProcessor());
-		RoomMessageConfig.addProcessor(new InitSceneProcessor());
 		RoomMessageConfig.addProcessor(new RoomCommonProcessor());
 		
 		

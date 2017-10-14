@@ -41,7 +41,7 @@ public class DeployRoleProcessor implements IProcessor {
 		synchronized (roleInfo) {
 			if (req.getResult() != 1) {
 				// 角色添加失败
-				logger.warn("deploy role failed " + req.getRoleId());
+				logger.warn("deploy role failed " + req.getRoleId() + ", result = " + req.getResult());
 				roleInfo.setRoomId(0);
 				roomService.leaveRoom(req.getRoomId(), req.getRoleId());
 				

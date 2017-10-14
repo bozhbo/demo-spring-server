@@ -121,6 +121,7 @@ public class RoomLoopThread extends Thread {
 								}
 							}
 						} else {
+							logger.error("room not exist " + ((DeployRoleInfoEvent)roomEvent).getReq().getRoomId());
 							roomWorldService.deployRoleInfoFailed(((DeployRoleInfoEvent)roomEvent).getReq().getRoomId(), ((DeployRoleInfoEvent)roomEvent).getReq().getRoleId());
 						}
 					} else if (roomEvent instanceof RemoveRoleInfoEvent) {
@@ -177,6 +178,7 @@ public class RoomLoopThread extends Thread {
 		PlayingRoomInfo playingRoomInfo = map.get(roleOperateEvent.getRoomId());
 		
 		if (playingRoomInfo == null) {
+			logger.error("room not exits " + roleOperateEvent.getRoomId());
 			return;
 		}
 		

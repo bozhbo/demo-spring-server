@@ -196,7 +196,7 @@ public class ClientThread implements Runnable {
 		ConnectFuture cf = null;
 		
 		if (this.connector == null) {
-			connector = new SocketConnector(4, Executors.newCachedThreadPool());
+			connector = new SocketConnector(1, Executors.newCachedThreadPool());
 			
 			IoConnectorConfig clientConfig = connector.getDefaultConfig();
 			clientConfig.setThreadModel(ThreadModel.MANUAL);

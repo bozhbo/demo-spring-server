@@ -22,7 +22,7 @@ public class InitRoleProcessor implements IProcessor {
 
 	@Override
 	public int getMsgType() {
-		return GameMessageType.GAME_CLIENT_LOGIN_RECEIVE;
+		return GameMessageType.GAME_CLIENT_INIT_RECEIVE;
 	}
 
 }

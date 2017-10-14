@@ -1,5 +1,6 @@
 package com.spring.room.control.service.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ import com.spring.logic.role.cache.RoleRoomCache;
 import com.spring.logic.role.enums.RoleCardState;
 import com.spring.logic.role.enums.RoleRoomState;
 import com.spring.logic.role.info.RoomRoleInfo;
+import com.spring.logic.room.RoomConfig;
 import com.spring.logic.room.enums.RoomPlayingEnum;
 import com.spring.logic.room.enums.RoomTypeEnum;
 import com.spring.logic.room.info.PlayingRoomInfo;
@@ -71,8 +73,8 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 				playingRoomInfo.setReadyTime(curTime);
 
 				// 推送准备开始消息,出现开始倒计时,当前状态玩家可以继续加入游戏
-				roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(), ""),
-						new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_READY, ""));
+				roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, 0, ""),
+						new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_READY, RoomOperateJsonRes.instance().addIntValue(LogicValue.KEY_ROOM_ID, playingRoomInfo.getRoomId()).toString()));
 			} else {
 				// 准备时间结束,进入发牌阶段,当前状态玩家不可以继续加入游戏
 				if (curTime - playingRoomInfo.getReadyTime() > 6000) {
@@ -106,17 +108,23 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 				roomRoleInfo.setGoldFlowerInfo(
 						GoldFlowerService.getGoldFlowerInfo(playingRoomInfo.getCardList().get(index++), playingRoomInfo.getCardList().get(index++), playingRoomInfo.getCardList().get(index++)));
 			}
+			
+			StringBuffer buffer = new StringBuffer();
 
 			// 推送发牌消息
 			for (RoomRoleInfo roomRoleInfo : list) {
-				Map<String, Object> map = new HashMap<>();
-				map.put(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId());
-				map.put(LogicValue.KEY_ROLE_CARD, roomRoleInfo.getGoldFlowerInfo().getKey());
-
-				roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(), ""),
-						new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_GIVE_CARD, RoomOperateJsonRes.instance().addIntValue(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId())
+				roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, 0, ""),
+						new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_GIVE_CARD, RoomOperateJsonRes.instance()
+								.addIntValue(LogicValue.KEY_ROOM_ID, playingRoomInfo.getRoomId())
+								.addIntValue(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId())
 								.addStringValue(LogicValue.KEY_ROLE_CARD, roomRoleInfo.getGoldFlowerInfo().getKey()).toString()));
+			
+				buffer.append(roomRoleInfo.getRoleId()).append(",");
 			}
+			
+			playingRoomInfo.setSendCardTime(curTime);
+			
+			logger.info("room " + playingRoomInfo.getRoomId() + " was send card " + buffer.toString());
 		} else {
 			if (curTime - playingRoomInfo.getSendCardTime() > 3000) {
 				playingRoomInfo.setRoomState(RoomPlayingEnum.ROOM_STATE_PLAYING);
@@ -137,8 +145,12 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 			playingRoomInfo.setRoomRoundTemp(1);
 
 			// 发送消息到第一个玩家要求操作
-			roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(), ""), new CommonResp(
-					GameMessageType.GAME_CLIENT_PLAY_RECEIVE_OPERATION, RoomOperateJsonRes.instance().addIntValue(LogicValue.KEY_ROLE, playingRoomInfo.getRoomRoleInfo().getRoleId()).toString()));
+			roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, 0, ""), new CommonResp(
+					GameMessageType.GAME_CLIENT_PLAY_RECEIVE_OPERATION, RoomOperateJsonRes.instance()
+					.addIntValue(LogicValue.KEY_ROOM_ID, playingRoomInfo.getRoomId())
+					.addIntValue(LogicValue.KEY_ROLE, playingRoomInfo.getRoomRoleInfo().getRoleId()).toString()));
+			
+			logger.info("choose role " + playingRoomInfo.getRoomRoleInfo().getRoleId() + " to operate");
 		} else {
 			if (curTime - playingRoomInfo.getRoomRoleInfo().getStartTime() < 6000) {
 				// 等待玩家操作
@@ -160,6 +172,7 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 
 		if (playingRoomInfo.getPlayingMap().containsKey(roomRoleInfo.getRoleId())) {
 			// 已经准备
+			logger.warn("role was be ready");
 			return;
 		}
 
@@ -177,13 +190,17 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 		playingRoomInfo.getPlayingMap().put(roomRoleInfo.getRoleId(), roomRoleInfo);
 		playingRoomInfo.getPlayingList().add(roomRoleInfo);
 
-		roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(), ""),
-				new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_ROLE_READY, RoomOperateJsonRes.instance().addIntValue(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId()).toString()));
+		roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, 0, ""),
+				new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_ROLE_READY, RoomOperateJsonRes.instance()
+						.addIntValue(LogicValue.KEY_ROOM_ID, playingRoomInfo.getRoomId())
+						.addIntValue(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId()).toString()));
 
-		if (playingRoomInfo.getPlayingList().size() == playingRoomInfo.getList().size()) {
+		if (playingRoomInfo.getPlayingList().size() == playingRoomInfo.getList().size() && playingRoomInfo.getList().size() == RoomConfig.ROOM_MAX_ROLES) {
 			// 立即开始
 			playingRoomInfo.setRoomState(RoomPlayingEnum.ROOM_STATE_SEND_CARD);
 		}
+		
+		logger.info("role ready " + roomRoleInfo.getRoleId());
 	}
 
 	@Override
@@ -200,11 +217,15 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 		roomRoleInfo.setRoleRoomState(RoleRoomState.UNPLAYING);
 		roomRoleInfo.setRoleCardState(RoleCardState.CLOSE);
 
-		roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(), ""),
-				new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_GIVE_UP, RoomOperateJsonRes.instance().addIntValue(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId()).toString()));
+		roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, 0, ""),
+				new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_GIVE_UP, RoomOperateJsonRes.instance()
+						.addIntValue(LogicValue.KEY_ROOM_ID, playingRoomInfo.getRoomId())
+						.addIntValue(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId()).toString()));
 
 		// 检查游戏结束
 		checkGameover(playingRoomInfo);
+		
+		logger.info("room " + playingRoomInfo.getRoomId() + " role give up " + roomRoleInfo.getRoleId());
 	}
 
 	@Override
@@ -235,13 +256,25 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 		}
 
 		Map<String, Object> map = new HashMap<>();
-		map.put(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId());
-		map.put(LogicValue.KEY_ROLE_REDUCE_GOLD, gold);
-		map.put(LogicValue.KEY_ROLE_GOLD, roomRoleInfo.getGold());
+		map.put(LogicValue.KEY_ROOM_ID, playingRoomInfo.getRoomId());
 		map.put(LogicValue.KEY_ROOM_GOLD, playingRoomInfo.getAmountGold());
+		
+		List<Map<String, Object>> jsonList = new ArrayList<>();
+		Map<String, Object> roleMap = new HashMap<>();
+		
+		roleMap.put(LogicValue.KEY_ROOM_ID, playingRoomInfo.getRoomId());
+		roleMap.put(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId());
+		roleMap.put(LogicValue.KEY_ROLE_REDUCE_GOLD, gold);
+		roleMap.put(LogicValue.KEY_ROLE_GOLD, roomRoleInfo.getGold());
+		
+		jsonList.add(roleMap);
+		
+		map.put(LogicValue.KEY_ROOM_ROLE, jsonList);
 
-		roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(), ""),
+		roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, 0, ""),
 				new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_FOLLOW, LogicUtil.tojson(map)));
+	
+		logger.info("role follow " + roomRoleInfo.getRoleId());
 	}
 
 	@Override
@@ -277,14 +310,26 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 		}
 
 		Map<String, Object> map = new HashMap<>();
-		map.put(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId());
-		map.put(LogicValue.KEY_ROLE_REDUCE_GOLD, gold);
-		map.put(LogicValue.KEY_ROLE_GOLD, roomRoleInfo.getGold());
+		map.put(LogicValue.KEY_ROOM_ID, playingRoomInfo.getRoomId());
 		map.put(LogicValue.KEY_ROOM_GOLD, playingRoomInfo.getAmountGold());
+		
+		List<Map<String, Object>> jsonList = new ArrayList<>();
+		Map<String, Object> roleMap = new HashMap<>();
+		
+		roleMap.put(LogicValue.KEY_ROOM_ID, playingRoomInfo.getRoomId());
+		roleMap.put(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId());
+		roleMap.put(LogicValue.KEY_ROLE_REDUCE_GOLD, gold);
+		roleMap.put(LogicValue.KEY_ROLE_GOLD, roomRoleInfo.getGold());
+		
+		jsonList.add(roleMap);
+		
+		map.put(LogicValue.KEY_ROOM_ROLE, jsonList);
 
 		// 发送跟注消息
 		roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(), ""),
 				new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_ADD, LogicUtil.tojson(map)));
+	
+		logger.info("role add " + roomRoleInfo.getRoleId());
 	}
 
 	@Override
@@ -301,16 +346,21 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 		roomRoleInfo.setRoleCardState(RoleCardState.OPEN);
 
 		Map<String, Object> map = new HashMap<>();
+		map.put(LogicValue.KEY_ROOM_ID, playingRoomInfo.getRoomId());
 		map.put(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId());
 		map.put(LogicValue.KEY_ROLE_CARD, roomRoleInfo.getGoldFlowerInfo().getKey());
 
 		messageService.sendGateMessage(roomRoleInfo.getGateId(),
-				messageService.createMessageHead(roomRoleInfo.getRoleId(), 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(), ""),
+				messageService.createMessageHead(roomRoleInfo.getRoleId(), 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, 0, ""),
 				new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_LOOK_CARD, RoomOperateJsonRes.instance().addIntValue(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId())
 						.addStringValue(LogicValue.KEY_ROLE_CARD, roomRoleInfo.getGoldFlowerInfo().getKey()).toString()));
 
-		roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(), ""),
-				new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_LOOK_CARD, RoomOperateJsonRes.instance().addIntValue(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId()).toString()));
+		roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, 0, ""),
+				new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_LOOK_CARD, RoomOperateJsonRes.instance()
+						.addIntValue(LogicValue.KEY_ROOM_ID, playingRoomInfo.getRoomId())
+						.addIntValue(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId()).toString()));
+	
+		logger.info("role look " + roomRoleInfo.getRoleId());
 	}
 
 	@Override
@@ -380,14 +430,33 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 		}
 
 		Map<String, Object> map = new HashMap<>();
-		map.put(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId());
-		map.put(LogicValue.KEY_ROLE_REDUCE_GOLD, gold);
-		map.put(LogicValue.KEY_ROLE_GOLD, roomRoleInfo.getGold());
+		map.put(LogicValue.KEY_ROOM_ID, playingRoomInfo.getRoomId());
 		map.put(LogicValue.KEY_ROOM_GOLD, playingRoomInfo.getAmountGold());
-		map.put(LogicValue.KEY_TARGET_ROLE, targetRoomRoleInfo.getRoleId());
-		map.put(LogicValue.KEY_LOST_ROLE, lostRoleId);
-		map.put(LogicValue.KEY_WIN_ROLE, winRoleId);
-
+		
+		List<Map<String, Object>> jsonList = new ArrayList<>();
+		Map<String, Object> roleMap = new HashMap<>();
+		Map<String, Object> targetRoleMap = new HashMap<>();
+		
+		roleMap.put(LogicValue.KEY_ROOM_ID, playingRoomInfo.getRoomId());
+		roleMap.put(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId());
+		roleMap.put(LogicValue.KEY_ROLE_REDUCE_GOLD, gold);
+		roleMap.put(LogicValue.KEY_ROLE_GOLD, roomRoleInfo.getGold());
+		
+		targetRoleMap.put(LogicValue.KEY_ROLE, targetRoomRoleInfo.getRoleId());
+		
+		if (winRoleId == roomRoleInfo.getRoleId()) {
+			roleMap.put(LogicValue.KEY_WIN_ROLE, winRoleId);
+			targetRoleMap.put(LogicValue.KEY_LOST_ROLE, lostRoleId);
+		} else {
+			roleMap.put(LogicValue.KEY_LOST_ROLE, lostRoleId);
+			targetRoleMap.put(LogicValue.KEY_WIN_ROLE, winRoleId);
+		}
+		
+		jsonList.add(roleMap);
+		jsonList.add(targetRoleMap);
+		
+		map.put(LogicValue.KEY_ROOM_ROLE, jsonList);
+		
 		// 发送比牌消息
 		roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(), ""),
 				new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_COMPARE, LogicUtil.tojson(map)));
@@ -446,6 +515,8 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 				return false;
 			}
 		}
+		
+		logger.info("room " + playingRoomInfo.getRoomId() + " end");
 
 		// 游戏结束
 		lastRoomRoleInfo.setGold(lastRoomRoleInfo.getGold() + playingRoomInfo.getAmountGold());
@@ -455,16 +526,21 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 		// 显示自己和比牌输的牌
 		for (RoomRoleInfo tempRoomRoleInfo : roleList) {
 			if (tempRoomRoleInfo.getRoleRoomState() == RoleRoomState.LOST || tempRoomRoleInfo == lastRoomRoleInfo) {
-				roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(), ""),
-						new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_SHOW_CARD, RoomOperateJsonRes.instance().addIntValue(LogicValue.KEY_ROLE, tempRoomRoleInfo.getRoleId())
+				roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, 0, ""),
+						new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_SHOW_CARD, RoomOperateJsonRes.instance()
+								.addIntValue(LogicValue.KEY_ROOM_ID, playingRoomInfo.getRoomId())
+								.addIntValue(LogicValue.KEY_ROLE, tempRoomRoleInfo.getRoleId())
 								.addStringValue(LogicValue.KEY_ROLE_CARD, tempRoomRoleInfo.getGoldFlowerInfo().getKey()).toString()));
 			}
 		}
 
 		// 发送结束消息
-		roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(), ""),
+		roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, 0, ""),
 				new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_GAME_END,
-						RoomOperateJsonRes.instance().addIntValue(LogicValue.KEY_ROLE, lastRoomRoleInfo.getRoleId()).addIntValue(LogicValue.KEY_ROLE_GOLD, lastRoomRoleInfo.getGold()).toString()));
+						RoomOperateJsonRes.instance()
+						.addIntValue(LogicValue.KEY_ROOM_ID, playingRoomInfo.getRoomId())
+						.addIntValue(LogicValue.KEY_ROLE, lastRoomRoleInfo.getRoleId())
+						.addIntValue(LogicValue.KEY_ROLE_GOLD, lastRoomRoleInfo.getGold()).toString()));
 
 		// 回传每局结果
 		Message roomSettlementMessage = new Message();
@@ -508,6 +584,8 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 		playingRoomInfo.setRoomRoleInfo(null);
 		playingRoomInfo.getPlayingList().clear();
 		playingRoomInfo.getPlayingMap().clear();
+		
+		logger.info("game end and reset " + playingRoomInfo.getRoomId());
 
 		return true;
 	}
@@ -533,8 +611,10 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 			playingRoomInfo.setRoomRoundTemp(1);
 
 			// 通知回合变化
-			roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(), ""),
-					new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_ROUND, RoomOperateJsonRes.instance().addIntValue(LogicValue.KEY_ROOM_ROUND, playingRoomInfo.getRoomRound()).toString()));
+			roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, 0, ""),
+					new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_ROUND, RoomOperateJsonRes.instance()
+							.addIntValue(LogicValue.KEY_ROOM_ID, playingRoomInfo.getRoomId())
+							.addIntValue(LogicValue.KEY_ROOM_ROUND, playingRoomInfo.getRoomRound()).toString()));
 		} else {
 			playingRoomInfo.setRoomRoundTemp(playingRoomInfo.getRoomRoundTemp() + 1);
 		}
@@ -567,6 +647,8 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 			if (roomRoleInfo.getRoleRoomState() != RoleRoomState.PLAYING) {
 				roomRoleInfo = null;
 				continue;
+			} else {
+				break;
 			}
 		}
 
@@ -585,8 +667,12 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 			playingRoomInfo.setRoomRoleInfo(roomRoleInfo);
 			playingRoomInfo.getRoomRoleInfo().setStartTime(System.currentTimeMillis());
 
-			roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(), ""),
-					new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_OPERATION, RoomOperateJsonRes.instance().addIntValue(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId()).toString()));
+			roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, 0, ""),
+					new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_OPERATION, RoomOperateJsonRes.instance()
+							.addIntValue(LogicValue.KEY_ROOM_ID, playingRoomInfo.getRoomId())
+							.addIntValue(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId()).toString()));
+			
+			logger.info("choose role " + playingRoomInfo.getRoomRoleInfo().getRoleId() + " to operate");
 		}
 	}
 

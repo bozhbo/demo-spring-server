@@ -221,6 +221,8 @@ public class ConnectProtocolHandler extends IoHandlerAdapter {
 
 				if (serverName.startsWith(ServerName.GAME_SCENE_SERVER)) {
 					serverName = serverName + "-" + msgmgt.getSceneId((byte[]) message);
+				} else if (serverName.startsWith(ServerName.ROOM_SERVER_NAME)) {
+					serverName = serverName + "-" + msgmgt.getSceneId((byte[]) message);
 				}
 
 				IoSession revSess = ServerMap.getSession(serverName);
@@ -238,6 +240,8 @@ public class ConnectProtocolHandler extends IoHandlerAdapter {
 				} else {
 					if (msgType == Command.USER_VERIFY_ROLE_REQ) {
 						session.write(msgmgt.getUserVerifyResp(ErrorCode.GATE_SERVER_ERROR_1));
+					} else {
+						log.error("this is no server session for msg " + Integer.toHexString(msgType));
 					}
 				}
 			} else {

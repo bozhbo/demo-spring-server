@@ -32,7 +32,7 @@ public class RobotThread extends Thread {
 	@Override
 	public void run() {
 		for (int i = 0; i < roles; i++) {
-			ClientControl.netService.connectGame("127.0.0.1", 8088, serverName + (i + 1));
+			ClientControl.netService.connectGame("192.168.2.142", 8088, serverName + (i + 1));
 		}
 		
 		while (true) {
@@ -94,7 +94,7 @@ public class RobotThread extends Thread {
 					} else if (roleInfo.getState() == 3) {
 						// 轮到操作
 						if (roleInfo.opCount >= 3) {
-							ClientControl.roleService.sendCommonMsg(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_GIVE_UP, "", serverMap.get(account));
+							ClientControl.roleService.sendCommonMsg(GameMessageType.GAME_CLIENT_PLAY_SEND_GIVE_UP, "", serverMap.get(account));
 						} else {
 							ClientControl.roleService.sendCommonMsg(GameMessageType.GAME_CLIENT_PLAY_SEND_FOLLOW, "", serverMap.get(account));
 							roleInfo.opCount++;

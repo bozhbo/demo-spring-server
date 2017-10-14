@@ -1,6 +1,7 @@
 package com.spring.logic.message.request.room;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.spring.logic.util.LogicUtil;
@@ -19,6 +20,11 @@ public class RoomOperateJsonRes {
 	}
 	
 	public RoomOperateJsonRes addStringValue(String key, String value) {
+		map.put(key, value);
+		return this;
+	}
+	
+	public RoomOperateJsonRes addListValue(String key, List<Map<String, Object>> value) {
 		map.put(key, value);
 		return this;
 	}

@@ -27,11 +27,12 @@ public class RoleLoginServiceImpl implements RoleLoginService {
 
 	@Override
 	public void roleLogin(int gateId, int roleId, String account, String password, String validate, RoomMessageHead head, LoginResp resp, Function<LoginResp, Integer> function) {
-		RoleInfo roleInfo = RoleCache.getRoleInfo(roleId);
+		RoleInfo roleInfo = RoleCache.getRoleInfo(account);
 		
 		if (roleInfo == null) {
 			// TODO load from DB
 			roleInfo = new RoleInfo();
+			roleInfo.setAccount(account);
 			roleInfo.setRoleId(LogicUtil.getSequenceId());
 			RoleCache.addRoleInfo(roleInfo);
 		}
@@ -45,7 +46,7 @@ public class RoleLoginServiceImpl implements RoleLoginService {
 		resp.setResult(1);
 		resp.setAccount(account);
 		resp.setGateServerId(gateId);
-		resp.setRoleId(account.hashCode());
+		resp.setRoleId(roleInfo.getRoleId());
 		resp.setRoleName(account);
 		
 		int errorCode = function.apply(resp);

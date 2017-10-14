@@ -63,7 +63,7 @@ public class RoomServerMain {
 		try {
 			RoomClient.connect(RoomServerConfig.WORLD_SERVER_IP, RoomServerConfig.WORLD_SERVER_PORT,
 					RoomServerConfig.ROOM_SERVER_IP, ServerName.ROOM_SERVER_NAME + "-" + RoomServerConfig.ROOM_SERVER_ID, ServerName.GAME_SERVER_NAME,
-					new ClientHandle(new RoomClientSessionHandler(), Executors.newCachedThreadPool()), list, true,
+					new ClientHandle(new RoomClientSessionHandler(), null), list, true,
 					true);
 		} catch (Exception e) {
 			e.printStackTrace();

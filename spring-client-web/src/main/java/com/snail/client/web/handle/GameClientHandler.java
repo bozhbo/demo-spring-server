@@ -30,6 +30,7 @@ public class GameClientHandler extends IoHandlerAdapter {
 		if (msgType == GameMessageType.GAME_CLIENT_LOGIN_RECEIVE) {
 			RoomMessageHead head = (RoomMessageHead)msg.getiRoomHead();
 			ClientControl.MY_ROLE_ID = head.getRoleId();
+			((LoginResp)msg.getiRoomBody()).setRoleId(roleId);
 			ClientControl.roleService.loginEnd((LoginResp)msg.getiRoomBody());
 		} else if (msgType == GameMessageType.GAME_CLIENT_INIT_RECEIVE) {
 			InitResp resp = (InitResp)msg.getiRoomBody();

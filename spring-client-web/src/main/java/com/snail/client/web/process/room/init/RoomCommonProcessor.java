@@ -18,9 +18,11 @@ public class RoomCommonProcessor implements IProcessor {
 		if (resp.getOptionType() == GameMessageType.GAME_CLIENT_PLAY_RECEIVE_READY) {
 			ClientControl.roleService.roomReady(head.getRoleId(), resp);
 		} else if (resp.getOptionType() == GameMessageType.GAME_CLIENT_PLAY_RECEIVE_GIVE_CARD) {
-			
+			// 给牌 等待3秒
+			ClientControl.roleService.roomGiveCard(head.getRoleId(), resp);
 		} else if (resp.getOptionType() == GameMessageType.GAME_CLIENT_PLAY_RECEIVE_OPERATION) {
-			
+			// 轮到自己操作
+			ClientControl.roleService.roomRoleOperate(head.getRoleId(), resp);
 		} else if (resp.getOptionType() == GameMessageType.GAME_CLIENT_PLAY_RECEIVE_SHOW_CARD) {
 			
 		} else if (resp.getOptionType() == GameMessageType.GAME_CLIENT_PLAY_RECEIVE_ROUND) {

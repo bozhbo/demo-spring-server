@@ -98,7 +98,7 @@ public class RoleService {
 		
 		Map<String, Object> map = LogicUtil.fromJson(resp.getOptionStr(), Map.class);
 		
-		roleInfo.getRoomOtherRoleMap().put(Integer.parseInt(map.get(LogicValue.KEY_ROLE).toString()), 1);
+		roleInfo.getRoomOtherRoleMap().put((int)Double.parseDouble(map.get(LogicValue.KEY_ROLE).toString()), 1);
 	}
 	
 	public void roomInit(int roleId, CommonResp resp) {
@@ -110,7 +110,7 @@ public class RoleService {
 		}
 		
 		Map<String, Object> map = LogicUtil.fromJson(resp.getOptionStr(), Map.class);
-		roleInfo.setRoomId(Integer.parseInt(map.get(LogicValue.KEY_ROOM_ID).toString()));
+		roleInfo.setRoomId((int)Double.parseDouble(map.get(LogicValue.KEY_ROOM_ID).toString()));
 		
 		roleInfo.setState(1);
 	}
@@ -118,7 +118,7 @@ public class RoleService {
 	public void roomRoleOperation(CommonResp resp) {
 		Map<String, Object> map = LogicUtil.fromJson(resp.getOptionStr(), Map.class);
 		
-		int roleId = (int)map.get(LogicValue.KEY_ROLE);
+		int roleId = (int)Double.parseDouble(map.get(LogicValue.KEY_ROLE).toString());
 		
 		RobotRoleInfo roleInfo = roleIdMap.get(roleId);
 		
@@ -157,9 +157,34 @@ public class RoleService {
 		roleInfo.setState(1);
 	}
 	
+	public void roomGiveCard(int roleId, CommonResp resp) {
+		RobotRoleInfo roleInfo = roleIdMap.get(roleId);
+		
+		if (roleInfo == null) {
+			errorCode.compareAndSet(1, 10008);
+			return;
+		}
+		
+		// 不需要任何操作
+		// roleInfo.setState(1);
+	}
+	
+	public void roomRoleOperate(int roleId, CommonResp resp) {
+		RobotRoleInfo roleInfo = roleIdMap.get(roleId);
+		
+		if (roleInfo == null) {
+			errorCode.compareAndSet(1, 10009);
+			return;
+		}
+		
+		// 轮到自己操作
+		roleInfo.setState(3);
+	}
+	
 	public void sendCommonMsg(int type, String value, String serverName) {
 		RoomMessageHead head = new RoomMessageHead();
 		head.setMsgType(GameMessageType.GAME_CLIENT_PLAY_SEND);
+		head.setSceneId(11);
 		CommonResp resp = new CommonResp(type, value);
 		
 		Message message = new Message();

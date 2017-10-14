@@ -44,7 +44,7 @@ public class PlayGameProcessor implements IProcessor {
 			return;
 		}
 		
-		int roomId = head.getSceneId();
+		int roomId = roomRoleInfo.getRoomId();
 		
 		RoomLoopThread roomLoopThread = RoomServerConfig.getRoomThread().getRoomLoopThread(roomId);
 		
@@ -66,7 +66,7 @@ public class PlayGameProcessor implements IProcessor {
 
 	@Override
 	public int getMsgType() {
-		return GameMessageType.GAME_CLIENT_WORLD_COMMON_SEND;
+		return GameMessageType.GAME_CLIENT_PLAY_SEND;
 	}
 
 	@Autowired

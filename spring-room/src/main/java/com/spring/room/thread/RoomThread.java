@@ -253,24 +253,33 @@ public class RoomThread extends Thread {
 		int roomId = deployRoleInfoEvent.getReq().getRoomId();
 		int roleId = deployRoleInfoEvent.getReq().getRoleId();
 		
+		RoomLoopThread roomLoopThread = null;
+		
 		RoomRoleInfo roomRoleInfo = RoleRoomCache.getRoomRoleInfo(roleId);
 		
 		if (roomRoleInfo != null) {
 			// 存在未移除角色
-			RemoveRoleReq req = new RemoveRoleReq();
-			req.setRoleId(roleId);
-			req.setRoomId(roomId);
+			roomLoopThread = roomMap.get(roomRoleInfo.getRoomId());
 			
-			RemoveRoleInfoEvent removeRoleInfoEvent = new RemoveRoleInfoEvent(req);
-			removeRoleInfo(removeRoleInfoEvent);
+			if (roomLoopThread != null) {
+				roomLoopThread.addRoomEvent(roomEvent);
+				return true;
+			}
 			
-			logger.error("role add failed for exist in room");
-			return false;
+//			RemoveRoleReq req = new RemoveRoleReq();
+//			req.setRoleId(roleId);
+//			req.setRoomId(roomId);
+//			
+//			RemoveRoleInfoEvent removeRoleInfoEvent = new RemoveRoleInfoEvent(req);
+//			removeRoleInfo(removeRoleInfoEvent);
+//			
+//			logger.error("role add failed for exist in room");
+//			return false;
 		}
 		
 		int index = (int)(System.currentTimeMillis() % list.size());
 		
-		RoomLoopThread roomLoopThread = list.get(index);
+		roomLoopThread = list.get(index);
 		
 		if (roomLoopThread.getRoomSize() * RoomConfig.ROOM_MAX_ROLES < THREAD_MAX_ROLE_COUNT) {
 			roomLoopThread.addRoomEvent(roomEvent);

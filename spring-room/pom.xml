@@ -49,7 +49,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>com.spring.world.main.WorldServerMain</mainClass>
+							<mainClass>com.spring.room.main.RoomServerMain</mainClass>
 						</manifest>
 						<manifestEntries>
 							<Class-Path>.</Class-Path>

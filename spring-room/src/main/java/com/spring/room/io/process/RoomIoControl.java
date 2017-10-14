@@ -10,6 +10,7 @@ import com.spring.room.io.process.active.ActiveProcessor;
 import com.spring.room.io.process.deploy.RoleDeployProcessor;
 import com.spring.room.io.process.deploy.RoleRemoveProcessor;
 import com.spring.room.io.process.deploy.RoomDeployProcessor;
+import com.spring.room.io.process.play.PlayGameProcessor;
 
 public class RoomIoControl {
 
@@ -24,6 +25,7 @@ public class RoomIoControl {
 		RoomMessageConfig.addProcessor(roleDeployProcessor);
 		RoomMessageConfig.addProcessor(new RoleRemoveProcessor());
 		RoomMessageConfig.addProcessor(new RoomDeployProcessor());
+		RoomMessageConfig.addProcessor(new PlayGameProcessor());
 		
 		RoomMessageConfig.initProcessor();
 	}

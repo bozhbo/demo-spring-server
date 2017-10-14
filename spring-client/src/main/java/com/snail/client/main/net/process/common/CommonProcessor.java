@@ -22,7 +22,7 @@ public class CommonProcessor implements IProcessor {
 
 	@Override
 	public int getMsgType() {
-		return GameMessageType.GAME_CLIENT_LOGIN_RECEIVE;
+		return GameMessageType.GAME_CLIENT_WORLD_COMMON_RECEIVE;
 	}
 
 }

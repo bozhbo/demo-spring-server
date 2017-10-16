@@ -169,6 +169,7 @@ public class RoleService {
 		// roleInfo.setState(1);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void roomRoleOperate(int roleId, CommonResp resp) {
 		RobotRoleInfo roleInfo = roleIdMap.get(roleId);
 		
@@ -177,8 +178,13 @@ public class RoleService {
 			return;
 		}
 		
-		// 轮到自己操作
-		roleInfo.setState(3);
+		Map<String, Object> map = LogicUtil.fromJson(resp.getOptionStr(), Map.class);
+		Double opRoleId = (Double)map.get(LogicValue.KEY_ROLE);
+		
+		if (opRoleId.doubleValue() == roleId) {
+			// 轮到自己操作
+			roleInfo.setState(3);
+		}
 	}
 	
 	public void sendCommonMsg(int type, String value, String serverName) {

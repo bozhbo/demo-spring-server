@@ -32,6 +32,7 @@ import com.spring.logic.util.LogicUtil;
 import com.spring.logic.util.LogicValue;
 import com.spring.room.config.RoomServerConfig;
 import com.spring.room.control.service.RoomControlService;
+import com.spring.room.control.service.RoomLogicService;
 import com.spring.room.control.service.RoomMessageService;
 
 /**
@@ -45,9 +46,14 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 
 	private static final Log logger = LogFactory.getLog(RoomControlServiceAllImpl.class);
 
+	@Autowired
 	private MessageService messageService;
 
+	@Autowired
 	private RoomMessageService roomMessageService;
+	
+	@Autowired
+	private RoomLogicService roomLogicService;
 
 	@Override
 	public int loopRoomInfo(PlayingRoomInfo playingRoomInfo, long curTime) {
@@ -63,7 +69,18 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 			return 1;
 		}
 
-		if (playingRoomInfo.getRoomState() == RoomPlayingEnum.ROOM_STATE_READY) {
+		if (playingRoomInfo.getRoomState() == RoomPlayingEnum.ROOM_TYPE_END) {
+			// 重新发送房间数据校验房间数据
+			playingRoomInfo.setRoomState(RoomPlayingEnum.ROOM_STATE_INIT);
+			
+			List<RoomRoleInfo> list = playingRoomInfo.getList();
+			
+			for (RoomRoleInfo roomRoleInfo : list) {
+				roomLogicService.sendRoomSyncMessage(playingRoomInfo, roomRoleInfo);
+			}
+			
+			logger.info("room " + playingRoomInfo.getRoomId() + " will restart");
+		} else if (playingRoomInfo.getRoomState() == RoomPlayingEnum.ROOM_STATE_READY) {
 			if (playingRoomInfo.getPlayingList().size() <= 1) {
 				// 人数过少
 				return 1;
@@ -131,6 +148,16 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 				Collections.sort(playingRoomInfo.getPlayingList(), (r1, r2) -> {
 					return playingRoomInfo.getList().indexOf(r1) - playingRoomInfo.getList().indexOf(r2);
 				});
+				
+				List<RoomRoleInfo> playingList = playingRoomInfo.getPlayingList();
+				StringBuffer buffer = new StringBuffer();
+				
+				for (RoomRoleInfo roomRoleInfo : playingList) {
+					buffer.append(roomRoleInfo.getRoleId()).append(",");
+				}
+				
+				logger.info("room " + playingRoomInfo.getRoomId() + " was start " + buffer.toString());
+				
 				doRoomPlaying(playingRoomInfo, curTime);
 			}
 		}
@@ -150,7 +177,7 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 					.addIntValue(LogicValue.KEY_ROOM_ID, playingRoomInfo.getRoomId())
 					.addIntValue(LogicValue.KEY_ROLE, playingRoomInfo.getRoomRoleInfo().getRoleId()).toString()));
 			
-			logger.info("choose role " + playingRoomInfo.getRoomRoleInfo().getRoleId() + " to operate");
+			logger.info("room = " + playingRoomInfo.getRoomId() + " choose role " + playingRoomInfo.getRoomRoleInfo().getRoleId() + " to operate");
 		} else {
 			if (curTime - playingRoomInfo.getRoomRoleInfo().getStartTime() < 6000) {
 				// 等待玩家操作
@@ -200,7 +227,7 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 			playingRoomInfo.setRoomState(RoomPlayingEnum.ROOM_STATE_SEND_CARD);
 		}
 		
-		logger.info("role ready " + roomRoleInfo.getRoleId());
+		logger.info("room = " + playingRoomInfo.getRoomId() + " role ready " + roomRoleInfo.getRoleId());
 	}
 
 	@Override
@@ -274,7 +301,7 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 		roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, 0, ""),
 				new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_FOLLOW, LogicUtil.tojson(map)));
 	
-		logger.info("role follow " + roomRoleInfo.getRoleId());
+		logger.info("room = " + playingRoomInfo.getRoomId() + " role follow " + roomRoleInfo.getRoleId());
 	}
 
 	@Override
@@ -329,15 +356,11 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 		roomMessageService.send2AllRoles(playingRoomInfo, messageService.createMessageHead(0, 0, GameMessageType.GAME_CLIENT_PLAY_RECEIVE, playingRoomInfo.getRoomId(), ""),
 				new CommonResp(GameMessageType.GAME_CLIENT_PLAY_RECEIVE_ADD, LogicUtil.tojson(map)));
 	
-		logger.info("role add " + roomRoleInfo.getRoleId());
+		logger.info("room = " + playingRoomInfo.getRoomId() + " role add " + roomRoleInfo.getRoleId());
 	}
 
 	@Override
 	public void look(PlayingRoomInfo playingRoomInfo, RoomRoleInfo roomRoleInfo) {
-		if (!checkRoleRound(playingRoomInfo, roomRoleInfo)) {
-			return;
-		}
-
 		if (playingRoomInfo.getRoomState() != RoomPlayingEnum.ROOM_STATE_PLAYING) {
 			logger.error("room is not in playing");
 			return;
@@ -360,7 +383,7 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 						.addIntValue(LogicValue.KEY_ROOM_ID, playingRoomInfo.getRoomId())
 						.addIntValue(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId()).toString()));
 	
-		logger.info("role look " + roomRoleInfo.getRoleId());
+		logger.info("room = " + playingRoomInfo.getRoomId() + " role look " + roomRoleInfo.getRoleId());
 	}
 
 	@Override
@@ -478,7 +501,7 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 		if (playingRoomInfo.getRoomRoleInfo() != roomRoleInfo) {
 			// 当前回合不对
 			messageService.sendGateMessage(roomRoleInfo.getGateId(), messageService.createErrorMessage(roomRoleInfo.getRoleId(), 730001, ""));
-			logger.error("role round error");
+			logger.error("role round error, room = " + playingRoomInfo.getRoomId() + ", role = " + roomRoleInfo.getRoleId() + ", cur role = " + playingRoomInfo.getRoomRoleInfo().getRoleId());
 			return false;
 		}
 
@@ -516,7 +539,7 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 			}
 		}
 		
-		logger.info("room " + playingRoomInfo.getRoomId() + " end");
+		logger.info("room " + playingRoomInfo.getRoomId() + " will end");
 
 		// 游戏结束
 		lastRoomRoleInfo.setGold(lastRoomRoleInfo.getGold() + playingRoomInfo.getAmountGold());
@@ -561,7 +584,7 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 		roomSettlementMessage.setiRoomBody(roomSettlementResp);
 		messageService.sendWorldMessage(roomSettlementMessage);
 
-		playingRoomInfo.setRoomState(RoomPlayingEnum.ROOM_STATE_INIT);
+		playingRoomInfo.setRoomState(RoomPlayingEnum.ROOM_TYPE_END);
 		playingRoomInfo.setLastUpdateTime(System.currentTimeMillis());
 		playingRoomInfo.setReadyTime(0);
 		playingRoomInfo.setSendCardTime(0);
@@ -585,7 +608,7 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 		playingRoomInfo.getPlayingList().clear();
 		playingRoomInfo.getPlayingMap().clear();
 		
-		logger.info("game end and reset " + playingRoomInfo.getRoomId());
+		logger.info("room = " + playingRoomInfo.getRoomId() + " game end");
 
 		return true;
 	}
@@ -672,18 +695,7 @@ public class RoomControlServiceAllImpl implements RoomControlService {
 							.addIntValue(LogicValue.KEY_ROOM_ID, playingRoomInfo.getRoomId())
 							.addIntValue(LogicValue.KEY_ROLE, roomRoleInfo.getRoleId()).toString()));
 			
-			logger.info("choose role " + playingRoomInfo.getRoomRoleInfo().getRoleId() + " to operate");
+			logger.info("room = " + playingRoomInfo.getRoomId() + " choose role " + playingRoomInfo.getRoomRoleInfo().getRoleId() + " to operate");
 		}
 	}
-
-	@Autowired
-	public void setMessageService(MessageService messageService) {
-		this.messageService = messageService;
-	}
-
-	@Autowired
-	public void setRoomMessageService(RoomMessageService roomMessageService) {
-		this.roomMessageService = roomMessageService;
-	}
-
 }

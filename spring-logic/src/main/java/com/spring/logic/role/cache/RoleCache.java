@@ -24,4 +24,7 @@ public class RoleCache {
 		return accountMap.get(account);
 	}
 	
+	public static int getOnlineRole() {
+		return map.size();
+	}
 }

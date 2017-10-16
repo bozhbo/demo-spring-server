@@ -165,6 +165,8 @@ public class RoomLogicServiceImpl implements RoomLogicService {
 		roomMap.put(LogicValue.KEY_ROOM_UNIT_GOLD, playingRoomInfo.getCurGoldUnit());
 		roomMap.put(LogicValue.KEY_ROOM_ROUND, playingRoomInfo.getRoomRound());
 		roomMap.put(LogicValue.KEY_ROOM_SERVER_ID, RoomServerConfig.ROOM_SERVER_ID);
+		// 客户端获取状态为ROOM_STATE_INIT时出现准备按钮
+		roomMap.put(LogicValue.KEY_ROOM_STATE, playingRoomInfo.getRoomState().getValue());
 		
 		List<Map<String, Object>> roleList = new ArrayList<>();
 		

@@ -41,4 +41,6 @@ public class LogicValue {
 	public static String KEY_ROOM_ROUND = "roomRound";
 	
 	public static String KEY_ROOM_SERVER_ID = "roomServerId";
+	
+	public static String KEY_ROOM_STATE = "roomState";
 }

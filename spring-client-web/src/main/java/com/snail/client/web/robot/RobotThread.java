@@ -32,7 +32,7 @@ public class RobotThread extends Thread {
 	@Override
 	public void run() {
 		for (int i = 0; i < roles; i++) {
-			ClientControl.netService.connectGame("192.168.2.142", 8088, serverName + (i + 1));
+			ClientControl.netService.connectGame("127.0.0.1", 8088, serverName + (i + 1));
 		}
 		
 		while (true) {
